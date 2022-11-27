@@ -1,21 +1,13 @@
 @import "./modules.scss";
-
+@import "./fonts.scss";
+@import "./buttons.scss";
+@import "./marketList.scss";
 // @import "fonts";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap");
 // @import "utils/libs";
 // @import "utils/vars";
 // @import "utils/mixins";
 
-$white: #ffffff;
-$black: #111111;
-$orange: #c56622;
-$orange-light: rgba(197, 102, 34, 0.1);
-$gray-bg: #eeeeee;
-$gray: #f2f2f2;
-$brown: #783c11;
-$green: #23c220;
-$red: #ff3123;
-$warning: #ff7a00;
 
 $breakpoints: (
   "phone": 400px,

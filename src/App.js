@@ -1,15 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Footer, Navbar } from "./components";
-import { Home } from "./pages";
+import { ContextProvider } from "./context/context";
+import { Home, UserCabinet } from "./pages";
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-      <Footer />
+      <ContextProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cabinet" element={<UserCabinet />} />
+        </Routes>
+        <Footer />
+      </ContextProvider>
     </Router>
   );
 }

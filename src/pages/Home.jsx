@@ -1,5 +1,22 @@
+import { useEffect, useState } from "react";
+import {
+  Categories,
+  DownloadApp,
+  Filter,
+  FooterMenu,
+  Houses,
+} from "../components";
+
 const Home = () => {
-  return <div>Home fdsafdsa</div>;
+  return (
+    <>
+      <Filter />
+      <Categories />
+      <Houses />
+      <FooterMenu />
+      <DownloadApp />
+    </>
+  );
 };
 
 export default Home;
