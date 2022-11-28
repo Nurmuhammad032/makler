@@ -1,0 +1,92 @@
+body {
+  position: relative;
+  background-color: #c9c9c9;
+}
+
+.single-page-container {
+  width: 930px;
+  height: 362px;
+  margin: 63px auto;
+}
+
+.main-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main-text {
+  width: 518px;
+  height: 132px;
+  font-size: 28px;
+
+  color: #0b0b0b;
+}
+.personal-word {
+  display: inline-block;
+  width: 350px;
+  height: 18px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #0b0b0b;
+}
+.instance-word {
+  width: 518px;
+  height: 69px;
+  font-size: 15px;
+  line-height: 23px;
+  color: #0b0b0b;
+}
+
+.last-word {
+  width: 518px;
+  height: 69px;
+  font-size: 15px;
+  line-height: 23px;
+  color: #0b0b0b;
+}
+.anons-text {
+  position: absolute;
+  width: 100px;
+
+  margin-left: 690px;
+  margin-bottom: 260px;
+
+  font-size: 24px;
+  line-height: 26px;
+  color: #000000;
+}
+
+.right-image {
+  width: 284px;
+  height: 362px;
+  background-color: #fff;
+}
+
+.facebook-image{
+    margin-top: 23px;
+}
+
+
+@media only screen and (max-width: 630px) {
+
+    .single-page-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .main-text{
+        width: 40vh;
+    }
+    .instance-word{
+        width: 40vh;
+    }
+    .main-body{
+        margin-top: 500px;
+        flex-direction: column;
+    }.facebook-image{
+        width: 284px;
+    }
+}
