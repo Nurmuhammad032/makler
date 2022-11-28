@@ -7,6 +7,7 @@ export { default as FooterMenu } from "./FooterMenu/FooterMenu";
 export { default as DownloadApp } from "./DownloadApp/DownloadApp";
 export { default as UserContents } from "./User/UserContents";
 export { default as LoginModal } from "./LoginModal/LoginModal";
-export { default as ProductCard } from "./ProductCard/ProductCard";
 export { default as SliderContent } from "./SliderContent/SliderContent";
 export { default as FilterWorker } from "./FilterWorker/FilterWorker";
+export { default as UserCard } from "./UserCard/UserCard";
+

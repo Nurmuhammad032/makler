@@ -7,6 +7,7 @@ import {
   SavedProduct,
   SingleProduct,
   UserCabinet,
+  UserSingle,
   Workers,
 } from "./pages";
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/save-products" element={<SavedProduct />} />
             <Route path="/product" element={<SingleProduct />} />
             <Route path="/workers" element={<Workers />} />
+            <Route path="/worker" element={<UserSingle />} />
           </Routes>
           <Footer />
         </div>

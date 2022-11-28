@@ -1,5 +1,5 @@
 import React from "react";
-import { FilterWorker } from "../../components";
+import { FilterWorker, UserCard } from "../../components";
 
 const Workers = () => {
   return (
@@ -7,7 +7,9 @@ const Workers = () => {
       <div className="container">
         <div>
           <FilterWorker />
-          <div>fdsaljlfslfjlsk</div>
+          <div>
+            <UserCard />
+          </div>
         </div>
         <button
           className="btn btn-big btn-white"
