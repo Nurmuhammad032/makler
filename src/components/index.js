@@ -6,3 +6,4 @@ export { default as Houses } from "./Houses/Houses";
 export { default as FooterMenu } from "./FooterMenu/FooterMenu";
 export { default as DownloadApp } from "./DownloadApp/DownloadApp";
 export { default as UserAnnouncements } from "./User/UserAnnouncements";
+export { default as UserCard } from "./UserCard/UserCard";

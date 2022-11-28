@@ -5,11 +5,13 @@ import {
   Filter,
   FooterMenu,
   Houses,
+  UserCard,
 } from "../components";
 
 const Home = () => {
   return (
     <>
+    
       <Filter />
       <Categories />
       <Houses />
