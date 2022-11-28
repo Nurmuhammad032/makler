@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import ContextApp from "../../context/context";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import ProductCard from "../ProductCard/ProductCard";
 
 const Houses = () => {
   const { allHouses } = useContext(ContextApp);
@@ -31,30 +32,7 @@ const Houses = () => {
           </div>
           <ul className="cards-list" id="houses-list">
             {allHouses?.map((item) => (
-              <li className="cards-item" key={item.id}>
-                <a href="/product.html">
-                  <div className="cards-item__top">
-                    <button className="btn-save">
-                      <svg className="svg-sprite-icon icon-save">
-                        <use href={`${sprite}#save`}></use>
-                      </svg>
-                    </button>
-                    <img
-                      src={item.images.length && item.images[0].images}
-                      alt={item.title}
-                    />
-                  </div>
-                  <div className="cards-item__bottom">
-                    <div className="cards-item-info">
-                      <div className="cards-item-info__top">
-                        <p>{item.title}</p>
-                        <span>{item.price}</span>
-                      </div>
-                      <div className="cards-item-info__bottom"></div>
-                    </div>
-                  </div>
-                </a>
-              </li>
+              <ProductCard key={item.id} data={item} />
             ))}
           </ul>
           <button className="btn btn-big btn-white" id="show-more">

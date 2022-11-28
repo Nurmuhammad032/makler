@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="wrapper">
       <header className="header">
         <div className="container">
           <div className="header-body">
@@ -56,11 +55,11 @@ const Navbar = () => {
                 </li>
                 <li>
                   {" "}
-                  <a href="/save-products.html">
+                  <Link to="/save-products">
                     <svg className="svg-sprite-icon icon-fi_heart w-16">
                       <use href={`${spirite}#fi_heart`}></use>
                     </svg>
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   {" "}
@@ -72,9 +71,9 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
+                  <Link
                     className="btn btn-orange-text"
-                    href="/create-product.html"
+                    to="/create-product"
                   >
                     <svg
                       width="16"
@@ -91,14 +90,13 @@ const Navbar = () => {
                       />
                     </svg>
                     <span>разместить объявление</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </header>
-    </div>
   );
 };
 

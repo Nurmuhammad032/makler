@@ -1,6 +1,6 @@
 import spirite from "../../assets/img/symbol/sprite.svg";
 
-const Filter = () => {
+const FilterWorker = () => {
   return (
     <section className="main-s">
       <div className="nav-search">
@@ -36,13 +36,13 @@ const Filter = () => {
               </div>
             </li>
             <li className="nav-search_type select-choose">
-              <label>Тип</label>
+              <label>Деятельности мастера</label>
               <a
                 className="choose-btn choose-btn-link"
                 href="#"
                 id="choose-type"
               >
-                <span>Квартирa </span>
+                <span>Сантехник </span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -93,30 +93,6 @@ const Filter = () => {
                 <span>г.Ташкент, ул. Амир Темур 65 А дом </span>
               </a>
             </li>
-            <li className="nav-search_rooms">
-              <label>Кол-во комнат</label>
-              <ul className="rooms-list" id="choose-room">
-                <li>
-                  {" "}
-                  <a href="#">1 </a>
-                </li>
-                <li>
-                  {" "}
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3 </a>
-                </li>
-                <li>
-                  {" "}
-                  <a href="#">4 </a>
-                </li>
-                <li>
-                  {" "}
-                  <a href="#">5+ </a>
-                </li>
-              </ul>
-            </li>
             <li>
               <button className="btn show-btn-orange btn-search">
                 Показать
@@ -139,4 +115,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default FilterWorker;

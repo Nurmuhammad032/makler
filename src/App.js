@@ -1,18 +1,31 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Footer, Navbar } from "./components";
 import { ContextProvider } from "./context/context";
-import { Home, UserCabinet } from "./pages";
+import {
+  CreateProduct,
+  Home,
+  SavedProduct,
+  SingleProduct,
+  UserCabinet,
+  Workers,
+} from "./pages";
 
 function App() {
   return (
     <Router>
       <ContextProvider>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cabinet" element={<UserCabinet />} />
-        </Routes>
-        <Footer />
+        <div className="wrapper">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cabinet" element={<UserCabinet />} />
+            <Route path="/create-product" element={<CreateProduct />} />
+            <Route path="/save-products" element={<SavedProduct />} />
+            <Route path="/product" element={<SingleProduct />} />
+            <Route path="/workers" element={<Workers />} />
+          </Routes>
+          <Footer />
+        </div>
       </ContextProvider>
     </Router>
   );
