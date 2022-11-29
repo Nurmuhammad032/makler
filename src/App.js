@@ -2,12 +2,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Footer, Navbar } from "./components";
 import { ContextProvider } from "./context/context";
 import {
+  AllIndustriya,
   CreateProduct,
   Home,
+  Industriya,
+  MasterPage,
   SavedProduct,
   SingleProduct,
   UserCabinet,
-  UserSingle,
   Workers,
 } from "./pages";
 
@@ -24,7 +26,9 @@ function App() {
             <Route path="/save-products" element={<SavedProduct />} />
             <Route path="/product" element={<SingleProduct />} />
             <Route path="/workers" element={<Workers />} />
-            <Route path="/worker" element={<UserSingle />} />
+            <Route path="/master" element={<MasterPage />} />
+            <Route path="/industria" element={<Industriya />} />
+            <Route path="/industries" element={<AllIndustriya />} />
           </Routes>
           <Footer />
         </div>

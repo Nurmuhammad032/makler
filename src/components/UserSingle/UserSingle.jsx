@@ -2,7 +2,7 @@ import "./UserSingle.scss";
 import UserImg from "../../assets/img/avatar-big.png";
 import { UserCard } from "../../components";
 
-const UserSingle = () => {
+const UserSingle = ({ data }) => {
   return (
     <section
       className="content"
@@ -16,37 +16,29 @@ const UserSingle = () => {
             <div className="user-card">
               <img src={UserImg} alt="User image" />
               <div className="user-info">
-                <h4 className="user-name">Abduvali Eshonqulov</h4>
-                <p className="user-level">Мастер, 3 года опыта</p>
+                <h4 className="user-name">{data.name}</h4>
+                <p className="user-level">{data.jobInfo}</p>
               </div>
               <div className="info-cards">
-                <span className="info-box">сантехник</span>
-                <span className="info-box">евро</span>
-                <span className="info-box">ремонт</span>
-                <span className="info-box">ремонт</span>
-                <span className="info-box">электрик</span>
+                {data.skills.map((item) => (
+                  <span key={item} className="info-box">
+                    {item}
+                  </span>
+                ))}
               </div>
-              <p className="user-loc">Ташкент, Шайхантахурский район</p>
+              <p className="user-loc">{data.address}</p>
             </div>
             <div className="app__worker-info--wrapper">
               <div className="app__worker-info">
-                <h1>+998 90 123-45-67</h1>
-                <p>info@gmail.com</p>
+                <h1>{data.telNumber}</h1>
+                <p>{data.email}</p>
               </div>
               <button className="worker-btn">Написать мастеру</button>
             </div>
           </div>
           <div className="app__worker-right">
             <h1>Описание</h1>
-            <p>
-              A warehouse for storing goods is available for rent. There is a
-              free area (land plot of 2 hectares) for the buildings of
-              production workshops, mini-factories, etc. Our warehouse is
-              located in the city of Tashkent, Sergeli industrial zone, opposite
-              the Sergeli Logistic customs post. Convenient location, on a
-              central road, there are all communications, a warehouse of more
-              than 3000 square meters.
-            </p>
+            <p>{data.info}</p>
           </div>
         </div>
         <div
@@ -65,8 +57,9 @@ const UserSingle = () => {
             Рекомендуем похожие
           </h1>
           <div className="workers-group">
-            {[1, 1, 1, 1].map((_, i) => (
-              <UserCard key={i} />
+            {[1, 1, 1, 1].map((item, i) => (
+              // <UserCard key={i} />
+              <div key={i}>{item}</div>
             ))}
           </div>
         </div>

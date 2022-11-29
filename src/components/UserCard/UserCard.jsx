@@ -2,7 +2,7 @@ import React from "react";
 import "./UserCard.css";
 import UserImg from "../../assets/img/avatar-big.png";
 
-const UserCard = () => {
+const UserCard = ({ data }) => {
   return (
     <div>
       <div
@@ -13,19 +13,17 @@ const UserCard = () => {
       >
         <div className="master-card">
           <div className="user-card">
-            <img src={UserImg} alt="User image" />
+            <img src={data.avatar} alt="User image" />
             <div className="user-info">
-              <h4 className="user-name">Abduvali Eshonqulov</h4>
-              <p className="user-level">Мастер, 3 года опыта</p>
+              <h4 className="user-name">{data.name}</h4>
+              <p className="user-level">Мастер, {data.experience} года опыта</p>
             </div>
             <div className="info-cards">
-              <span className="info-box">сантехник</span>
-              <span className="info-box">евро</span>
-              <span className="info-box">ремонт</span>
-              <span className="info-box">ремонт</span>
-              <span className="info-box">электрик</span>
+              {data.profession.map((item) => (
+                <span className="info-box" key={item.title}>{item.title}</span>
+              ))}
             </div>
-            <p className="user-loc">Ташкент, Шайхантахурский район</p>
+            <p className="user-loc">{data.address.addressName}</p>
           </div>
         </div>
       </div>
