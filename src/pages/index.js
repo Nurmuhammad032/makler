@@ -6,4 +6,4 @@ export { default as SingleProduct } from "./SingleProduct/SingleProduct";
 export { default as Workers } from "./Workers/Workers";
 export { default as MasterPage } from "./Master/MasterPage";
 export { default as Industriya } from "./Industriya/Industriya";
-export { default as AllIndustriya} from "./AllIndustriya/AllIndustriya";
+export { default as AllIndustriya } from "./AllIndustriya/AllIndustriya";

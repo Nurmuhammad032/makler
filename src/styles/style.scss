@@ -68,6 +68,17 @@ body {
   bottom: 0 !important;
 }
 
+// ,
+.app__cards--wrapper{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+
+  @include laptop {
+    justify-content: center;
+  }
+}
+
 .slick-next{
   right: 0.4rem !important;
   top: auto !important;

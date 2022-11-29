@@ -1,22 +1,25 @@
-const baseURL = "https://fathulla.tk";
+export const baseURL = "https://fathulla.tk";
 
 const requests = {
   fetchCategories: `${baseURL}/api/v1/categories/`,
   fetchAllHouses: `${baseURL}/products/web/api/v1/all-web-houses/`,
   fetchAllMasters: `${baseURL}/master/api/v1/maklers/`,
+  fetchAllStores: `${baseURL}/store2/api/v1/store/`,
 };
 
 export const getRequests = async () => {
-  const [categories, allHouses, masters] = await Promise.all([
+  const [categories, allHouses, masters, stores] = await Promise.all([
     fetch(requests.fetchCategories).then((res) => res.json()),
     fetch(requests.fetchAllHouses).then((res) => res.json()),
     fetch(requests.fetchAllMasters).then((res) => res.json()),
+    fetch(requests.fetchAllStores).then((res) => res.json()),
   ]);
 
   return {
     categories: categories.results,
     allHouses: allHouses.results,
     masters: masters.results,
+    stores: stores.results
   };
 };
 

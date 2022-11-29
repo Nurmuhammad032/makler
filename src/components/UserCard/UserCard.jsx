@@ -1,10 +1,11 @@
 import React from "react";
 import "./UserCard.css";
 import UserImg from "../../assets/img/avatar-big.png";
+import { Link } from "react-router-dom";
 
 const UserCard = ({ data }) => {
   return (
-    <div>
+    <Link to={`${data?.pk}`}>
       <div
         className="main-card"
         style={{
@@ -20,14 +21,16 @@ const UserCard = ({ data }) => {
             </div>
             <div className="info-cards">
               {data.profession.map((item) => (
-                <span className="info-box" key={item.title}>{item.title}</span>
+                <span className="info-box" key={item.title}>
+                  {item.title}
+                </span>
               ))}
             </div>
             <p className="user-loc">{data.address.addressName}</p>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -4,13 +4,12 @@ import {
   Filter,
   FooterMenu,
   Houses,
-  ProductPage,
+  ProductSingle,
 } from "../components";
 
 const Home = () => {
   return (
     <>
-      <ProductPage/>
       <Filter />
       <Categories />
       <Houses />

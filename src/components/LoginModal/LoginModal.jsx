@@ -1,7 +1,26 @@
 import "./LoginModal.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import useForm from "../../hooks/useForm";
+import axios from "axios";
+import { baseURL } from "../../requests/requests";
 
 const LoginModal = ({ close }) => {
+  const { form, changeHandler } = useForm({
+    number: "",
+  });
+
+  const handeSubmit = (e) => {
+    e.preventDefault();
+    const info = {
+      phone_number: form.number.toString(),
+    };
+// localStorage.setItem("access", data?.token?.access)
+    axios
+      .post(`https://fathulla.tk/authorization/signup/`, info)
+      .then((data) => localStorage.setItem("access", data?.data.token?.access))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="modal login-modal">
       <div className="modal-body">
@@ -30,10 +49,16 @@ const LoginModal = ({ close }) => {
             после регистрации! Спасибо, что выбрали нас!
           </p>
         </div>
-        <form action="#">
+        <form onSubmit={handeSubmit}>
           <div className="form-input">
             <label>Номер телефона</label>
-            <input type="text" id="telephone" name="telephone" value="+998" />
+            <input
+              type="text"
+              id="telephone"
+              name="number"
+              onChange={changeHandler}
+              value={form.number}
+            />
             <button className="btn btn-orange">
               Подтвердит номер телефона
             </button>

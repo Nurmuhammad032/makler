@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import "./Workers.scss";
 import { FilterWorker, UserCard } from "../../components";
 import ContextApp from "../../context/context";
 
@@ -11,7 +10,7 @@ const Workers = () => {
       <div className="container">
         <div>
           <FilterWorker />
-          <div className="app__masters-wrapper">
+          <div className="app__cards--wrapper">
             {masters?.map((data, i) => (
               <div
                 key={i}

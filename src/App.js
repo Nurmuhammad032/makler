@@ -25,10 +25,10 @@ function App() {
             <Route path="/create-product" element={<CreateProduct />} />
             <Route path="/save-products" element={<SavedProduct />} />
             <Route path="/product" element={<SingleProduct />} />
-            <Route path="/workers" element={<Workers />} />
-            <Route path="/master" element={<MasterPage />} />
-            <Route path="/industria" element={<Industriya />} />
-            <Route path="/industries" element={<AllIndustriya />} />
+            <Route path="/master" element={<Workers />} />
+            <Route path="/master/:id" element={<MasterPage />} />
+            <Route path="/industria/:id" element={<Industriya />} />
+            <Route path="/industria" element={<AllIndustriya />} />
           </Routes>
           <Footer />
         </div>
