@@ -11,4 +11,4 @@ export { default as SliderContent } from "./SliderContent/SliderContent";
 export { default as FilterWorker } from "./FilterWorker/FilterWorker";
 export { default as UserCard } from "./UserCard/UserCard";
 export { default as UserSingle} from "./UserSingle/UserSingle";
-
+export { default as ProductSingle} from "./ProductPage/ProductPage";
