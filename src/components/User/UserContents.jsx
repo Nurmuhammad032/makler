@@ -55,7 +55,7 @@ const UserContents = ({ data }) => {
           </div>
         </div>
         <picture>
-          <source srcset={card} type="image/webp" />
+          <source srcSet={card} type="image/webp" />
           <img src={card} alt="Картинка Объявления" />
         </picture>
       </div>

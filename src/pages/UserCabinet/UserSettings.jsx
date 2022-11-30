@@ -8,7 +8,7 @@ const UserSettings = () => {
           <div className="settings-profile-logo">
             {" "}
             <picture>
-              <source srcset="img/avatar-big.webp" type="image/webp" />
+              <source srcSet="img/avatar-big.webp" type="image/webp" />
               <img src="img/avatar-big.png" alt="Аватар" />
             </picture>
           </div>

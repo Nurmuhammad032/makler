@@ -252,7 +252,7 @@ const UserCabinet = () => {
               <div className="cabinet-profile-logo">
                 {" "}
                 <picture>
-                  <source srcset={avatar} type="image/webp" />
+                  <source srcSet={avatar} type="image/webp" />
                   <img src={avatar} alt="Логотип" />
                 </picture>
               </div>

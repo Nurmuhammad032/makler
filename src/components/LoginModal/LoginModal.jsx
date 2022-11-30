@@ -3,8 +3,11 @@ import sprite from "../../assets/img/symbol/sprite.svg";
 import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
+import { useContext } from "react";
+import ContextApp from "../../context/context";
 
 const LoginModal = ({ close }) => {
+  const { loginModalFunc } = useContext(ContextApp);
   const { form, changeHandler } = useForm({
     number: "",
   });
@@ -14,10 +17,13 @@ const LoginModal = ({ close }) => {
     const info = {
       phone_number: form.number.toString(),
     };
-// localStorage.setItem("access", data?.token?.access)
+    // localStorage.setItem("access", data?.token?.access)
     axios
-      .post(`https://fathulla.tk/authorization/signup/`, info)
-      .then((data) => localStorage.setItem("access", data?.data.token?.access))
+      .post(`${baseURL}/authorization/signup/`, info)
+      .then((data) => {
+        localStorage.setItem("access", data?.data.token?.access);
+        window.location.reload();
+      })
       .catch((err) => console.log(err));
   };
 
@@ -28,7 +34,7 @@ const LoginModal = ({ close }) => {
         <span
           className="close-btn"
           href="#"
-          onClick={() => close(false)}
+          onClick={() => loginModalFunc(false)}
           style={{
             cursor: "pointer",
           }}

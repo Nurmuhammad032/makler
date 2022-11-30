@@ -1,10 +1,97 @@
 import "./CreateProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginModal } from "../../components";
+import ContextApp from "../../context/context";
+import { useRef } from "react";
+import { GeolocationControl, Map, YMaps, ZoomControl } from "react-yandex-maps";
+import useForm from "../../hooks/useForm";
 
 const CreateProduct = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const { form, changeHandler } = useForm({});
+  const initialState = {
+    title: "",
+    center: [40.783388, 72.350663],
+    zoom: 12,
+  };
+
+  const mapOptions = {
+    modules: ["geocode", "SuggestView"],
+    defaultOptions: { suppressMapOpenBlock: true },
+    width: 600,
+    height: 400,
+  };
+
+  const geolocationOptions = {
+    defaultOptions: { maxWidth: 128 },
+    defaultData: { content: "Determine" },
+  };
+
+  const { loginModalFunc, openLoginModal } = useContext(ContextApp);
+  const [state, setState] = useState({ ...initialState });
+  const [mapConstructor, setMapConstructor] = useState(null);
+  const mapRef = useRef(null);
+  const searchRef = useRef(null);
+  const [points, setPoints] = useState([]);
+  let address = [41.311151, 69.279737];
+
+  // const renderMap = () => {
+  //   axios
+  //     .get(
+  //       `https://geocode-maps.yandex.ru/1.x/?apikey=c5bd98ea-afd9-433c-909d-a54b6459fb30&format=json&geocode=${address}`
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //       let point =
+  //         res.data.response.GeoObjectCollection.featureMember[0].GeoObject
+  //           .Point;
+
+  //       setPoints([
+  //         [Number(point.pos.split(" ")[1]), Number(point.pos.split(" ")[0])],
+  //       ]);
+  //     });
+  // };
+
+  const handleReset = () => {
+    setState({ ...initialState });
+    searchRef.current.value = "";
+    mapRef.current.setCenter(initialState.center);
+    mapRef.current.setZoom(initialState.zoom);
+  };
+
+  // search popup
+  useEffect(() => {
+    if (mapConstructor) {
+      new mapConstructor.SuggestView(searchRef.current).events.add(
+        "select",
+        function (e) {
+          const selectedName = e.get("item")?.value;
+          mapConstructor?.geocode(selectedName).then((result) => {
+            const newCoords = result?.geoObjects
+              ?.get(0)
+              ?.geometry?.getCoordinates();
+            console.log(newCoords);
+            setState((prevState) => ({ ...prevState, center: newCoords }));
+          });
+        }
+      );
+    }
+  }, [mapConstructor]);
+
+  // change title
+  const handleBoundsChange = (e) => {
+    const newCoords = mapRef.current.getCenter();
+    mapConstructor?.geocode(newCoords).then((res) => {
+      const nearest = res?.geoObjects?.get(0);
+      const foundAddress = nearest?.properties.get("text");
+      const [centerX, centerY] = nearest?.geometry.getCoordinates();
+      const [initialCenterX, initialCenterY] = initialState?.center;
+      if (centerX !== initialCenterX && centerY !== initialCenterY) {
+        setState((prevState) => ({ ...prevState, title: foundAddress }));
+      }
+    });
+  };
+
   return (
     <>
       <section className="create-product-s">
@@ -197,18 +284,59 @@ const CreateProduct = () => {
                   <h5>Где находится?</h5>
                   <div className="map-address">
                     <input
+                      ref={searchRef}
                       placeholder="г.Ташкент, ул.Охангарон 65 А 1"
                       id="suggest"
                     />
-                    <button className="btn btn-black" id="save-address">
+                    {/* <button className="btn btn-black" id="save-address">
                       Сохранить
-                    </button>
+                    </button> */}
                   </div>
                 </div>
                 <p className="error-par d-none">
                   Такой геолокации не существует
                 </p>
-                <div id="map"></div>
+                <div
+                  id="map"
+                  className="mapRoot"
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  <YMaps
+                    query={{
+                      apikey: "29294198-6cdc-4996-a870-01e89b830f3e",
+                      lang: "en_RU",
+                    }}
+                  >
+                    <Map
+                      {...mapOptions}
+                      // state={state}s
+                      state={{
+                        center: state?.center,
+                        zoom: 12,
+                      }}
+                      onLoad={setMapConstructor}
+                      onBoundsChange={handleBoundsChange}
+                      instanceRef={mapRef}
+                    >
+                      <div
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                          background: "#000",
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -100%)",
+                          zIndex: 3000,
+                        }}
+                      ></div>
+                      <GeolocationControl {...geolocationOptions} />
+                      <ZoomControl />
+                    </Map>
+                  </YMaps>
+                </div>
               </div>
               <h5>Изображения объекта</h5>
               <div className="image-upload mb-50">
@@ -364,14 +492,14 @@ const CreateProduct = () => {
                   </svg>
                 </label>
               </div>
-              <div className="btns">
+              {/* <div className="btns">
                 <button className="btn btn-black">
                   Сохранить как черновик
                 </button>
                 <button className="btn btn-orange">
                   Опубликовать объявление{" "}
                 </button>
-              </div>
+              </div> */}
             </form>
             <div className="create-product__right">
               <h5>Контактная информация</h5>
@@ -380,7 +508,7 @@ const CreateProduct = () => {
                 <p>
                   Если вы уже зарегистрированы, нажмите на кнопку{" "}
                   <span
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => loginModalFunc(true)}
                     id="login-modal"
                     style={{
                       fontWeight: "bold",
@@ -393,7 +521,7 @@ const CreateProduct = () => {
                   </span>
                   .{" "}
                 </p>
-                <form action="#">
+                <form>
                   <div className="form-input">
                     <label>Имя Фамилия*</label>
                     <input type="text" placeholder="ФИО" />
@@ -419,7 +547,7 @@ const CreateProduct = () => {
           </div>
         </div>
       </section>
-      {openModal && <LoginModal close={setOpenModal} />}
+      {openLoginModal && <LoginModal />}
     </>
   );
 };
