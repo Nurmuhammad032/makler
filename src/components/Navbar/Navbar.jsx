@@ -7,15 +7,14 @@ import { useEffect, useState } from "react";
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
 
+  const access = localStorage.getItem("access");
   useEffect(() => {
-    const access = localStorage.getItem("access");
-
     if (access) {
       setIsLogin(true);
     } else {
       setIsLogin(false);
     }
-  }, []);
+  }, [access]);
 
   return (
     <header className="header">
