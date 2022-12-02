@@ -8,7 +8,6 @@
 // @import "utils/vars";
 // @import "utils/mixins";
 
-
 $breakpoints: (
   "phone": 400px,
   "phone-wide": 480px,
@@ -50,7 +49,7 @@ body {
   height: 100%;
   width: 100%;
 }
- 
+
 .slick-arrow {
   z-index: 40;
   width: 1.4rem !important;
@@ -69,7 +68,7 @@ body {
 }
 
 // ,
-.app__cards--wrapper{
+.app__cards--wrapper {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
@@ -79,7 +78,7 @@ body {
   }
 }
 
-.slick-next{
+.slick-next {
   right: 0.4rem !important;
   top: auto !important;
   bottom: 0 !important;
@@ -87,7 +86,7 @@ body {
 
 .slick-dots {
   bottom: 0 !important;
-} 
+}
 
 .workers-group {
   display: flex;
@@ -97,6 +96,16 @@ body {
   @include tablet {
     justify-content: center;
   }
+}
+
+.app__nav-input {
+  border: none !important;
+  border-radius: 4rem !important;
+  cursor: pointer;
+}
+
+.app__nav-input.active {
+  background-color: rgba(197, 102, 34, 0.1) !important;
 }
 
 h1,
@@ -332,61 +341,59 @@ input {
   }
 }
 
-
-.form-textarea  {
-	margin-bottom: rem(20px);
-	textarea {
-		background: #FFFFFF;
-		border: 1px solid #DEDEDE;
-		border-radius: 4px;
-		padding: rem(16px) rem(14px);
-		width: 100%;
-		height: rem(132px);
-		font-weight: 400;
-		font-size: rem(13px);
-		line-height: rem(16px);
-		&:active,
-		&:focus,
-		&:focus-visible {
-			outline: none;
-			outline-offset: 0;
-		}
-		&::placeholder {
-			color: #0F1826;
-			opacity: 0.4;
-		}
-	}
-	
+.form-textarea {
+  margin-bottom: rem(20px);
+  textarea {
+    background: #ffffff;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: rem(16px) rem(14px);
+    width: 100%;
+    height: rem(132px);
+    font-weight: 400;
+    font-size: rem(13px);
+    line-height: rem(16px);
+    &:active,
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      outline-offset: 0;
+    }
+    &::placeholder {
+      color: #0f1826;
+      opacity: 0.4;
+    }
+  }
 }
 
 .form-input {
-	margin-bottom: rem(20px);
+  margin-bottom: rem(20px);
 
-	&:last-child {
-		margin-bottom: rem(25px);
-	}
+  &:last-child {
+    margin-bottom: rem(25px);
+  }
 
-	label {
-		margin-bottom: 10px;
-		display: flex;
-		font-family: SFProDisplay_400;
-		font-size: rem(13px);
-		line-height: rem(18px);
-		color: #0F1826;
-	}
+  label {
+    margin-bottom: 10px;
+    display: flex;
+    font-family: SFProDisplay_400;
+    font-size: rem(13px);
+    line-height: rem(18px);
+    color: #0f1826;
+  }
 
-	input {
-		background: #FFFFFF;
-		border: 1px solid #DEDEDE;
-		border-radius: 4px;
-		padding: rem(16px) rem(14px);
-		width: 100%;
-		font-weight: 400;
-		font-size: rem(13px);
-		line-height: rem(16px);
-		&::placeholder {
-			color: #0F1826;
-			opacity: 0.4;
-		}
-	}
+  input {
+    background: #ffffff;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: rem(16px) rem(14px);
+    width: 100%;
+    font-weight: 400;
+    font-size: rem(13px);
+    line-height: rem(16px);
+    &::placeholder {
+      color: #0f1826;
+      opacity: 0.4;
+    }
+  }
 }

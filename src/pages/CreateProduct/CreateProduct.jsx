@@ -4,16 +4,125 @@ import { useContext, useEffect, useState } from "react";
 import { LoginModal } from "../../components";
 import ContextApp from "../../context/context";
 import { useRef } from "react";
-import { GeolocationControl, Map, YMaps, ZoomControl } from "react-yandex-maps";
+import {
+  GeolocationControl,
+  Map,
+  YMaps,
+  ZoomControl,
+} from "@pbe/react-yandex-maps";
 import useForm from "../../hooks/useForm";
+import useNav from "../../hooks/useNav";
+import axios from "axios";
+import { baseURL } from "../../requests/requests";
 
 const CreateProduct = () => {
-  const { form, changeHandler } = useForm({});
+  const [navActive, setNavActive] = useState(false);
+  const { loginModalFunc, openLoginModal } = useContext(ContextApp);
   const initialState = {
     title: "",
     center: [40.783388, 72.350663],
     zoom: 12,
   };
+
+  const texte = (e) => {};
+
+  const [state, setState] = useState({ ...initialState });
+  const [mapConstructor, setMapConstructor] = useState(null);
+  const mapRef = useRef(null);
+  const searchRef = useRef(null);
+  const [points, setPoints] = useState([]);
+  const { form, changeHandler } = useForm({
+    title: "",
+    descriptions: "",
+    price: "",
+    price_type: "y.e",
+    type: "",
+    rental_type: "",
+    property_type: "residential",
+    object: "flat",
+    web_address_title: "",
+    web_address_latitude: "",
+    web_address_longtitude: "",
+    // uploaded_images: "",
+    pm_general: "",
+    pm_residential: "",
+    pm_kitchen: "",
+    number_of_rooms: "",
+    floor: "",
+    floor_from: "",
+    building_type: "",
+    app_ipoteka: "",
+    app_mebel: "",
+    app_new_building: "",
+    amenities: [3],
+    phone_number: "+99895",
+    isBookmarked: false,
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {
+      title: form.title,
+      descriptions: form.descriptions,
+      price: form.price,
+      price_type: Number(form.price_type),
+      type: form.type,
+      rental_type: form.rental_type,
+      property_type: form.property_type,
+      object: form.object,
+      web_address_title: searchRef.current?.value,
+      web_address_latitude: initialState.center[0],
+      // web_address_longtitude: initialState.center[1],
+      // uploaded_images: form.uploaded_images,
+      pm_general: form.pm_general,
+      pm_residential: form.pm_residential,
+      pm_kitchen: form.pm_kitchen,
+      number_of_rooms: form.number_of_rooms,
+      floor: form.floor,
+      floor_from: form.floor_from,
+      building_type: form.building_type,
+      app_ipoteka: Boolean(form.app_ipoteka),
+      app_mebel: Boolean(form.app_mebel),
+      app_new_building: Boolean(form.app_new_building),
+      amenities: form.amenities,
+      phone_number: form.phone_number,
+      isBookmarked: form.isBookmarked,
+    };
+    const d = {
+      title: "string",
+      descriptions: "string",
+      price: "string",
+      price_type: 1,
+      type: "rent",
+      rental_type: "long_time",
+      property_type: "residential",
+      object: "flat",
+      web_address_title: "string",
+      web_address_latitude: 0,
+      pm_general: "8",
+      pm_residential: "string",
+      pm_kitchen: "string",
+      number_of_rooms: "string",
+      floor: "string",
+      floor_from: "string",
+      building_type: "brick",
+      app_ipoteka: true,
+      app_mebel: true,
+      app_new_building: true,
+      amenities: [3],
+      phone_number: "string",
+      isBookmarked: true,
+    };
+
+    console.log(data, d);
+
+    axios
+      .post(`https://fathulla.tk/products/web/api/v1/web-houses/create/`, data)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+  // /products/web/api/v1/web-houses/create/
+  // console.log(data);
 
   const mapOptions = {
     modules: ["geocode", "SuggestView"],
@@ -22,18 +131,15 @@ const CreateProduct = () => {
     height: 400,
   };
 
+  // const testc = (e) => {
+  //   console.log(e.target.value);
+  //   console.log(typeof e.target.value);
+  // };
+
   const geolocationOptions = {
     defaultOptions: { maxWidth: 128 },
     defaultData: { content: "Determine" },
   };
-
-  const { loginModalFunc, openLoginModal } = useContext(ContextApp);
-  const [state, setState] = useState({ ...initialState });
-  const [mapConstructor, setMapConstructor] = useState(null);
-  const mapRef = useRef(null);
-  const searchRef = useRef(null);
-  const [points, setPoints] = useState([]);
-  let address = [41.311151, 69.279737];
 
   // const renderMap = () => {
   //   axios
@@ -52,12 +158,12 @@ const CreateProduct = () => {
   //     });
   // };
 
-  const handleReset = () => {
-    setState({ ...initialState });
-    searchRef.current.value = "";
-    mapRef.current.setCenter(initialState.center);
-    mapRef.current.setZoom(initialState.zoom);
-  };
+  // const handleReset = () => {
+  //   setState({ ...initialState });
+  //   searchRef.current.value = "";
+  //   mapRef.current.setCenter(initialState.center);
+  //   mapRef.current.setZoom(initialState.zoom);
+  // };
 
   // search popup
   useEffect(() => {
@@ -97,7 +203,11 @@ const CreateProduct = () => {
       <section className="create-product-s">
         <div className="container">
           <div className="create-product">
-            <form className="create-product__left" id="create-product">
+            <form
+              className="create-product__left"
+              id="create-product"
+              onSubmit={handleSubmit}
+            >
               <h2>
                 Добавить новое <br />
                 объявление
@@ -113,6 +223,8 @@ const CreateProduct = () => {
                   placeholder="пусто"
                   id="title-product"
                   type="text"
+                  name="title"
+                  onChange={changeHandler}
                   required
                 />
               </div>
@@ -122,6 +234,8 @@ const CreateProduct = () => {
                   placeholder="пусто"
                   id="description-product"
                   type="text"
+                  name="descriptions"
+                  onChange={changeHandler}
                   required
                 ></textarea>
               </div>
@@ -131,33 +245,39 @@ const CreateProduct = () => {
                   type="number"
                   placeholder="Стоимость"
                   required
-                  name="product-price"
+                  name="price"
+                  onChange={changeHandler}
                 />
                 <div className="form-price-choose">
                   <button
                     className="choose-currency"
                     type="button"
                     id="select-currency"
+                    onClick={() => setNavActive((prev) => !prev)}
                   >
-                    <span>у.е</span>
+                    <span>{form.price_type}</span>
                     <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
                       <use href={`${sprite}#fi_chevron-down`}></use>
                     </svg>
                   </button>
-                  <div className="nav-body-choose">
+                  <div className={`nav-body-choose ${navActive && "active"}`}>
                     <ul>
-                      <li>
-                        {" "}
-                        <a className="btn btn-orange-light active" href="#">
-                          y.e
-                        </a>
-                      </li>
-                      <li>
-                        {" "}
-                        <a className="btn btn-orange-light" href="#">
-                          som
-                        </a>
-                      </li>
+                      {[1, 2].map((item) => (
+                        <input
+                          key={item}
+                          type="text"
+                          name="price_type"
+                          className={`app__nav-input ${
+                            form.price_type === item && "active"
+                          }`}
+                          onClick={(e) => {
+                            changeHandler(e);
+                            setNavActive(false);
+                          }}
+                          value={item}
+                          readOnly
+                        />
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -167,19 +287,22 @@ const CreateProduct = () => {
                 <div className="radio-btn-big">
                   <input
                     type="radio"
-                    name="type-product"
+                    name="type"
                     id="rent"
-                    defaultChecked
+                    checked={form.type === "rent"}
                     value="rent"
+                    onChange={changeHandler}
                   />
                   <label htmlFor="rent">Сдать в аренду</label>
                 </div>
                 <div className="radio-btn-big">
                   <input
                     type="radio"
-                    name="type-product"
+                    name="type"
                     id="sale"
+                    checked={form.type === "for_sale"}
                     value="for_sale"
+                    onChange={changeHandler}
                   />
                   <label htmlFor="sale">Продажа недвижимости</label>
                 </div>
@@ -190,8 +313,9 @@ const CreateProduct = () => {
                   <input
                     type="radio"
                     id="long"
-                    name="time"
-                    defaultChecked
+                    name="rental_type"
+                    onChange={changeHandler}
+                    // defaultChecked
                     value="long_time"
                   />
                   <label htmlFor="long">Длительно</label>
@@ -199,40 +323,94 @@ const CreateProduct = () => {
                 <li className="switch-btn">
                   <input
                     type="radio"
+                    onChange={changeHandler}
                     id="month"
-                    name="time"
+                    name="rental_type"
                     value="several_months"
                   />
                   <label htmlFor="month">На несколько месяцев</label>
                 </li>
                 <li className="switch-btn">
-                  <input type="radio" id="day" name="time" value="daily" />
+                  <input
+                    type="radio"
+                    onChange={changeHandler}
+                    id="day"
+                    name="rental_type"
+                    value="daily"
+                  />
                   <label htmlFor="day">Посуточно</label>
                 </li>
               </ul>
               <h5>Тип недвижимости</h5>
               <ul className="radio-list mb-60">
                 <li className="radio-btn">
-                  <input type="radio" id="living" name="type" defaultChecked />
+                  <input
+                    type="radio"
+                    id="living"
+                    value={"residential"}
+                    checked={form.property_type === "residential"}
+                    onChange={changeHandler}
+                    name="property_type"
+                  />
                   <label htmlFor="living">Жилая </label>
                 </li>
                 <li className="radio-btn">
-                  <input type="radio" id="commercial" name="type" />
+                  <input
+                    type="radio"
+                    id="commercial"
+                    value={"commercial"}
+                    checked={form.property_type === "commercial"}
+                    onChange={changeHandler}
+                    name="property_type"
+                  />
                   <label htmlFor="commercial">Коммерческая </label>
                 </li>
               </ul>
               <h5>Объект</h5>
               <ul className="radio-list mb-50">
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="flat"
-                    name="object"
-                    defaultChecked
-                    value="flat"
-                  />
-                  <label htmlFor="flat">Квартира</label>
-                </li>
+                {[
+                  {
+                    text: "Квартира",
+                    value: "flat",
+                  },
+                  {
+                    text: "Комната",
+                    value: "room",
+                  },
+                  {
+                    text: "Дача",
+                    value: "summer_cottage",
+                  },
+                  {
+                    text: "Дом",
+                    value: "house",
+                  },
+                  {
+                    text: "Часть дома",
+                    value: "part_house",
+                  },
+                  {
+                    text: "Таунхаус",
+                    value: "townhouse",
+                  },
+                  {
+                    text: "Койко-место",
+                    value: "bed_space",
+                  },
+                ].map(({ text, value }) => (
+                  <li className="radio-btn" key={value}>
+                    <input
+                      type="radio"
+                      id={text}
+                      name="object"
+                      onChange={changeHandler}
+                      value={value}
+                      checked={form.object === value}
+                    />
+                    <label htmlFor={text}>{text}</label>
+                  </li>
+                ))}
+                {/* 
                 <li className="radio-btn">
                   <input type="radio" id="room" name="object" value="room" />
                   <label htmlFor="room">Комната</label>
@@ -276,7 +454,7 @@ const CreateProduct = () => {
                     value="bed_space"
                   />
                   <label htmlFor="some">Койко-место</label>
-                </li>
+                </li> */}
               </ul>
               <h5>Расположение</h5>
               <div className="map mb-50">
@@ -287,6 +465,9 @@ const CreateProduct = () => {
                       ref={searchRef}
                       placeholder="г.Ташкент, ул.Охангарон 65 А 1"
                       id="suggest"
+                      name="web_address_title"
+                      // onChange={changeHandler}
+                      // value={form.web_address_title}
                     />
                     {/* <button className="btn btn-black" id="save-address">
                       Сохранить
@@ -339,7 +520,7 @@ const CreateProduct = () => {
                 </div>
               </div>
               <h5>Изображения объекта</h5>
-              <div className="image-upload mb-50">
+              {/* <div className="image-upload mb-50">
                 <div className="image-outer">
                   <div className="image-outer-info">
                     <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
@@ -347,7 +528,9 @@ const CreateProduct = () => {
                   </div>
                   <input
                     type="file"
-                    name="files"
+                    name="uploaded_images"
+                    // onChange={changeHandler}
+                        onChange={texte}
                     id="upload-images"
                     accept="image/png, image/jpeg, image/jpg"
                     multiple
@@ -355,7 +538,7 @@ const CreateProduct = () => {
                   <label htmlFor="upload-images">открыть</label>
                 </div>
                 <ul className="image-list" id="gallery"></ul>
-              </div>
+              </div> */}
               <h5>Вся информация об объекте</h5>
               <div className="sizes mb-50">
                 <p>Площадь, м² *</p>
@@ -364,10 +547,24 @@ const CreateProduct = () => {
                     placeholder="Общая"
                     type="number"
                     id="general"
+                    name="pm_general"
+                    onChange={changeHandler}
                     required
                   />
-                  <input placeholder="Жилая" type="number" required />
-                  <input placeholder="Кухня" type="number" required />
+                  <input
+                    placeholder="Жилая"
+                    name="pm_residential"
+                    onChange={changeHandler}
+                    type="number"
+                    required
+                  />
+                  <input
+                    placeholder="Кухня"
+                    name="pm_kitchen"
+                    onChange={changeHandler}
+                    type="number"
+                    required
+                  />
                 </div>
                 <div className="sizes-input">
                   <label>Количество комнат *</label>
@@ -375,6 +572,7 @@ const CreateProduct = () => {
                     placeholder="Общая"
                     name="number_of_rooms"
                     type="number"
+                    onChange={changeHandler}
                     required
                   />
                 </div>
@@ -384,6 +582,7 @@ const CreateProduct = () => {
                     placeholder="Общая"
                     name="floor"
                     type="number"
+                    onChange={changeHandler}
                     required
                   />
                 </div>
@@ -391,7 +590,8 @@ const CreateProduct = () => {
                   <label>Этаж из*</label>
                   <input
                     placeholder="Общая"
-                    name="floor_of"
+                    name="floor_from"
+                    onChange={changeHandler}
                     type="number"
                     required
                   />
@@ -399,38 +599,53 @@ const CreateProduct = () => {
               </div>
               <h5>Тип строения</h5>
               <ul className="radio-list mb-50">
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="type-brick"
-                    name="type-building"
-                    defaultChecked
-                  />
-                  <label htmlFor="type-brick">Кирпич</label>
-                </li>
-                <li className="radio-btn">
+                {["brick", "monolith", "panel", "blocky"].map((item) => (
+                  <li className="radio-btn" key={item}>
+                    <input
+                      type="radio"
+                      id={item}
+                      name="building_type"
+                      value={item}
+                      onChange={changeHandler}
+                      checked={form.building_type === item}
+                    />
+                    <label htmlFor={item}>{item}</label>
+                  </li>
+                ))}
+                {/*      <li className="radio-btn">
                   <input type="radio" id="type-monolith" name="type-building" />
                   <label htmlFor="type-monolith">Монолит</label>
                 </li>
-                <li className="radio-btn">
-                  <input type="radio" id="type-panel" name="type-building" />
+FV                  <input type="radio" id="type-panel" name="type-building" />
                   <label htmlFor="type-panel">Панель</label>
                 </li>
                 <li className="radio-btn">
                   <input type="radio" id="type-block" name="type-building" />
                   <label htmlFor="type-block">Блочный</label>
-                </li>
+                </li> */}
               </ul>
               <ul className="ipoteka-list mb-40">
                 <li className="radio-list">
                   <h5>Ипотека</h5>
                   <div className="radios">
                     <div className="radio-btn">
-                      <input type="radio" id="ipoteka-yes" name="ipoteka" />
+                      <input
+                        type="radio"
+                        id="ipoteka-yes"
+                        value={"true"}
+                        onChange={changeHandler}
+                        name="app_ipoteka"
+                      />
                       <label htmlFor="ipoteka-yes">да</label>
                     </div>
                     <div className="radio-btn">
-                      <input type="radio" id="ipoteka-no" name="ipoteka" />
+                      <input
+                        type="radio"
+                        id="ipoteka-no"
+                        value={""}
+                        name="app_ipoteka"
+                        onChange={changeHandler}
+                      />
                       <label htmlFor="ipoteka-no">нет </label>
                     </div>
                   </div>
@@ -442,7 +657,9 @@ const CreateProduct = () => {
                       <input
                         type="radio"
                         id="new-buildings-yes"
-                        name="new-buildings"
+                        name="app_new_building"
+                        onChange={changeHandler}
+                        value={"true"}
                       />
                       <label htmlFor="new-buildings-yes">да</label>
                     </div>
@@ -450,7 +667,9 @@ const CreateProduct = () => {
                       <input
                         type="radio"
                         id="new-buildings-no"
-                        name="new-buildings"
+                        name="app_new_building"
+                        onChange={changeHandler}
+                        value={""}
                       />
                       <label htmlFor="new-buildings-no">нет </label>
                     </div>
@@ -463,7 +682,9 @@ const CreateProduct = () => {
                       <input
                         type="radio"
                         id="furnishings-yes"
-                        name="furnishings"
+                        name="app_mebel"
+                        onChange={changeHandler}
+                        value={"true"}
                       />
                       <label htmlFor="furnishings-yes">да</label>
                     </div>
@@ -471,7 +692,9 @@ const CreateProduct = () => {
                       <input
                         type="radio"
                         id="furnishings-no"
-                        name="furnishings"
+                        onChange={changeHandler}
+                        value={""}
+                        name="app_mebel"
                       />
                       <label htmlFor="furnishings-no">нет </label>
                     </div>
@@ -492,14 +715,18 @@ const CreateProduct = () => {
                   </svg>
                 </label>
               </div>
-              {/* <div className="btns">
-                <button className="btn btn-black">
+              <div className="btns">
+                <button
+                  className="btn btn-black"
+                  type="submit"
+                  onSubmit={handleSubmit}
+                >
                   Сохранить как черновик
                 </button>
-                <button className="btn btn-orange">
+                {/* <button className="btn btn-orange">
                   Опубликовать объявление{" "}
-                </button>
-              </div> */}
+                </button> */}
+              </div>
             </form>
             <div className="create-product__right">
               <h5>Контактная информация</h5>
