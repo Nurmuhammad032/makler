@@ -1,6 +1,7 @@
 import {
   Categories,
   DownloadApp,
+  EditPage,
   Filter,
   FooterMenu,
   Houses,
@@ -10,6 +11,7 @@ import {
 const Home = () => {
   return (
     <>
+    <EditPage/>
       <Filter />
       <Categories />
       <Houses />
