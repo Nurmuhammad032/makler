@@ -11,7 +11,6 @@ import {
 const Home = () => {
   return (
     <>
-    <EditPage/>
       <Filter />
       <Categories />
       <Houses />

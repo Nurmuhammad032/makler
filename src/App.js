@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Footer, Navbar } from "./components";
+import { EditPage, Footer, Navbar } from "./components";
 import { ContextProvider } from "./context/context";
 import ProtectedRoute from "./helpers/ProtectedRoute";
 import {
@@ -42,6 +42,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/create-master" element={<EditPage />} />
             <Route path="/create-product" element={<CreateProduct />} />
             <Route path="/save-products" element={<SavedProduct />} />
             <Route path="/product" element={<SingleProduct />} />
