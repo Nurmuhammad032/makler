@@ -8,12 +8,80 @@ import {
   YMaps,
   ZoomControl,
 } from "@pbe/react-yandex-maps";
+import {
+  Box,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Chip,
+  useTheme,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+import useForm from "../../hooks/useForm";
+import axios from "axios";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  {
+    text: "architect",
+    value: 1,
+  },
+  {
+    text: "painter",
+    value: 2,
+  },
+  {
+    text: "electrician",
+    value: 3,
+  },
+];
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 
 export default function EditPage() {
+  const theme = useTheme();
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    console.log(value);
+  };
   const initialState = {
     title: "",
     center: [40.783388, 72.350663],
     zoom: 12,
+  };
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
   };
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
@@ -63,90 +131,146 @@ export default function EditPage() {
     });
   };
 
+  const { form, changeHandler } = useForm({
+    name: "",
+    email: "",
+    // image:
+    //   "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
+    phone: 998,
+    address_title: searchRef.current?.value,
+    address_latitude: state.center[0],
+    address_longitude: state.center[1],
+    // avatar:
+    //   "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
+    profession: [],
+    descriptions: "",
+    experience: 0,
+  });
+
+  const handeSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: form.name,
+      email: form.email,
+      //   image:
+      // "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
+      phone: Number(form.phone),
+      address_title: form.address_title,
+      address_latitude: form.address_latitude,
+      address_longitude: form.address_longitude,
+      //   avatar:
+      // "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
+      profession: form.profession,
+      descriptions: form.descriptions,
+      experience: form.experience,
+    };
+
+    axios
+      .post("https://fathulla.tk/master/api/v1/maklers/create/", data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+  console.log(form);
+
   return (
     <div className="container">
       <div className="create-product-s">
         <div className="create-product">
-          <div className="editpage__card">
-            <div className="edit__left__card">
-              <h1 className="edit__card__title">
-                Регистрируйтес как мастер, получите работы
-              </h1>
-              <p className="edit__card__text">
-                Объявление будет доступно на{" "}
-                <a target={"_blank"} className="text__link" href="">
-                  Makler.uz
-                </a>{" "}
-                и в наших мобильных приложениях
-              </p>
-              <div className="card__header">
-                <img
-                  className="avatar__img"
-                  src={avatar_image}
-                  alt="avatar image"
-                />
-                <div className="image__card">
-                  <p className="avatar__name">
-                    Загрузите фото профиля или логотп компании
-                  </p>
-                  <button className="change__btn">Изменить фото профиля</button>
-                </div>
+          <form className="create-product__left" onSubmit={handeSubmit}>
+            <h1 className="edit__card__title">
+              Регистрируйтес как мастер, получите работы
+            </h1>
+            <p className="edit__card__text">
+              Объявление будет доступно на{" "}
+              <a target={"_blank"} className="text__link" href="">
+                Makler.uz
+              </a>{" "}
+              и в наших мобильных приложениях
+            </p>
+            <div className="card__header">
+              <img
+                className="avatar__img"
+                src={avatar_image}
+                alt="avatar image"
+              />
+              <div className="image__card">
+                <p className="avatar__name">
+                  Загрузите фото профиля или логотп компании
+                </p>
+                <button className="change__btn">Изменить фото профиля</button>
               </div>
-              <div className="editpage__input">
-                <form className="form__input" action="" method={"post"}>
-                  <label htmlFor="">
-                    <span>Имя Фамилия</span>
-                    <input
-                      name={"name"}
-                      id="name"
-                      type={"text"}
-                      placeholder="Abbos Janizakov"
-                    />
-                  </label>
-                  <label id="email" htmlFor="">
-                    <span>Электронная почта</span>
-                    <input
-                      name={"email"}
-                      type={"email"}
-                      placeholder="info@gmail.com"
-                    />
-                  </label>
-                  <label htmlFor="">
-                    <span>Номер телефона | Ваше логин</span>
-                    <input
-                      name={"phone number"}
-                      type={"number"}
-                      placeholder="+998 90 123-45-67"
-                    />
-                  </label>
-                  <label htmlFor="">
-                    <span>Пароль</span>
-                    <input
-                      name={"password"}
-                      type="password"
-                      placeholder="пусто"
-                    />
-                  </label>
-                  <label htmlFor="">
-                    <span className="text__area">Краткое описание о себе</span>
-                    <textarea
-                      className="textarea"
-                      id=""
-                      placeholder="пусто"
-                    ></textarea>
-                  </label>
-                </form>
+            </div>
+            <div className="editpage__input">
+              <div className="form__input">
+                <label htmlFor="">
+                  <span>Имя Фамилия</span>
+                  <input
+                    name={"name"}
+                    id="name"
+                    onChange={changeHandler}
+                    type={"text"}
+                    placeholder="Abbos Janizakov"
+                  />
+                </label>
+                <label id="email" htmlFor="">
+                  <span>Электронная почта</span>
+                  <input
+                    name={"email"}
+                    type={"email"}
+                    onChange={changeHandler}
+                    placeholder="info@gmail.com"
+                  />
+                </label>
+                <label htmlFor="">
+                  <span>Номер телефона | Ваше логин</span>
+                  <input
+                    name={"phone"}
+                    type={"number"}
+                    onChange={changeHandler}
+                    placeholder="90 123-45-67"
+                  />
+                </label>
+                <label htmlFor="">
+                  <span>Пароль</span>
+                  <input
+                    name={"password"}
+                    type="password"
+                    onChange={changeHandler}
+                    placeholder="пусто"
+                  />
+                </label>
+                <label htmlFor="e">
+                  <span
+                    className="text__area"
+                    style={{
+                      display: 'block'
+                    }}
+                  >
+                    Краткое описание о себе
+                  </span>
+                  <input type="text" id="e" placeholder="experience" />
+                </label>
+                <label htmlFor="">
+                  <span className="text__area">Краткое описание о себе</span>
+                  <textarea
+                    className="textarea"
+                    id=""
+                    name="descriptions"
+                    onChange={changeHandler}
+                    placeholder="пусто"
+                  ></textarea>
+                </label>
               </div>
-              <div className="second-card">
-                <div className="second__card">
-                  <h2 className="second__card__title">
-                    Выберите раздел и специализацию *
-                  </h2>
-                  <p className="second__card__text">
-                    Введите род деятельности!
-                  </p>
-                </div>
-                <select
+            </div>
+            <div className="second-card">
+              <div className="second__card">
+                <h2 className="second__card__title">
+                  Выберите раздел и специализацию *
+                </h2>
+                <p className="second__card__text">Введите род деятельности!</p>
+              </div>
+              {/* <select
                   className="select"
                   name="ergerg"
                   id=""
@@ -167,9 +291,47 @@ export default function EditPage() {
                   <option className="select__option" value="service">
                     Мастер окон
                   </option>
-                </select>
-              </div>
-              {/* <div className="map--box">
+                </select> */}
+              <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
+                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+                <Select
+                  labelId="demo-multiple-chip-label"
+                  id="demo-multiple-chip"
+                  multiple
+                  value={personName}
+                  onChange={(e) => {
+                    handleChange();
+                    changeHandler(e);
+                  }}
+                  input={
+                    <OutlinedInput id="select-multiple-chip" label="Chip" />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip
+                          sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
+                          key={value}
+                          label={value}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {names.map((name) => (
+                    <MenuItem
+                      key={name.value}
+                      value={name.value}
+                      style={getStyles(name.value, personName, theme)}
+                    >
+                      {name.text}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            {/* <div className="map--box">
                 <form action="">
                   <label className="map__address" htmlFor="">
                     Укажите зону обслуживания!
@@ -185,115 +347,117 @@ export default function EditPage() {
                   frameBorder={"none"}
                 ></iframe>
               </div> */}
-              <h5>Расположение</h5>
+            <h5>Расположение</h5>
+            <div
+              className="map"
+              style={{
+                position: "relative",
+              }}
+            >
+              <div className="map-info">
+                <h5>Где находится?</h5>
+                <div className="map-address">
+                  <input
+                    ref={searchRef}
+                    placeholder="г.Ташкент, ул.Охангарон 65 А 1"
+                    id="suggest"
+                    name="web_address_title"
+                    // onChange={changeHandler}
+                    // value={form.web_address_title}
+                  />
+                </div>
+              </div>
+              <p className="error-par d-none">Такой геолокации не существует</p>
               <div
-                className="map"
+                id="map"
+                className="mapRoot"
                 style={{
                   position: "relative",
                 }}
               >
-                <div className="map-info">
-                  <h5>Где находится?</h5>
-                  <div className="map-address">
-                    <input
-                      ref={searchRef}
-                      placeholder="г.Ташкент, ул.Охангарон 65 А 1"
-                      id="suggest"
-                      name="web_address_title"
-                      // onChange={changeHandler}
-                      // value={form.web_address_title}
-                    />
-                  </div>
-                </div>
-                <p className="error-par d-none">
-                  Такой геолокации не существует
-                </p>
-                <div
-                  id="map"
-                  className="mapRoot"
-                  style={{
-                    position: "relative",
+                <YMaps
+                  query={{
+                    apikey: "29294198-6cdc-4996-a870-01e89b830f3e",
+                    lang: "en_RU",
                   }}
                 >
-                  <YMaps
-                    query={{
-                      apikey: "29294198-6cdc-4996-a870-01e89b830f3e",
-                      lang: "en_RU",
+                  <Map
+                    {...mapOptions}
+                    // state={state}s
+                    state={{
+                      center: state?.center,
+                      zoom: 12,
                     }}
+                    onLoad={setMapConstructor}
+                    onBoundsChange={handleBoundsChange}
+                    instanceRef={mapRef}
                   >
-                    <Map
-                      {...mapOptions}
-                      // state={state}s
-                      state={{
-                        center: state?.center,
-                        zoom: 12,
+                    <div
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        background: "#000",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -100%)",
+                        zIndex: 3000,
                       }}
-                      onLoad={setMapConstructor}
-                      onBoundsChange={handleBoundsChange}
-                      instanceRef={mapRef}
-                    >
-                      <div
-                        style={{
-                          width: "1rem",
-                          height: "1rem",
-                          background: "#000",
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -100%)",
-                          zIndex: 3000,
-                        }}
-                      ></div>
-                      <GeolocationControl {...geolocationOptions} />
-                      <ZoomControl />
-                    </Map>
-                  </YMaps>
-                </div>
-              </div>
-
-              <div className="checkbox">
-                <input
-                  className="checkbox__input"
-                  type={"checkbox"}
-                  name=""
-                  id=""
-                />
-                <span className="checkbox__text">
-                  Я прочитал и согласен с условиями использования и публикации!
-                </span>
-              </div>
-
-              <div className="register">
-                <form action="">
-                  <button className="register__btn">Зарегистрироватся</button>
-                </form>
+                    ></div>
+                    <GeolocationControl {...geolocationOptions} />
+                    <ZoomControl />
+                  </Map>
+                </YMaps>
               </div>
             </div>
-            <div className="edit__right__card">
-              <div className="edit__card">
-                <div className="edit__card__content">
-                  <h2 className="right__card__title">
-                    Краткое описание о нашем сервисе
-                  </h2>
-                  <p className="edit__card__text">Регистрация как мастер</p>
-                  <p>
-                    Как только вы зарегистрируетесь в качестве мастера, вы
-                    сможете получать заказы по направлениям, введенным через наш
-                    портал!
-                  </p>
-                  <div className="blockquote__card">
-                    <em className="blockquote__text">
-                      Напоминаем, что мы не несем ответственности за сбор платы
-                      за услуги через этот портал!
-                    </em>
-                  </div>
-                  <p>
-                    При регистрации вы вводите свой номер телефона в качестве
-                    логина и придумываете себе пароль. Нажав кнопку входа, вы
-                    введете свой номер телефона и пароль для доступа к
-                    существующему профилю.
-                  </p>
+
+            <div className="checkbox">
+              <input
+                className="checkbox__input"
+                type={"checkbox"}
+                name=""
+                id=""
+              />
+              <span className="checkbox__text">
+                Я прочитал и согласен с условиями использования и публикации!
+              </span>
+            </div>
+
+            <div className="register">
+              <div>
+                <button
+                  type="submit"
+                  onSubmit={handeSubmit}
+                  className="register__btn"
+                >
+                  Зарегистрироватся
+                </button>
+              </div>
+            </div>
+          </form>
+          <div className="create-product__right">
+            <div className="edit__card">
+              <div className="edit__card__content">
+                <h2 className="right__card__title">
+                  Краткое описание о нашем сервисе
+                </h2>
+                <p className="edit__card__text">Регистрация как мастер</p>
+                <p>
+                  Как только вы зарегистрируетесь в качестве мастера, вы сможете
+                  получать заказы по направлениям, введенным через наш портал!
+                </p>
+                <div className="blockquote__card">
+                  <em className="blockquote__text">
+                    Напоминаем, что мы не несем ответственности за сбор платы за
+                    услуги через этот портал!
+                  </em>
                 </div>
+                <p>
+                  При регистрации вы вводите свой номер телефона в качестве
+                  логина и придумываете себе пароль. Нажав кнопку входа, вы
+                  введете свой номер телефона и пароль для доступа к
+                  существующему профилю.
+                </p>
               </div>
             </div>
           </div>
