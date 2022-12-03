@@ -2,10 +2,12 @@ import "./Navbar.scss";
 import logo from "../../assets/img/logo_site2.png";
 import spirite from "../../assets/img/symbol/sprite.svg";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import ContextApp from "../../context/context";
 
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const { userData } = useContext(ContextApp);
 
   const access = localStorage.getItem("access");
   useEffect(() => {
@@ -75,7 +77,7 @@ const Navbar = () => {
               </li>
               <li>
                 {isLogin ? (
-                  <Link to="/cabinet">
+                  <Link to={`/cabinet/${userData?.id}`}>
                     <svg className="svg-sprite-icon icon-fi_log-in w-16">
                       <use href={`${spirite}#fi_log-in`}></use>
                     </svg>

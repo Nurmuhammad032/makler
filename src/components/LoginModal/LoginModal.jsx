@@ -3,11 +3,12 @@ import sprite from "../../assets/img/symbol/sprite.svg";
 import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ContextApp from "../../context/context";
 
-const LoginModal = ({ close }) => {
+const LoginModal = () => {
   const { loginModalFunc } = useContext(ContextApp);
+  const [da, setDa] = useState()
   const { form, changeHandler } = useForm({
     number: "",
   });
@@ -22,10 +23,13 @@ const LoginModal = ({ close }) => {
       .post(`${baseURL}/authorization/signup/`, info)
       .then((data) => {
         localStorage.setItem("access", data?.data.token?.access);
-        window.location.reload();
+        // window.location.reload();
+        setDa(data);
       })
       .catch((err) => console.log(err));
-  };
+
+    };
+    console.log(da?.data.token?.access)
 
   return (
     <div className="modal login-modal">

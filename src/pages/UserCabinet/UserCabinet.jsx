@@ -8,11 +8,29 @@ import {
   draft,
   userCabinetNavigator,
 } from "./userAnnounce";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserSettings from "./UserSettings";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../../requests/requests";
+import ContextApp from "../../context/context";
 
 const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
+  const { getUserData, userData } = useContext(ContextApp);
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  console.log(id);
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/users/api/v1/get-user/${id}`)
+      .then((data) => getUserData(data.data))
+      .catch(() => navigate("/"));
+  }, []);
+
+  console.log(userData);
 
   return (
     <section className="cabinet-s">
@@ -257,8 +275,9 @@ const UserCabinet = () => {
                 </picture>
               </div>
               <div className="cabinet-profile-info">
-                <h4>Abbos Janizakov</h4>
-                <p>id:123981</p>
+                <h4>Name: {userData?.first_name}</h4>
+                <p>id: {userData?.id}</p>
+                <p>Email: {userData?.email}</p>
               </div>
             </div>
             <ul className="cabinet-nav-list">

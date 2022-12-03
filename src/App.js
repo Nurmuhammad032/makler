@@ -27,6 +27,8 @@ function App() {
     }
   }, []);
 
+  console.log(isLogin);
+
   return (
     <Router>
       <ContextProvider>
@@ -34,14 +36,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route
-              path="/cabinet"
-              element={
-                <ProtectedRoute user={isLogin}>
-                  <UserCabinet />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/cabinet/:id" element={<UserCabinet />} />
             <Route path="/create-master" element={<EditPage />} />
             <Route path="/create-product" element={<CreateProduct />} />
             <Route path="/save-products" element={<SavedProduct />} />

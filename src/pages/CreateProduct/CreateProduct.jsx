@@ -28,6 +28,9 @@ const CreateProduct = () => {
 
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
+  const [file, setFile] = useState([]);
+  const [img, setImg] = useState([]);
+  const [fileDataURL, setFileDataURL] = useState(null);
   const mapRef = useRef(null);
   const searchRef = useRef(null);
   const [points, setPoints] = useState([]);
@@ -61,68 +64,113 @@ const CreateProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      title: form.title,
-      descriptions: form.descriptions,
-      price: form.price,
-      price_type: Number(form.price_type),
-      type: form.type,
-      rental_type: form.rental_type,
-      property_type: form.property_type,
-      object: form.object,
-      web_address_title: searchRef.current?.value,
-      web_address_latitude: initialState.center[0],
-      // web_address_longtitude: initialState.center[1],
-      // uploaded_images: form.uploaded_images,
-      pm_general: form.pm_general,
-      pm_residential: form.pm_residential,
-      pm_kitchen: form.pm_kitchen,
-      number_of_rooms: form.number_of_rooms,
-      floor: form.floor,
-      floor_from: form.floor_from,
-      building_type: form.building_type,
-      app_ipoteka: Boolean(form.app_ipoteka),
-      app_mebel: Boolean(form.app_mebel),
-      app_new_building: Boolean(form.app_new_building),
-      amenities: form.amenities,
-      phone_number: form.phone_number,
-      isBookmarked: form.isBookmarked,
-    };
-    const d = {
-      title: "string",
-      descriptions: "string",
-      price: "string",
-      price_type: 1,
-      type: "rent",
-      rental_type: "long_time",
-      property_type: "residential",
-      object: "flat",
-      web_address_title: "string",
-      web_address_latitude: 0,
-      pm_general: "8",
-      pm_residential: "string",
-      pm_kitchen: "string",
-      number_of_rooms: "string",
-      floor: "string",
-      floor_from: "string",
-      building_type: "brick",
-      app_ipoteka: true,
-      app_mebel: true,
-      app_new_building: true,
-      amenities: [3],
-      phone_number: "string",
-      isBookmarked: true,
-    };
+    // console.log(file.map((f) => console.log(f)));
+    const formData = new FormData();
+    // const data = {
+    formData.append("title", form.title);
+    formData.append("descriptions", form.descriptions);
+    formData.append("price", form.price);
+    formData.append("price_type", Number(form.price_type));
+    formData.append("type", form.type);
+    formData.append("rental_type", form.rental_type);
+    formData.append("property_type", form.property_type);
+    formData.append("object", form.object);
+    formData.append("web_address_title", searchRef.current?.value);
+    formData.append("web_address_latitude", initialState.center[0]);
+    formData.append("web_address_longtitude", initialState.center[1]);
+    formData.append("pm_general", form.pm_general);
+    formData.append("pm_residential", form.pm_residential);
+    formData.append("pm_kitchen", form.pm_kitchen);
+    formData.append("number_of_rooms", form.number_of_rooms);
+    formData.append("floor", form.floor);
+    formData.append("floor_from", form.floor_from);
+    formData.append("building_type", form.building_type);
+    formData.append("app_ipoteka", Boolean(form.app_ipoteka));
+    formData.append("app_mebel", form.app_mebel);
+    formData.append("app_new_building", form.app_new_building);
+    formData.append("amenities", form.amenities);
+    formData.append("phone_number", form.phone_number);
+    formData.append("isBookmarked", form.isBookmarked);
+    for (const fi of file) {
+      formData.append("uploaded_images", fi);
+    }
 
-    console.log(data, d);
+
+    //  console.log(formData);
+    const userToken = localStorage.getItem("access");
 
     axios
-      .post(`https://fathulla.tk/products/web/api/v1/web-houses/create/`, data)
+      .post(
+        `https://fathulla.tk/products/web/api/v1/web-houses/create/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
       .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
-  // /products/web/api/v1/web-houses/create/
-  // console.log(data);
+
+  const handleChange = (e) => {
+    const { files } = e.target;
+    setFile([...files]);
+    const validimg = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      validimg.push(file);
+    }
+    if (validimg.length) {
+      setImg(validimg);
+      return;
+    }
+    alert("Selected images are not of valid type!");
+  };
+  // console.log(file);
+
+  useEffect(() => {
+    const fileReaders = [];
+    let isCancel = false;
+    if (img?.length) {
+      const promises = img.map((file) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReaders.push(fileReader);
+          fileReader.onload = (e) => {
+            const { result } = e.target;
+            if (result) {
+              resolve(result);
+            }
+          };
+          fileReader.onabort = () => {
+            reject(new Error("File reading aborted"));
+          };
+          fileReader.onerror = () => {
+            reject(new Error("Failed to read file"));
+          };
+          fileReader.readAsDataURL(file);
+        });
+      });
+      Promise.all(promises)
+        .then((images) => {
+          if (!isCancel) {
+            setImg(images);
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [img]);
 
   const mapOptions = {
     modules: ["geocode", "SuggestView"],
@@ -131,39 +179,10 @@ const CreateProduct = () => {
     height: 400,
   };
 
-  // const testc = (e) => {
-  //   console.log(e.target.value);
-  //   console.log(typeof e.target.value);
-  // };
-
   const geolocationOptions = {
     defaultOptions: { maxWidth: 128 },
     defaultData: { content: "Determine" },
   };
-
-  // const renderMap = () => {
-  //   axios
-  //     .get(
-  //       `https://geocode-maps.yandex.ru/1.x/?apikey=c5bd98ea-afd9-433c-909d-a54b6459fb30&format=json&geocode=${address}`
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //       let point =
-  //         res.data.response.GeoObjectCollection.featureMember[0].GeoObject
-  //           .Point;
-
-  //       setPoints([
-  //         [Number(point.pos.split(" ")[1]), Number(point.pos.split(" ")[0])],
-  //       ]);
-  //     });
-  // };
-
-  // const handleReset = () => {
-  //   setState({ ...initialState });
-  //   searchRef.current.value = "";
-  //   mapRef.current.setCenter(initialState.center);
-  //   mapRef.current.setZoom(initialState.zoom);
-  // };
 
   // search popup
   useEffect(() => {
@@ -176,7 +195,6 @@ const CreateProduct = () => {
             const newCoords = result?.geoObjects
               ?.get(0)
               ?.geometry?.getCoordinates();
-            console.log(newCoords);
             setState((prevState) => ({ ...prevState, center: newCoords }));
           });
         }
@@ -207,6 +225,7 @@ const CreateProduct = () => {
               className="create-product__left"
               id="create-product"
               onSubmit={handleSubmit}
+              encType={"multipart/form-data"}
             >
               <h2>
                 Добавить новое <br />
@@ -520,7 +539,7 @@ const CreateProduct = () => {
                 </div>
               </div>
               <h5>Изображения объекта</h5>
-              {/* <div className="image-upload mb-50">
+              <div className="image-upload mb-50">
                 <div className="image-outer">
                   <div className="image-outer-info">
                     <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
@@ -530,15 +549,22 @@ const CreateProduct = () => {
                     type="file"
                     name="uploaded_images"
                     // onChange={changeHandler}
-                        onChange={texte}
+                    onChange={(e) => handleChange(e)}
                     id="upload-images"
                     accept="image/png, image/jpeg, image/jpg"
                     multiple
                   />
                   <label htmlFor="upload-images">открыть</label>
                 </div>
-                <ul className="image-list" id="gallery"></ul>
-              </div> */}
+                <ul className="image-list" id="gallery">
+                  {img.length &&
+                    img.map((im, i) => (
+                      <li key={i}>
+                        <img src={im} alt="house" />
+                      </li>
+                    ))}
+                </ul>
+              </div>
               <h5>Вся информация об объекте</h5>
               <div className="sizes mb-50">
                 <p>Площадь, м² *</p>

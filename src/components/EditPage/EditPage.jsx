@@ -5,6 +5,7 @@ import sprite from "../../assets/img/symbol/sprite.svg";
 import {
   GeolocationControl,
   Map,
+  Placemark,
   YMaps,
   ZoomControl,
 } from "@pbe/react-yandex-maps";
@@ -118,6 +119,8 @@ export default function EditPage() {
     }
   }, [mapConstructor]);
 
+  console.log(searchRef.current?.value);
+
   const handleBoundsChange = (e) => {
     const newCoords = mapRef.current.getCenter();
     mapConstructor?.geocode(newCoords).then((res) => {
@@ -140,6 +143,7 @@ export default function EditPage() {
     address_title: searchRef.current?.value,
     address_latitude: state.center[0],
     address_longitude: state.center[1],
+    password: "",
     // avatar:
     //   "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
     profession: [],
@@ -156,22 +160,26 @@ export default function EditPage() {
       //   image:
       // "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
       phone: Number(form.phone),
-      address_title: form.address_title,
+      address_title: searchRef.current?.value,
       address_latitude: form.address_latitude,
       address_longitude: form.address_longitude,
+      password: form.password,
       //   avatar:
       // "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
-      profession: form.profession,
+      profession: form.profession.map((data) => data.value),
       descriptions: form.descriptions,
       experience: form.experience,
     };
+    console.log(data);
 
     axios
       .post("https://fathulla.tk/master/api/v1/maklers/create/", data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+
+    console.log(data);
   };
-  console.log(form);
+  //   console.log(form);
 
   return (
     <div className="container">
@@ -240,17 +248,6 @@ export default function EditPage() {
                     placeholder="пусто"
                   />
                 </label>
-                <label htmlFor="e">
-                  <span
-                    className="text__area"
-                    style={{
-                      display: 'block'
-                    }}
-                  >
-                    Краткое описание о себе
-                  </span>
-                  <input type="text" id="e" placeholder="experience" />
-                </label>
                 <label htmlFor="">
                   <span className="text__area">Краткое описание о себе</span>
                   <textarea
@@ -262,6 +259,19 @@ export default function EditPage() {
                   ></textarea>
                 </label>
               </div>
+              <label htmlFor="e">
+                <span className="text__area">Краткое описание о себе</span>
+                <input
+                  type="number"
+                  id="e"
+                  name="experience"
+                  onChange={changeHandler}
+                  placeholder="experience"
+                  style={{
+                    width: "100%",
+                  }}
+                />
+              </label>
             </div>
             <div className="second-card">
               <div className="second__card">
@@ -270,37 +280,16 @@ export default function EditPage() {
                 </h2>
                 <p className="second__card__text">Введите род деятельности!</p>
               </div>
-              {/* <select
-                  className="select"
-                  name="ergerg"
-                  id=""
-                  placeholder="Сантехник"
-                >
-                  <option className="select__option" value="service">
-                    Сантехник
-                  </option>
-                  <option className="select__option" value="service">
-                    Мебельщик
-                  </option>
-                  <option className="select__option" value="service">
-                    Уборшик
-                  </option>
-                  <option className="select__option" value="service">
-                    Электрик
-                  </option>
-                  <option className="select__option" value="service">
-                    Мастер окон
-                  </option>
-                </select> */}
               <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
                 <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
                 <Select
                   labelId="demo-multiple-chip-label"
                   id="demo-multiple-chip"
                   multiple
+                  name="profession"
                   value={personName}
                   onChange={(e) => {
-                    handleChange();
+                    handleChange(e);
                     changeHandler(e);
                   }}
                   input={
@@ -311,8 +300,8 @@ export default function EditPage() {
                       {selected.map((value) => (
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
-                          key={value}
-                          label={value}
+                          key={value.value}
+                          label={value.text}
                         />
                       ))}
                     </Box>
@@ -322,7 +311,7 @@ export default function EditPage() {
                   {names.map((name) => (
                     <MenuItem
                       key={name.value}
-                      value={name.value}
+                      value={name}
                       style={getStyles(name.value, personName, theme)}
                     >
                       {name.text}
@@ -361,9 +350,9 @@ export default function EditPage() {
                     ref={searchRef}
                     placeholder="г.Ташкент, ул.Охангарон 65 А 1"
                     id="suggest"
-                    name="web_address_title"
+                    name="address_title"
                     // onChange={changeHandler}
-                    // value={form.web_address_title}
+                    // value={form.address_title}
                   />
                 </div>
               </div>
@@ -392,7 +381,7 @@ export default function EditPage() {
                     onBoundsChange={handleBoundsChange}
                     instanceRef={mapRef}
                   >
-                    <div
+                    {/* <div
                       style={{
                         width: "1rem",
                         height: "1rem",
@@ -403,9 +392,10 @@ export default function EditPage() {
                         transform: "translate(-50%, -100%)",
                         zIndex: 3000,
                       }}
-                    ></div>
+                    ></div> */}
                     <GeolocationControl {...geolocationOptions} />
-                    <ZoomControl />
+                    {/* <ZoomControl     /> */}
+                    <Placemark geometry={state.center} />
                   </Map>
                 </YMaps>
               </div>

@@ -26,7 +26,7 @@ const UserCard = ({ data }) => {
                 </span>
               ))}
             </div>
-            <p className="user-loc">{data.address.addressName}</p>
+            <p className="user-loc">{data.address_title}</p>
           </div>
         </div>
       </div>

@@ -40,7 +40,7 @@ const UserSingle = ({ data }) => {
                   )}
                   <p className="user-loc">
                     {typeof data.address !== "string"
-                      ? data.address.addressName
+                      ? data.address_title
                       : data.address}
                   </p>
                 </div>
@@ -60,7 +60,7 @@ const UserSingle = ({ data }) => {
               </div>
               <div className="app__worker-right">
                 <h1>Описание</h1>
-                <p>{data?.description}</p>
+                <p>{data?.descriptions}</p>
               </div>
             </div>
             <div
