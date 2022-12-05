@@ -227,3 +227,17 @@ label {
 .blockquote__text {
   color: #c56622;
 }
+
+textarea{
+  resize: none;
+}
+.price__select{
+  margin: 10px 0;
+}
+.price-name{
+  margin-top: 20px;
+}
+
+.phone-number{
+  width: 435px;
+}
