@@ -40,7 +40,7 @@ function App() {
             <Route path="/create-master" element={<EditPage />} />
             <Route path="/create-product" element={<CreateProduct />} />
             <Route path="/save-products" element={<SavedProduct />} />
-            <Route path="/product" element={<SingleProduct />} />
+            <Route path="/product/:id" element={<SingleProduct />} />
             <Route path="/master" element={<Workers />} />
             <Route path="/master/:id" element={<MasterPage />} />
             <Route path="/industria/:id" element={<Industriya />} />

@@ -18,7 +18,16 @@ const UserSingle = ({ data }) => {
             <div className="app__worker-wrapper">
               <div className="app__worker-left">
                 <div className="user-card">
-                  <img src={UserImg} alt="User image" />
+                  <img
+                    src={data?.avatar}
+                    alt="User image"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
                   <div className="user-info">
                     <h4 className="user-name">{data?.name}</h4>
                     <p className="user-level">

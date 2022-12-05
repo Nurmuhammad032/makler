@@ -62,7 +62,7 @@ const SliderContent = ({ imgUrl }) => {
           }}
         >
           <img
-            src={img}
+            src={img.images}
             alt={img}
             style={{
               height: "100%",

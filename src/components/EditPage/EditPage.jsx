@@ -60,6 +60,18 @@ function getStyles(name, personName, theme) {
 export default function EditPage() {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
+  const [file, setFile] = useState();
+  const [imgUrl, setImgUrl] = useState();
+  const fileHandle = (e) => {
+    const img = e.target.files[0];
+    setFile(img);
+    let reader = new FileReader();
+    reader.readAsDataURL(img);
+
+    reader.onloadend = function () {
+      setImgUrl(reader.result);
+    };
+  };
 
   const handleChange = (event) => {
     const {
@@ -144,8 +156,6 @@ export default function EditPage() {
     address_latitude: state.center[0],
     address_longitude: state.center[1],
     password: "",
-    // avatar:
-    //   "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
     profession: [],
     descriptions: "",
     experience: 0,
@@ -153,33 +163,32 @@ export default function EditPage() {
 
   const handeSubmit = (e) => {
     e.preventDefault();
-
-    const data = {
-      name: form.name,
-      email: form.email,
-      //   image:
-      // "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
-      phone: Number(form.phone),
-      address_title: searchRef.current?.value,
-      address_latitude: form.address_latitude,
-      address_longitude: form.address_longitude,
-      password: form.password,
-      //   avatar:
-      // "https://fathulla.tk/media/master_avatar/UIC_Group_-_Google_Chrome_25.11.2022_11_10_33.png",
-      profession: form.profession.map((data) => data.value),
-      descriptions: form.descriptions,
-      experience: form.experience,
-    };
-    console.log(data);
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("phone", Number(form.phone));
+    formData.append("address_title", searchRef.current?.value);
+    formData.append("address_latitude", form.address_latitude);
+    formData.append("address_longitude", form.address_longitude);
+    formData.append("password", form.password);
+    formData.append("avatar", file);
+    formData.append(
+      "profession",
+      form.profession.map((data) => data.value)
+    );
+    formData.append("descriptions", form.descriptions);
+    formData.append("experience", form.experience);
+    const userToken = localStorage.getItem("access");
 
     axios
-      .post("https://fathulla.tk/master/api/v1/maklers/create/", data)
+      .post("https://fathulla.tk/master/api/v1/maklers/create/", formData, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-
-    console.log(data);
   };
-  //   console.log(form);
 
   return (
     <div className="container">
@@ -199,14 +208,38 @@ export default function EditPage() {
             <div className="card__header">
               <img
                 className="avatar__img"
-                src={avatar_image}
+                src={imgUrl ? imgUrl : avatar_image}
                 alt="avatar image"
+                width={"96px"}
+                height={"96px"}
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
               />
               <div className="image__card">
                 <p className="avatar__name">
                   Загрузите фото профиля или логотп компании
                 </p>
-                <button className="change__btn">Изменить фото профиля</button>
+                {/* <button className="change__btn">Изменить фото профиля</button> */}
+                <label
+                  htmlFor="file"
+                  className="change__btn"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  Изменить фото профиля
+                </label>
+                <input
+                  type={"file"}
+                  onChange={fileHandle}
+                  id="file"
+                  accept="image/png, image/jpeg, image/jpg"
+                  style={{
+                    display: "none",
+                  }}
+                />
               </div>
             </div>
             <div className="editpage__input">

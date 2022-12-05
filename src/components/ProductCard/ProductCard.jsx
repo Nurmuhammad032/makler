@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import sprite from "../../assets/img/symbol/sprite.svg";
 
 const ProductCard = ({ data }) => {
   return (
     <li className="cards-item">
-      <a href="/product.html">
+      <Link to={`/product/${data.id}`}>
         <div className="cards-item__top">
           <button className="btn-save">
             <svg className="svg-sprite-icon icon-save">
@@ -24,7 +25,7 @@ const ProductCard = ({ data }) => {
             <div className="cards-item-info__bottom"></div>
           </div>
         </div>
-      </a>
+      </Link>
     </li>
   );
 };

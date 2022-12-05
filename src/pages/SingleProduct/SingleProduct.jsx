@@ -2,10 +2,31 @@ import "./SingleProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import { DownloadApp, FooterMenu, SliderContent } from "../../components";
 import img1 from "../../assets/img/slider/1.png";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
+import { useContext } from "react";
+import ContextApp from "../../context/context";
 
 const img = [img1, img1, img1, img1];
 
 const SingleProduct = () => {
+  const { id } = useParams();
+  const { houseData, getHouseData } = useContext(ContextApp);
+
+  useEffect(() => {
+    axios
+      .get(`https://fathulla.tk/products/web/api/v1/houses/${id}`)
+      .then((data) => {
+        getHouseData(data.data);
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  console.log(houseData);
+  console.log(id);
+
   return (
     <div
       style={{
@@ -22,32 +43,20 @@ const SingleProduct = () => {
               }}
             >
               <div className="swiper">
-                <SliderContent imgUrl={img} />
+                {houseData?.images.length && (
+                  <SliderContent imgUrl={houseData?.images} />
+                )}
               </div>
-              {/* <div className="swiper">
-                <div className="swiper-wrapper"></div>
-                <div className="swiper-button-prev">
-                  <svg className="svg-sprite-icon icon-left-arr fill-n">
-                    <use href={`${sprite}#left-arr`}></use>
-                  </svg>
-                </div>
-                <div className="swiper-button-next">
-                  <svg className="svg-sprite-icon icon-left-arr fill-n">
-                    <use href={`${sprite}#left-arr`}></use>
-                  </svg>
-                </div>
-                <div className="swiper-pagination"></div>
-                <div className="swiper-scrollbar"></div>
-              </div> */}
             </div>
             <div className="slider__right">
               <ul>
-                {img.map((item, i) => (
-                  <li key={i}>
-                    {" "}
-                    <img src={item} alt="Картинка 1" />
-                  </li>
-                ))}
+                {houseData?.images.length &&
+                  houseData?.images.map((item, i) => (
+                    <li key={i}>
+                      {" "}
+                      <img src={item.images} alt="Картинка 1" />
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>
@@ -55,15 +64,13 @@ const SingleProduct = () => {
       </section>
       <section className="info-product-s">
         <div className="container">
-          <h2 className="product-info-title">
-            Двухэтажное шале в лесном комплексе
-          </h2>
-          <p className="product-info-par">Ташкент, Яшнабадский район</p>
+          <h2 className="product-info-title">{houseData?.title}</h2>
+          <p className="product-info-par">{houseData?.web_address_title}</p>
           <div className="info-product">
             <div className="info-product-sidebar">
               <div className="plashka">
                 <h4>Стоимость за месяц:</h4>
-                <strong>4 367 640 сум</strong>
+                <strong>{houseData?.price} сум</strong>
                 <a className="btn btn-orange" href="tel:035252434">
                   Позвонить маклеру
                 </a>
