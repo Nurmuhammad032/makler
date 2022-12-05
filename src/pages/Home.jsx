@@ -7,10 +7,15 @@ import {
   Houses,
   ProductSingle,
 } from "../components";
+import BookInput from "./BookInput/BookInput";
+import CreateIndustriya from "./CreateIndustriya/CreateIndustriya";
 
 const Home = () => {
   return (
     <>
+    <BookInput/>
+    
+    {/* <CreateIndustriya/> */}
       <Filter />
       <Categories />
       <Houses />
