@@ -13,7 +13,7 @@ import CreateIndustriya from "./CreateIndustriya/CreateIndustriya";
 const Home = () => {
   return (
     <>
-    <BookInput/>
+    {/* <BookInput/> */}
     
     {/* <CreateIndustriya/> */}
       <Filter />

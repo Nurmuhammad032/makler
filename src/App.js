@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { EditPage, Footer, Navbar } from "./components";
 import { ContextProvider } from "./context/context";
 import ProtectedRoute from "./helpers/ProtectedRoute";
+import 'react-toastify/dist/ReactToastify.css';
 import {
   AllIndustriya,
+  CreateIndustriya,
   CreateProduct,
   Home,
   Industriya,
@@ -14,6 +16,7 @@ import {
   UserCabinet,
   Workers,
 } from "./pages";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -33,6 +36,7 @@ function App() {
     <Router>
       <ContextProvider>
         <div className="wrapper">
+        <ToastContainer />
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -45,6 +49,7 @@ function App() {
             <Route path="/master/:id" element={<MasterPage />} />
             <Route path="/industria/:id" element={<Industriya />} />
             <Route path="/industria" element={<AllIndustriya />} />
+            <Route path="/create-industria" element={<CreateIndustriya />} />
           </Routes>
           <Footer />
         </div>

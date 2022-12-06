@@ -14,6 +14,7 @@ import useForm from "../../hooks/useForm";
 import useNav from "../../hooks/useNav";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
+import { toast } from "react-toastify";
 
 const CreateProduct = () => {
   const [navActive, setNavActive] = useState(false);
@@ -109,8 +110,14 @@ const CreateProduct = () => {
           },
         }
       )
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err.response.data));
+      .then((res) => {
+        console.log(res);
+        toast.success("Successfully created");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Something went wrong!");
+      });
   };
 
   const handleChange = (e) => {

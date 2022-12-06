@@ -5,6 +5,7 @@ import { UserCard } from "../../components";
   /*  */
 }
 const UserSingle = ({ data }) => {
+  console.log(data);
   return (
     <>
       {data ? (
@@ -19,7 +20,9 @@ const UserSingle = ({ data }) => {
               <div className="app__worker-left">
                 <div className="user-card">
                   <img
-                    src={data?.avatar}
+                    src={
+                      "brand_image" in data ? data.brand_image : data?.avatar
+                    }
                     alt="User image"
                     style={{
                       width: "100px",
@@ -69,7 +72,11 @@ const UserSingle = ({ data }) => {
               </div>
               <div className="app__worker-right">
                 <h1>Описание</h1>
-                <p>{data?.descriptions}</p>
+                <p>
+                  {"description" in data
+                    ? data.description
+                    : data?.descriptions}
+                </p>
               </div>
             </div>
             <div

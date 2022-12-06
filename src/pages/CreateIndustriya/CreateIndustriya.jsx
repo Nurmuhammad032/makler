@@ -1,91 +1,575 @@
-import React from 'react'
-import avatar_image from './../../assets/img/avatar_change.png';
-import './../../components/EditPage/EditPage.css';
+import React from "react";
+import avatar_image from "./../../assets/img/avatar_change.png";
+import { useState, useRef, useEffect } from "react";
+import sprite from "../../assets/img/symbol/sprite.svg";
+import "./../../components/EditPage/EditPage.css";
+import {
+  Box,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Chip,
+  useTheme,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+import {
+  GeolocationControl,
+  Placemark,
+  YMaps,
+  Map,
+} from "@pbe/react-yandex-maps";
+import useForm from "../../hooks/useForm";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  {
+    text: "architect",
+    value: 1,
+  },
+  {
+    text: "painter",
+    value: 2,
+  },
+  {
+    text: "electrician",
+    value: 3,
+  },
+];
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 export default function CreateIndustriya() {
+  const theme = useTheme();
+  const [navActive, setNavActive] = useState(false);
+  const [personName, setPersonName] = React.useState([]);
+  const [file, setFile] = useState();
+  const [imgUrl, setImgUrl] = useState({
+    brand: null,
+    view: null,
+  });
+
+  const fileHandle = (file, name) => {
+    const img = file;
+    setFile(img);
+    let reader = new FileReader();
+    reader.readAsDataURL(img);
+
+    reader.onloadend = function () {
+      setImgUrl((prev) => {
+        return {
+          ...prev,
+          [name]: reader.result,
+        };
+      });
+    };
+  };
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
+  const initialState = {
+    title: "",
+    center: [40.783388, 72.350663],
+    zoom: 12,
+  };
+
+  const [state, setState] = useState({ ...initialState });
+  const [mapConstructor, setMapConstructor] = useState(null);
+  const mapRef = useRef(null);
+  const searchRef = useRef(null);
+
+  const mapOptions = {
+    modules: ["geocode", "SuggestView"],
+    defaultOptions: { suppressMapOpenBlock: true },
+    width: 600,
+    height: 400,
+  };
+
+  const geolocationOptions = {
+    defaultOptions: { maxWidth: 128 },
+    defaultData: { content: "Determine" },
+  };
+
+  useEffect(() => {
+    if (mapConstructor) {
+      new mapConstructor.SuggestView(searchRef.current).events.add(
+        "select",
+        function (e) {
+          const selectedName = e.get("item")?.value;
+          mapConstructor?.geocode(selectedName).then((result) => {
+            const newCoords = result?.geoObjects
+              ?.get(0)
+              ?.geometry?.getCoordinates();
+            setState((prevState) => ({ ...prevState, center: newCoords }));
+          });
+        }
+      );
+    }
+  }, [mapConstructor]);
+
+  const handleBoundsChange = (e) => {
+    const newCoords = mapRef.current.getCenter();
+    mapConstructor?.geocode(newCoords).then((res) => {
+      const nearest = res?.geoObjects?.get(0);
+      const foundAddress = nearest?.properties.get("text");
+      const [centerX, centerY] = nearest?.geometry.getCoordinates();
+      const [initialCenterX, initialCenterY] = initialState?.center;
+      if (centerX !== initialCenterX && centerY !== initialCenterY) {
+        setState((prevState) => ({ ...prevState, title: foundAddress }));
+      }
+    });
+  };
+
+  const [img, setImg] = useState({
+    brandImg: null,
+    machineImg: null,
+  });
+
+  const imgHandle = (e) => {
+    setImg((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.files[0],
+      };
+    });
+  };
+  console.log(img);
+
+  const { form, changeHandler } = useForm({
+    name: "",
+    description: "",
+    price_type: "y.e",
+    store_amenitites: [],
+    brand: "",
+    price: 0,
+    use_for: "",
+    phoneNumber: 0,
+    email: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("image", img.machineImg);
+    formData.append("brand_image", img.brandImg);
+    formData.append("description", form.description);
+    formData.append(
+      "store_amenitites",
+      form.store_amenitites.map((data) => data.value)
+    );
+    formData.append("brand", form.brand);
+    formData.append("price", form.price);
+    formData.append("use_for", form.use_for);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("address", searchRef.current?.value);
+    formData.append("email", form.email);
+
+    const userToken = localStorage.getItem("access");
+
+    axios
+      .post("https://fathulla.tk/store2/api/v1/store/create/", formData, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Successfully created");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Something went wrong!");
+      });
+  };
+
   return (
-    <div>
-        <div className="editpage__card">
-                <div className="edit__left__card">
-                    <h1 className="edit__card__title">Регистрируйтес как мастер, получите работы</h1>
-                    <p className="edit__card__text">Объявление будет доступно на <a target={"_blank"} className="text__link" href="">Makler.uz</a> и в наших мобильных приложениях</p>
-                    <div className="card__header">
-                        <img className="avatar__img" src={avatar_image} alt="avatar image" />
-                        <div className="image__card">
-                            <p className="avatar__name">
-                                Загрузите фото профиля или логотп компании
-                            </p>
-                            <button className="change__btn">Изменить фото профиля</button>
-                        </div>
-                    </div>
-                    <div className="editpage__input">
-                        <form
-
-                            className="form__input"
-                            action=""
-                            method={"post"}
-                        >
-                            <label htmlFor="">
-                                <span>Имя Фамилия</span>
-                                <input name={"name"} id="name" type={"text"} placeholder="Abbos Janizakov" />
-                            </label>
-                            <label id="email" htmlFor="">
-                                <span>Электронная почта</span>
-                                <input name={"email"} type={"email"} placeholder="info@gmail.com" />
-                            </label>
-                            <label htmlFor="">
-                                <span>Номер телефона | Ваше логин</span>
-                                <input name={"phone number"} type={"number"} placeholder="+998 90 123-45-67" />
-                            </label>
-                            <label htmlFor="">
-                                <span>Пароль</span>
-                                <input name={"password"} type="password" placeholder="пусто" />
-                            </label>
-                            <label htmlFor="">
-                                <span className="text__area">Краткое описание о себе</span>
-                                <textarea className="textarea" id="" placeholder="пусто"></textarea>
-                            </label>
-
-                        </form>
-                    </div>
-                    <div className="second-card">
-                        <div className="second__card">
-                            <h2 className="second__card__title">Выберите раздел и специализацию *</h2>
-                            <p className="second__card__text">Введите род деятельности!</p>
-                        </div>
-                        <select className="select" name="ergerg" id="" placeholder="Сантехник">
-                            <option className="select__option" value="service">Сантехник</option>
-                            <option className="select__option" value="service">Мебельщик</option>
-                            <option className="select__option" value="service">Уборшик</option>
-                            <option className="select__option" value="service">Электрик</option>
-                            <option className="select__option" value="service">Мастер окон</option>
-                        </select>
-                    </div>
-                    <div className="checkbox">
-                        <input className="checkbox__input" type={"checkbox"} name="" id="" />
-                        <span className="checkbox__text">Я прочитал и согласен с условиями использования и публикации!</span>
-                    </div>
-
-                    <div className="register">
-                        <form action="">
-                            <button className="register__btn">Зарегистрироватся</button>
-                        </form>
-                    </div>
-                </div>
-                <div className="edit__right__card">
-                    <div className="edit__card">
-                        <div className="edit__card__content">
-                            <h2 className="right__card__title">Краткое описание о нашем сервисе</h2>
-                            <p className="edit__card__text">Регистрация как мастер</p>
-                            <p>Как только вы зарегистрируетесь в качестве мастера, вы сможете получать заказы по направлениям, введенным через наш портал!</p>
-                            <div className="blockquote__card">
-                                <em className="blockquote__text">Напоминаем, что мы не несем ответственности за сбор платы за услуги через этот портал!</em>
-                            </div>
-                            <p>При регистрации вы вводите свой номер телефона в качестве логина и придумываете себе пароль. Нажав кнопку входа, вы введете свой номер телефона и пароль для доступа к существующему профилю.</p>
-
-                        </div>
-                    </div>
-                </div>
+    <div className="container">
+      <div className="create-product-s">
+        <div className="create-product">
+          <form className="create-product__left" onSubmit={handleSubmit}>
+            <h1 className="edit__card__title">
+              Регистрируйтес как мастер, получите работы
+            </h1>
+            <p className="edit__card__text">
+              Объявление будет доступно на{" "}
+              <a target={"_blank"} className="text__link" href="">
+                Makler.uz
+              </a>{" "}
+              и в наших мобильных приложениях
+            </p>
+            <div className="card__header">
+              <img
+                className="avatar__img"
+                src={imgUrl.brand ? imgUrl.brand : avatar_image}
+                alt="avatar image"
+                width={"96px"}
+                height={"96px"}
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+              <div className="image__card">
+                <p className="avatar__name">
+                  Загрузите фото профиля или логотп компании
+                </p>
+                <label
+                  htmlFor="file"
+                  className="change__btn"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  Изменить фото профиля
+                </label>
+                <input
+                  type={"file"}
+                  onChange={(e) => {
+                    fileHandle(e.target.files[0], "brand");
+                    imgHandle(e);
+                  }}
+                  name="brandImg"
+                  id="file"
+                  accept="image/png, image/jpeg, image/jpg"
+                  style={{
+                    display: "none",
+                  }}
+                />
+              </div>
             </div>
+            <div className="editpage__input">
+              <div className="form__input">
+                <label htmlFor="">
+                  <span>Имя Фамилия</span>
+                  <input
+                    name={"name"}
+                    onChange={changeHandler}
+                    id="name"
+                    type={"text"}
+                    placeholder="Abbos Janizakov"
+                  />
+                </label>
+                <label id="email" htmlFor="">
+                  <span>Электронная почта</span>
+                  <input
+                    name={"email"}
+                    onChange={changeHandler}
+                    type={"email"}
+                    placeholder="info@gmail.com"
+                  />
+                </label>
+                <label htmlFor="">
+                  <span>Номер телефона | Ваше логин</span>
+                  <input
+                    name={"phoneNumber"}
+                    onChange={changeHandler}
+                    type={"number"}
+                    placeholder="+998 90 123-45-67"
+                  />
+                </label>
+                <label htmlFor="">
+                  <span>Пароль</span>
+                  <input
+                    name={"brand"}
+                    type="text"
+                    placeholder="пусто"
+                    onChange={changeHandler}
+                  />
+                </label>
+                <label htmlFor="">
+                  <span className="text__area">Краткое описание о себе</span>
+                  <textarea
+                    className="textarea"
+                    name="description"
+                    onChange={changeHandler}
+                    id=""
+                    placeholder="пусто"
+                  ></textarea>
+                </label>
+              </div>
+              <div
+                style={{
+                  marginTop: "2rem",
+                }}
+              >
+                <h5>Цена</h5>
+                <div className="form-price">
+                  <input
+                    type="number"
+                    placeholder="Стоимость"
+                    required
+                    name="price"
+                    onChange={changeHandler}
+                  />
+                  <div className="form-price-choose">
+                    <button
+                      className="choose-currency"
+                      type="button"
+                      id="select-currency"
+                      onClick={() => setNavActive((prev) => !prev)}
+                    >
+                      <span>{form.price_type}</span>
+                      <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
+                        <use href={`${sprite}#fi_chevron-down`}></use>
+                      </svg>
+                    </button>
+                    <div className={`nav-body-choose ${navActive && "active"}`}>
+                      <ul>
+                        {[1, 2].map((item) => (
+                          <input
+                            key={item}
+                            type="text"
+                            name="price_type"
+                            className={`app__nav-input ${
+                              form.price_type === item && "active"
+                            }`}
+                            onClick={(e) => {
+                              changeHandler(e);
+                              setNavActive(false);
+                            }}
+                            value={item}
+                            readOnly
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="second-card">
+              <div className="second__card">
+                <h2 className="second__card__title">
+                  Выберите раздел и специализацию *
+                </h2>
+                <p className="second__card__text">Введите род деятельности!</p>
+              </div>
+              <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
+                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+                <Select
+                  labelId="demo-multiple-chip-label"
+                  id="demo-multiple-chip"
+                  multiple
+                  name="store_amenitites"
+                  value={personName}
+                  onChange={(e) => {
+                    handleChange(e);
+                    changeHandler(e);
+                  }}
+                  input={
+                    <OutlinedInput id="select-multiple-chip" label="Chip" />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip
+                          sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
+                          key={value.value}
+                          label={value.text}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {names.map((name) => (
+                    <MenuItem
+                      key={name.value}
+                      value={name}
+                      style={getStyles(name.value, personName, theme)}
+                    >
+                      {name.text}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            <h5>Расположение</h5>
+            <div
+              className="map"
+              style={{
+                position: "relative",
+              }}
+            >
+              <div className="map-info">
+                <h5>Где находится?</h5>
+                <div className="map-address">
+                  <input
+                    ref={searchRef}
+                    placeholder="г.Ташкент, ул.Охангарон 65 А 1"
+                    id="suggest"
+                    name="address_title"
+                    // onChange={changeHandler}
+                    // value={form.address_title}
+                  />
+                </div>
+              </div>
+              <p className="error-par d-none">Такой геолокации не существует</p>
+              <div
+                id="map"
+                className="mapRoot"
+                style={{
+                  position: "relative",
+                }}
+              >
+                <YMaps
+                  query={{
+                    apikey: "29294198-6cdc-4996-a870-01e89b830f3e",
+                    lang: "en_RU",
+                  }}
+                >
+                  <Map
+                    {...mapOptions}
+                    // state={state}s
+                    state={{
+                      center: state?.center,
+                      zoom: 12,
+                    }}
+                    onLoad={setMapConstructor}
+                    onBoundsChange={handleBoundsChange}
+                    instanceRef={mapRef}
+                  >
+                    {/* <div
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                        background: "#000",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -100%)",
+                        zIndex: 3000,
+                      }}
+                    ></div> */}
+                    <GeolocationControl {...geolocationOptions} />
+                    {/* <ZoomControl     /> */}
+                    <Placemark geometry={state.center} />
+                  </Map>
+                </YMaps>
+              </div>
+            </div>
+            <div
+              style={{
+                marginTop: "2rem",
+              }}
+            >
+              <h5>Изображения объекта</h5>
+              <div className="image-upload mb-50">
+                <div className="image-outer">
+                  <div className="image-outer-info">
+                    <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
+                    <p>Поддерживает: .jpg, .png, .jpeg</p>
+                  </div>
+                  <input
+                    type="file"
+                    name="machineImg"
+                    // onChange={changeHandler}
+                    onChange={(e) => {
+                      fileHandle(e.target.files[0], "view");
+                      imgHandle(e);
+                    }}
+                    // onChange={(e) => handleChange(e)}
+                    id="upload-images"
+                    accept="image/png, image/jpeg, image/jpg"
+                    multiple
+                  />
+                  <label htmlFor="upload-images">открыть</label>
+                </div>
+                <ul className="image-list" id="gallery">
+                  {imgUrl.view && (
+                    <li>
+                      <img
+                        src={imgUrl.view}
+                        alt="house"
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
+            <div className="checkbox">
+              <input
+                className="checkbox__input"
+                type={"checkbox"}
+                name=""
+                id=""
+              />
+              <span className="checkbox__text">
+                Я прочитал и согласен с условиями использования и публикации!
+              </span>
+            </div>
+
+            <div className="register">
+              <button className="register__btn">Зарегистрироватся</button>
+            </div>
+          </form>
+          <div className="create-product__right">
+            <div className="edit__card">
+              <div className="edit__card__content">
+                <h2 className="right__card__title">
+                  Краткое описание о нашем сервисе
+                </h2>
+                <p className="edit__card__text">Регистрация как мастер</p>
+                <p>
+                  Как только вы зарегистрируетесь в качестве мастера, вы сможете
+                  получать заказы по направлениям, введенным через наш портал!
+                </p>
+                <div className="blockquote__card">
+                  <em className="blockquote__text">
+                    Напоминаем, что мы не несем ответственности за сбор платы за
+                    услуги через этот портал!
+                  </em>
+                </div>
+                <p>
+                  При регистрации вы вводите свой номер телефона в качестве
+                  логина и придумываете себе пароль. Нажав кнопку входа, вы
+                  введете свой номер телефона и пароль для доступа к
+                  существующему профилю.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

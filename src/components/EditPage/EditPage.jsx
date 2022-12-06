@@ -7,7 +7,6 @@ import {
   Map,
   Placemark,
   YMaps,
-  ZoomControl,
 } from "@pbe/react-yandex-maps";
 import {
   Box,
@@ -21,6 +20,7 @@ import {
 } from "@mui/material";
 import useForm from "../../hooks/useForm";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -131,8 +131,6 @@ export default function EditPage() {
     }
   }, [mapConstructor]);
 
-  console.log(searchRef.current?.value);
-
   const handleBoundsChange = (e) => {
     const newCoords = mapRef.current.getCenter();
     mapConstructor?.geocode(newCoords).then((res) => {
@@ -186,8 +184,14 @@ export default function EditPage() {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res);
+        toast.success("Successfully created");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Something went wrong!");
+      });
   };
 
   return (
@@ -221,7 +225,6 @@ export default function EditPage() {
                 <p className="avatar__name">
                   Загрузите фото профиля или логотп компании
                 </p>
-                {/* <button className="change__btn">Изменить фото профиля</button> */}
                 <label
                   htmlFor="file"
                   className="change__btn"
@@ -353,22 +356,6 @@ export default function EditPage() {
                 </Select>
               </FormControl>
             </div>
-            {/* <div className="map--box">
-                <form action="">
-                  <label className="map__address" htmlFor="">
-                    Укажите зону обслуживания!
-                  </label>
-                  <input className="map__input" type="text" />
-                  <button className="map__btn">Сохранить</button>
-                </form>
-                <iframe
-                  className="map__google"
-                  src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d5848.508298798211!2d74.5708881!3d42.8674796!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2s!4v1669904023735!5m2!1sru!2s"
-                  width="440"
-                  height="260"
-                  frameBorder={"none"}
-                ></iframe>
-              </div> */}
             <h5>Расположение</h5>
             <div
               className="map"
