@@ -14,23 +14,33 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
 import ContextApp from "../../context/context";
+import { useStepContext } from "@mui/material";
 
 const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
   const { getUserData, userData } = useContext(ContextApp);
+  const [stores, setStores] = useState(null);
   const navigate = useNavigate();
 
   const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
+    let userToken = localStorage.getItem("access");
     axios
-      .get(`${baseURL}/users/api/v1/get-user/${id}`)
+      .get(`${baseURL}/users/api/v1/profile/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
       .then((data) => getUserData(data.data))
       .catch(() => navigate("/"));
   }, []);
 
-  console.log(userData);
+  useEffect(() => {
+    setStores(userData?.stores);
+  }, [userData]);
+
+  console.log(userData?.phone_number);
 
   return (
     <section className="cabinet-s">
@@ -57,9 +67,10 @@ const UserCabinet = () => {
                   </div>
                 </div>
                 <ul className="advert-list">
-                  {announceData.map((data) => (
-                    <UserContents key={data.id} data={data} />
-                  ))}
+                  {stores &&
+                    stores?.map((data, i) => (
+                      <UserContents key={i} data={data} />
+                    ))}
                 </ul>
               </div>
             </div>
@@ -110,7 +121,12 @@ const UserCabinet = () => {
             className={`settings-s ${holdId !== 5 && "d-none"}`}
             id="settings"
           >
-            <UserSettings />
+            <UserSettings
+              name={userData?.first_name}
+              number={userData?.phone_number}
+              email={userData?.email}
+              password={userData?.password}
+            />
           </section>
           {/* <section className="chat-s d-none" id="chat">
             <div className="container">

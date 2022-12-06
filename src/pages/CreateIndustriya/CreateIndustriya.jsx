@@ -22,6 +22,7 @@ import {
 import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -159,6 +160,7 @@ export default function CreateIndustriya() {
     brandImg: null,
     machineImg: null,
   });
+  const router = useNavigate();
 
   const imgHandle = (e) => {
     setImg((prev) => {
@@ -186,6 +188,7 @@ export default function CreateIndustriya() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("price_type", Number(form.price_type));
     formData.append("image", img.machineImg);
     formData.append("brand_image", img.brandImg);
     formData.append("description", form.description);
@@ -211,6 +214,7 @@ export default function CreateIndustriya() {
       .then((res) => {
         console.log(res);
         toast.success("Successfully created");
+        router("/industria");
       })
       .catch((err) => {
         console.log(err);

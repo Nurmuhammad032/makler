@@ -9,3 +9,4 @@ export { default as Industriya } from "./Industriya/Industriya";
 export { default as AllIndustriya } from "./AllIndustriya/AllIndustriya";
 export { default as CreateIndustriya } from "./CreateIndustriya/CreateIndustriya";
 export { default as BookInput } from "./BookInput/BookInput";
+export { default as CreatePage } from "./CreatePage/CreatePage";

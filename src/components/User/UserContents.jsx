@@ -5,21 +5,25 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 // img/symbol/sprite.svg#dots
 const UserContents = ({ data }) => {
   const [display, setDisplay] = useState(false);
-  
   return (
     <li className="advert-item">
       <div className="advert-item__top">
-        {"pendingType" in data && (
-          <div className="advert-item-status wait-status">
-            {" "}
-            <span className="advert-item-status-icon">
-              <svg className="svg-sprite-icon icon-dots-horizontal fill-n">
-                <use href={`${spirite}#dots-horizontal`}></use>
-              </svg>
-            </span>
-            <span>{data.pendingType}</span>
-          </div>
-        )}
+        <div className={`advert-item-status ${data.product_status}`}>
+          {" "}
+          <span className="advert-item-status-icon">
+            <svg className="svg-sprite-icon icon-dots-horizontal fill-n">
+              <use href={`${spirite}#dots-horizontal`}></use>
+            </svg>
+          </span>
+          <span>
+            {data.product_status === "InProgress"
+              ? "Ожидание подтверждения"
+              : data.product_status === "PUBLISH"
+              ? "Подтвержден"
+              : data.product_status === "DELETED" && "Отказaна!"}
+          </span>
+        </div>
+
         <div className="advert-settings">
           <button
             className="btn btn-settings"
@@ -55,19 +59,19 @@ const UserContents = ({ data }) => {
           </div>
         </div>
         <picture>
-          <source srcSet={card} type="image/webp" />
-          <img src={card} alt="Картинка Объявления" />
+          <source srcSet={data.image} type="image/webp" />
+          <img src={data.image} alt="Картинка Объявления" />
         </picture>
       </div>
       <div className="advert-item__bottom">
         <div className="advert-item-info">
           <div className="advert-item-info__top">
-            <p>2 Комнатая кв, 63м²</p>
+            <p>{data.name}</p>
             <span>{data.price}$</span>
           </div>
           <div className="advert-item-info__bottom">
-            <p>Ташкент, Шайхантахурский район</p>
-            <span>22:52</span>
+            <p>{data.address}</p>
+            {/* <span>22:52</span> */}
           </div>
           <ul className="statistic-list">
             <li>

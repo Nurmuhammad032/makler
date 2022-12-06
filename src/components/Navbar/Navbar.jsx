@@ -8,6 +8,8 @@ import ContextApp from "../../context/context";
 const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const { userData } = useContext(ContextApp);
+  const userId = localStorage.getItem("userId");
+  console.log(userId);
 
   const access = localStorage.getItem("access");
   useEffect(() => {
@@ -77,7 +79,7 @@ const Navbar = () => {
               </li>
               <li>
                 {isLogin ? (
-                  <Link to={`/cabinet/${userData?.id}`}>
+                  <Link to={`/cabinet/${userId}`}>
                     <svg className="svg-sprite-icon icon-fi_log-in w-16">
                       <use href={`${spirite}#fi_log-in`}></use>
                     </svg>
@@ -88,7 +90,7 @@ const Navbar = () => {
                 )}
               </li>
               <li>
-                <Link className="btn btn-orange-text" to="/create-product">
+                <Link className="btn btn-orange-text" to="/create">
                   <svg
                     width="16"
                     height="16"

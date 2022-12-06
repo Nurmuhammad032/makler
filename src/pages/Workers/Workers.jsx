@@ -12,28 +12,29 @@ const Workers = () => {
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
 
-  const init = async () => {
-    const res = await axios.get(url);
+  // const init = async () => {
+  //   const res = await axios.get(url);
 
-    setDisplayData(res.data.results);
-    setNextUrl(res.data.next);
-    setPrevUrl(res.data.previous);
-    console.log(res);
-  };
-  console.log(displayData);
-
+  //   setDisplayData(res.data.results);
+  //   setNextUrl(res.data.next);
+  //   setPrevUrl(res.data.previous);
+  //   console.log(res);
+  // };
+  const [limit, setLimit] = useState(6);
   useEffect(() => {
-    init();
-  }, [url]);
+    axios
+      .get(`https://fathulla.tk/master/api/v1/maklers/?limit=${limit}`)
+      .then((data) => setDisplayData(data.data.results))
+      .catch((err) => console.log(err));
+  }, [limit]);
 
-  const handleNext = () => {
-    setUrl(nextUrl);
-  };
+  // const handleNext = () => {
+  //   setUrl(nextUrl);
+  // };
 
-  const handlePrev = () => {
-    setUrl(prevUrl);
-  };
-  console.log(prevUrl);
+  // const handlePrev = () => {
+  //   setUrl(prevUrl);
+  // };
 
   return (
     <section className="content">
@@ -42,7 +43,7 @@ const Workers = () => {
           <FilterWorker />
           <div className="cards-s">
             <div className="cards-head">
-              <ul>
+              {/* <ul>
                 <li>
                   {" "}
                   <div
@@ -85,7 +86,7 @@ const Workers = () => {
                     )}
                   </div>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
           <div className="app__cards--wrapper">
@@ -103,6 +104,7 @@ const Workers = () => {
           </div>
         </div>
         <button
+          onClick={() => setLimit((prev) => (prev += 6))}
           className="btn btn-big btn-white"
           id="show-more"
           style={{

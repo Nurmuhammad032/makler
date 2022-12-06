@@ -1,6 +1,21 @@
 import React from "react";
+import useForm from "../../hooks/useForm";
 
-const UserSettings = () => {
+const UserSettings = ({ name, email, password, number }) => {
+  console.log(number)
+  const { form, changeHandler } = useForm({
+    name: name,
+    email: email,
+    password: password,
+    number: number,
+  });
+console.log(form);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {};
+  };
+
   return (
     <div className="container-sm">
       <div className="settings">
@@ -22,19 +37,24 @@ const UserSettings = () => {
         <form className="settings-form">
           <div className="form-input">
             <label>Имя Фамилия</label>
-            <input type="text" value="Abbos Janizakov" />
+            <input type="text" name="name" value={form.name} />
           </div>
           <div className="form-input">
             <label>Электронная почта</label>
-            <input type="text" value="abbosjanizakov@mail.ru" />
+            <input type="text" name="email" value={form.email} />
           </div>
           <div className="form-input">
             <label>Номер телефона | Ваше логин</label>
-            <input type="text" value="+998 90 123-45-67" />
+            <input type="text" name="number" value={form.number} />
           </div>
           <div className="form-input">
             <label>Пароль</label>
-            <input type="password" placeholder="пусто" />
+            <input
+              type="password"
+              placeholder="пусто"
+              name="password"
+              value={form.password}
+            />
           </div>
           <div className="change-password">
             <h3>Изменить пароль</h3>
@@ -44,7 +64,12 @@ const UserSettings = () => {
               смс-кода!
             </p>
             <label>Пароль</label>
-            <input type="password" placeholder="пусто" />
+            <input
+              type="password"
+              placeholder="пусто"
+              name="password"
+              value={form.password}
+            />
             <p className="change-password-par">
               Создайте постоянный пароль для входа в аккаунт!
             </p>

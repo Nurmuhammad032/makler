@@ -3,6 +3,7 @@ import "./ProductPage.css";
 import logo from "../../assets/img/icon.svg";
 import freeze from "../../assets/img/freeze.png";
 import { Link } from "react-router-dom";
+import { height } from "@mui/system";
 
 export default function ProductCard({ data }) {
   console.log(data);
@@ -35,6 +36,9 @@ export default function ProductCard({ data }) {
             style={{
               maxWidth: "340px",
               maxHeight: "237px",
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
             }}
           />
         </div>

@@ -7,8 +7,8 @@ import { useContext, useState } from "react";
 import ContextApp from "../../context/context";
 
 const LoginModal = () => {
-  const { loginModalFunc } = useContext(ContextApp);
-  const [da, setDa] = useState()
+  const { loginModalFunc, getUserId } = useContext(ContextApp);
+  const [da, setDa] = useState();
   const { form, changeHandler } = useForm({
     number: "",
   });
@@ -23,13 +23,15 @@ const LoginModal = () => {
       .post(`${baseURL}/authorization/signup/`, info)
       .then((data) => {
         localStorage.setItem("access", data?.data.token?.access);
+        localStorage.setItem("userId", data.data?.token?.id);
         // window.location.reload();
         setDa(data);
+        // getUserId(data.data?.token?.id);
+        console.log(data.data);
       })
       .catch((err) => console.log(err));
-
-    };
-    console.log(da?.data.token?.access)
+  };
+  console.log(da?.data.token?.access);
 
   return (
     <div className="modal login-modal">

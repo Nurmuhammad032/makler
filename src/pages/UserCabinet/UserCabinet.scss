@@ -115,20 +115,20 @@
         position: relative;
         right: -0.5px;
       }
-      &.wait-status {
+      &.InProgress {
         background: $warning;
         svg {
           fill: $orange;
         }
       }
-      &.error-status {
+      &.DELETED {
         background: $red;
         svg {
           fill: $red;
           right: 0;
         }
       }
-      &.success-status {
+      &.PUBLISH {
         background: $green;
         svg {
           right: 0;
