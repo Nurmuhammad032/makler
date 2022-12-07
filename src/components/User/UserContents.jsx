@@ -8,7 +8,15 @@ const UserContents = ({ data }) => {
   return (
     <li className="advert-item">
       <div className="advert-item__top">
-        <div className={`advert-item-status ${data.product_status}`}>
+        <div
+          className={`advert-item-status ${
+            data.product_status === 0
+              ? "wait-status"
+              : data.product_status === 1
+              ? "done-status"
+              : data.product_status === 2 && "error-status"
+          }`}
+        >
           {" "}
           <span className="advert-item-status-icon">
             <svg className="svg-sprite-icon icon-dots-horizontal fill-n">
@@ -16,11 +24,11 @@ const UserContents = ({ data }) => {
             </svg>
           </span>
           <span>
-            {data.product_status === "InProgress"
+            {data.product_status === 0
               ? "Ожидание подтверждения"
-              : data.product_status === "PUBLISH"
+              : data.product_status === 1
               ? "Подтвержден"
-              : data.product_status === "DELETED" && "Отказaна!"}
+              : data.product_status === 2 && "Отказaна!"}
           </span>
         </div>
 
@@ -59,18 +67,27 @@ const UserContents = ({ data }) => {
           </div>
         </div>
         <picture>
-          <source srcSet={data.image} type="image/webp" />
-          <img src={data.image} alt="Картинка Объявления" />
+          {"images" in data ? (
+            <>
+              <source srcSet={data.images[0].images} type="image/webp" />
+              <img src={data.images[0].images} alt="Картинка Объявления" />
+            </>
+          ) : (
+            <>
+              <source srcSet={data.image} type="image/webp" />
+              <img src={data.image} alt="Картинка Объявления" />
+            </>
+          )}
         </picture>
       </div>
       <div className="advert-item__bottom">
         <div className="advert-item-info">
           <div className="advert-item-info__top">
-            <p>{data.name}</p>
+            <p>{"name" in data ? data.name : data.title}</p>
             <span>{data.price}$</span>
           </div>
           <div className="advert-item-info__bottom">
-            <p>{data.address}</p>
+            <p>{"address" in data ? data.address : data.web_address_title}</p>
             {/* <span>22:52</span> */}
           </div>
           <ul className="statistic-list">

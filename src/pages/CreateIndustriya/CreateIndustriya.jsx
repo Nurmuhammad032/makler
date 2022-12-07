@@ -61,6 +61,7 @@ function getStyles(name, personName, theme) {
 
 export default function CreateIndustriya() {
   const theme = useTheme();
+  const [priceText, setPriceText] = useState("y.e");
   const [navActive, setNavActive] = useState(false);
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
@@ -175,7 +176,7 @@ export default function CreateIndustriya() {
   const { form, changeHandler } = useForm({
     name: "",
     description: "",
-    price_type: "y.e",
+    price_type: 1,
     store_amenitites: [],
     brand: "",
     price: 0,
@@ -308,7 +309,7 @@ export default function CreateIndustriya() {
                   />
                 </label>
                 <label htmlFor="">
-                  <span>Пароль</span>
+                  <span>brand name</span>
                   <input
                     name={"brand"}
                     type="text"
@@ -348,28 +349,45 @@ export default function CreateIndustriya() {
                       id="select-currency"
                       onClick={() => setNavActive((prev) => !prev)}
                     >
-                      <span>{form.price_type}</span>
+                      <span>{priceText}</span>
                       <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
                         <use href={`${sprite}#fi_chevron-down`}></use>
                       </svg>
                     </button>
                     <div className={`nav-body-choose ${navActive && "active"}`}>
                       <ul>
-                        {[1, 2].map((item) => (
-                          <input
-                            key={item}
-                            type="text"
-                            name="price_type"
-                            className={`app__nav-input ${
-                              form.price_type === item && "active"
-                            }`}
-                            onClick={(e) => {
-                              changeHandler(e);
-                              setNavActive(false);
-                            }}
-                            value={item}
-                            readOnly
-                          />
+                        {[
+                          { id: 1, text: "y.e" },
+                          { id: 2, text: "som" },
+                        ].map((item) => (
+                          <div>
+                            <label
+                              htmlFor={item.text}
+                              className={`labelcha ${
+                                item.id === Number(form.price_type)
+                                  ? "active"
+                                  : ""
+                              }`}
+                            >
+                              {item.text}
+                            </label>
+                            <input
+                              key={item.id}
+                              type="text"
+                              id={item.text}
+                              name="price_type"
+                              onClick={(e) => {
+                                changeHandler(e);
+                                setNavActive(false);
+                                setPriceText(item.text);
+                              }}
+                              value={item.id}
+                              readOnly
+                              style={{
+                                display: "none",
+                              }}
+                            />
+                          </div>
                         ))}
                       </ul>
                     </div>

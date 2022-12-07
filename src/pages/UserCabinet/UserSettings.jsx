@@ -1,15 +1,36 @@
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import useForm from "../../hooks/useForm";
 
-const UserSettings = ({ name, email, password, number }) => {
-  console.log(number)
-  const { form, changeHandler } = useForm({
-    name: name,
-    email: email,
-    password: password,
-    number: number,
+const UserSettings = ({ name, email, password, number, img }) => {
+  const [file, setFile] = useState();
+
+  const [data, setData] = useState({
+    name,
+    email,
+    password,
+    number,
   });
-console.log(form);
+
+  useEffect(() => {
+    setData({
+      name: name,
+      email: email,
+      password: password,
+      number: number,
+    });
+  }, [name, email, password, number]);
+
+  const handleChange = (e) => {
+    setData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -23,8 +44,8 @@ console.log(form);
           <div className="settings-profile-logo">
             {" "}
             <picture>
-              <source srcSet="img/avatar-big.webp" type="image/webp" />
-              <img src="img/avatar-big.png" alt="Аватар" />
+              <source srcSet={img} type="image/webp" />
+              <img src={img} alt="Аватар" />
             </picture>
           </div>
           <div className="settings-profile-info">
@@ -37,15 +58,30 @@ console.log(form);
         <form className="settings-form">
           <div className="form-input">
             <label>Имя Фамилия</label>
-            <input type="text" name="name" value={form.name} />
+            <input
+              type="text"
+              name="name"
+              onChange={handleChange}
+              value={data?.name}
+            />
           </div>
           <div className="form-input">
             <label>Электронная почта</label>
-            <input type="text" name="email" value={form.email} />
+            <input
+              type="text"
+              name="email"
+              onChange={handleChange}
+              value={data?.email}
+            />
           </div>
           <div className="form-input">
             <label>Номер телефона | Ваше логин</label>
-            <input type="text" name="number" value={form.number} />
+            <input
+              type="text"
+              name="number"
+              onChange={handleChange}
+              value={data?.number}
+            />
           </div>
           <div className="form-input">
             <label>Пароль</label>
@@ -53,7 +89,8 @@ console.log(form);
               type="password"
               placeholder="пусто"
               name="password"
-              value={form.password}
+              onChange={handleChange}
+              value={data?.password}
             />
           </div>
           <div className="change-password">
@@ -68,7 +105,7 @@ console.log(form);
               type="password"
               placeholder="пусто"
               name="password"
-              value={form.password}
+              value={data?.password}
             />
             <p className="change-password-par">
               Создайте постоянный пароль для входа в аккаунт!

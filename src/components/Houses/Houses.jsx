@@ -18,14 +18,14 @@ const Houses = () => {
   const [prevUrl, setPrevUrl] = useState();
 
   const init = async () => {
-    const res = await axios.get(`https://fathulla.tk/products/web/api/v1/all-web-houses/?limit=${limit}&offset=4`);
+    const res = await axios.get(`https://fathulla.tk/products/web/api/v1/all-web-houses/?limit=${limit}`);
 
     setDisplayData(res.data.results);
     setNextUrl(res.data.next);
     setPrevUrl(res.data.previous);
     console.log(res);
   };
-  // console.log(displayData);
+  console.log(displayData);
 
   useEffect(() => {
     init();

@@ -18,14 +18,13 @@ import { toast } from "react-toastify";
 
 const CreateProduct = () => {
   const [navActive, setNavActive] = useState(false);
+  const [priceText, setPriceText] = useState("y.e");
   const { loginModalFunc, openLoginModal } = useContext(ContextApp);
   const initialState = {
     title: "",
     center: [40.783388, 72.350663],
     zoom: 12,
   };
-
-  const texte = (e) => {};
 
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
@@ -39,9 +38,9 @@ const CreateProduct = () => {
     title: "",
     descriptions: "",
     price: "",
-    price_type: "y.e",
-    type: "",
-    rental_type: "",
+    price_type: 1,
+    type: "rent",
+    rental_type: "long_time",
     property_type: "residential",
     object: "flat",
     web_address_title: "",
@@ -54,56 +53,22 @@ const CreateProduct = () => {
     number_of_rooms: "",
     floor: "",
     floor_from: "",
-    building_type: "",
+    building_type: "brick",
     app_ipoteka: "",
     app_mebel: "",
     app_new_building: "",
-    amenities: [3],
+    amenities: [1],
     phone_number: "+99895",
     isBookmarked: false,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(file.map((f) => console.log(f)));
-    const formData = new FormData();
-    // const data = {
-    formData.append("title", form.title);
-    formData.append("descriptions", form.descriptions);
-    formData.append("price", form.price);
-    formData.append("price_type", Number(form.price_type));
-    formData.append("type", form.type);
-    formData.append("rental_type", form.rental_type);
-    formData.append("property_type", form.property_type);
-    formData.append("object", form.object);
-    formData.append("web_address_title", searchRef.current?.value);
-    formData.append("web_address_latitude", initialState.center[0]);
-    formData.append("web_address_longtitude", initialState.center[1]);
-    formData.append("pm_general", form.pm_general);
-    formData.append("pm_residential", form.pm_residential);
-    formData.append("pm_kitchen", form.pm_kitchen);
-    formData.append("number_of_rooms", form.number_of_rooms);
-    formData.append("floor", form.floor);
-    formData.append("floor_from", form.floor_from);
-    formData.append("building_type", form.building_type);
-    formData.append("app_ipoteka", Boolean(form.app_ipoteka));
-    formData.append("app_mebel", form.app_mebel);
-    formData.append("app_new_building", form.app_new_building);
-    formData.append("amenities", form.amenities);
-    formData.append("phone_number", form.phone_number);
-    formData.append("isBookmarked", form.isBookmarked);
-    for (const fi of file) {
-      formData.append("uploaded_images", fi);
-    }
-
-
-    //  console.log(formData);
+  const postData = (data) => {
     const userToken = localStorage.getItem("access");
 
     axios
       .post(
         `https://fathulla.tk/products/web/api/v1/web-houses/create/`,
-        formData,
+        data,
         {
           headers: {
             Authorization: `Bearer ${userToken}`,
@@ -118,6 +83,74 @@ const CreateProduct = () => {
         console.log(err);
         toast.error("Something went wrong!");
       });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("descriptions", form.descriptions);
+    formData.append("price", form.price);
+    formData.append("price_type", Number(form.price_type));
+    formData.append("type", form.type);
+    formData.append("rental_type", form.rental_type);
+    formData.append("property_type", form.property_type);
+    formData.append("object", form.object);
+    formData.append("web_address_title", searchRef.current?.value);
+    formData.append("web_address_latitude", initialState.center[0]);
+    formData.append("pm_general", form.pm_general);
+    formData.append("pm_residential", form.pm_residential);
+    formData.append("pm_kitchen", form.pm_kitchen);
+    formData.append("number_of_rooms", form.number_of_rooms);
+    formData.append("floor", form.floor);
+    formData.append("floor_from", form.floor_from);
+    formData.append("building_type", form.building_type);
+    formData.append("app_ipoteka", Boolean(form.app_ipoteka));
+    formData.append("app_mebel", form.app_mebel);
+    formData.append("app_new_building", form.app_new_building);
+    formData.append("amenities", form.amenities);
+    formData.append("phone_number", form.phone_number);
+    formData.append("isBookmarked", form.isBookmarked);
+    formData.append("draft", false);
+    for (const fi of file) {
+      formData.append("uploaded_images", fi);
+    }
+
+    //  console.log(formData);
+    postData(formData)
+  };
+  const handeDraftData = () => {
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("descriptions", form.descriptions);
+    formData.append("price", form.price);
+    formData.append("price_type", Number(form.price_type));
+    formData.append("type", form.type);
+    formData.append("rental_type", form.rental_type);
+    formData.append("property_type", form.property_type);
+    formData.append("object", form.object);
+    formData.append("web_address_title", searchRef.current?.value);
+    formData.append("web_address_latitude", initialState.center[0]);
+    formData.append("pm_general", form.pm_general);
+    formData.append("pm_residential", form.pm_residential);
+    formData.append("pm_kitchen", form.pm_kitchen);
+    formData.append("number_of_rooms", form.number_of_rooms);
+    formData.append("floor", form.floor);
+    formData.append("floor_from", form.floor_from);
+    formData.append("building_type", form.building_type);
+    formData.append("app_ipoteka", Boolean(form.app_ipoteka));
+    formData.append("app_mebel", form.app_mebel);
+    formData.append("app_new_building", form.app_new_building);
+    formData.append("amenities", form.amenities);
+    formData.append("phone_number", form.phone_number);
+    formData.append("isBookmarked", form.isBookmarked);
+    formData.append("draft", true);
+    for (const fi of file) {
+      formData.append("uploaded_images", fi);
+    }
+
+    //  console.log(formData);
+    postData(formData)
   };
 
   const handleChange = (e) => {
@@ -281,28 +314,44 @@ const CreateProduct = () => {
                     id="select-currency"
                     onClick={() => setNavActive((prev) => !prev)}
                   >
-                    <span>{form.price_type}</span>
+                    <span>{priceText}</span>
                     <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
                       <use href={`${sprite}#fi_chevron-down`}></use>
                     </svg>
                   </button>
                   <div className={`nav-body-choose ${navActive && "active"}`}>
                     <ul>
-                      {[1, 2].map((item) => (
-                        <input
-                          key={item}
-                          type="text"
-                          name="price_type"
-                          className={`app__nav-input ${
-                            form.price_type === item && "active"
-                          }`}
-                          onClick={(e) => {
-                            changeHandler(e);
-                            setNavActive(false);
-                          }}
-                          value={item}
-                          readOnly
-                        />
+                      {[
+                        { id: 1, text: "y.e" },
+                        { id: 2, text: "som" },
+                      ].map((item) => (
+                        <div key={item.id}>
+                          <label
+                            htmlFor={item.text}
+                            className={`labelcha ${
+                              item.id === Number(form.price_type)
+                                ? "active"
+                                : ""
+                            }`}
+                          >
+                            {item.text}
+                          </label>
+                          <input
+                            id={item.text}
+                            type="text"
+                            name="price_type"
+                            onClick={(e) => {
+                              changeHandler(e);
+                              setNavActive(false);
+                              setPriceText(item.text);
+                            }}
+                            value={item.id}
+                            readOnly
+                            style={{
+                              display: "none",
+                            }}
+                          />
+                        </div>
                       ))}
                     </ul>
                   </div>
@@ -341,7 +390,7 @@ const CreateProduct = () => {
                     id="long"
                     name="rental_type"
                     onChange={changeHandler}
-                    // defaultChecked
+                    checked={form.rental_type === "long_time"}
                     value="long_time"
                   />
                   <label htmlFor="long">Длительно</label>
@@ -564,12 +613,13 @@ const CreateProduct = () => {
                   <label htmlFor="upload-images">открыть</label>
                 </div>
                 <ul className="image-list" id="gallery">
-                  {img.length &&
-                    img.map((im, i) => (
-                      <li key={i}>
-                        <img src={im} alt="house" />
-                      </li>
-                    ))}
+                  {img.length
+                    ? img.map((im, i) => (
+                        <li key={i}>
+                          <img src={im} alt="house" />
+                        </li>
+                      ))
+                    : ""}
                 </ul>
               </div>
               <h5>Вся информация об объекте</h5>
@@ -632,17 +682,22 @@ const CreateProduct = () => {
               </div>
               <h5>Тип строения</h5>
               <ul className="radio-list mb-50">
-                {["brick", "monolith", "panel", "blocky"].map((item) => (
-                  <li className="radio-btn" key={item}>
+                {[
+                  { value: "brick", text: "Кирпич" },
+                  { value: "monolith", text: "Монолит" },
+                  { value: "panel", text: "Панель" },
+                  { value: "blocky", text: "Блочный" },
+                ].map((item) => (
+                  <li className="radio-btn" key={item.value}>
                     <input
                       type="radio"
-                      id={item}
+                      id={item.value}
                       name="building_type"
-                      value={item}
+                      value={item.value}
                       onChange={changeHandler}
-                      checked={form.building_type === item}
+                      checked={form.building_type === item.value}
                     />
-                    <label htmlFor={item}>{item}</label>
+                    <label htmlFor={item.value}>{item.text}</label>
                   </li>
                 ))}
                 {/*      <li className="radio-btn">
@@ -676,6 +731,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         type="radio"
                         id="ipoteka-no"
                         value={""}
+                        // checked={form}
                         name="app_ipoteka"
                         onChange={changeHandler}
                       />
@@ -751,10 +807,16 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
               <div className="btns">
                 <button
                   className="btn btn-black"
+                  onClick={handeDraftData}
+                >
+                  Сохранить как черновик
+                </button>
+                <button
+                  className="btn btn-orange"
                   type="submit"
                   onSubmit={handleSubmit}
                 >
-                  Сохранить как черновик
+                  Опубликовать объявление
                 </button>
                 {/* <button className="btn btn-orange">
                   Опубликовать объявление{" "}

@@ -20,6 +20,8 @@ const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
   const { getUserData, userData } = useContext(ContextApp);
   const [stores, setStores] = useState(null);
+  const [houses, setHouses] = useState(null);
+  const [draft, setDraft] = useState(null);
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -38,9 +40,10 @@ const UserCabinet = () => {
 
   useEffect(() => {
     setStores(userData?.stores);
+    setHouses(userData?.houses);
   }, [userData]);
 
-  console.log(userData?.phone_number);
+  console.log(houses);
 
   return (
     <section className="cabinet-s">
@@ -68,9 +71,20 @@ const UserCabinet = () => {
                 </div>
                 <ul className="advert-list">
                   {stores &&
-                    stores?.map((data, i) => (
-                      <UserContents key={i} data={data} />
-                    ))}
+                    stores
+                      ?.filter((item) => item.product_status !== 3)
+                      ?.map((item) => (
+                        <UserContents key={item.id} data={item} />
+                      ))}
+                  {houses &&
+                    houses
+                      ?.filter(
+                        (item) =>
+                          item.product_status !== 3 && item.draft !== true
+                      )
+                      ?.map((item) => (
+                        <UserContents key={item.id} data={item} />
+                      ))}
                 </ul>
               </div>
             </div>
@@ -82,9 +96,11 @@ const UserCabinet = () => {
             <div className="container-sm">
               <div className="advert">
                 <ul className="advert-list">
-                  {archive.map((data) => (
-                    <UserContents key={data.id} data={data} />
-                  ))}
+                  {stores
+                    ?.filter((item) => item.product_status === 3)
+                    ?.map((item) => (
+                      <UserContents key={item.id} data={item} />
+                    ))}
                 </ul>
               </div>
             </div>
@@ -110,9 +126,12 @@ const UserCabinet = () => {
                   </div>
                 </div>
                 <ul className="advert-list">
-                  {draft.map((data) => (
-                    <UserContents key={data.id} data={data} />
-                  ))}
+                  {houses &&
+                    houses
+                      ?.filter((item) => item.draft === true)
+                      ?.map((item) => (
+                        <UserContents key={item.id} data={item} />
+                      ))}
                 </ul>
               </div>
             </div>
@@ -122,6 +141,7 @@ const UserCabinet = () => {
             id="settings"
           >
             <UserSettings
+              img={userData?.avatar}
               name={userData?.first_name}
               number={userData?.phone_number}
               email={userData?.email}

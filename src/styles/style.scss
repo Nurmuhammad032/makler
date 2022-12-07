@@ -98,13 +98,20 @@ body {
   }
 }
 
+.labelcha {
+  width: 10rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 4rem;
+  cursor: pointer;
+}
+
 .app__nav-input {
   border: none !important;
   border-radius: 4rem !important;
   cursor: pointer;
 }
 
-.app__nav-input.active {
+.labelcha.active {
   background-color: rgba(197, 102, 34, 0.1) !important;
 }
 
