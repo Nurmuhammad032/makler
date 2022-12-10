@@ -31,7 +31,6 @@ const LoginModal = () => {
       })
       .catch((err) => console.log(err));
   };
-  console.log(da?.data.token?.access);
 
   return (
     <div className="modal login-modal">

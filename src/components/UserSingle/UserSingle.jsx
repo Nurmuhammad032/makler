@@ -5,7 +5,6 @@ import { UserCard } from "../../components";
   /*  */
 }
 const UserSingle = ({ data }) => {
-  console.log(data);
   return (
     <>
       {data ? (

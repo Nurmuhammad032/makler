@@ -33,7 +33,7 @@ const FilterWorker = () => {
         <div className="container">
           <ul className="nav-search-body">
             <li className="nav-search_how select-choose">
-              <label>Как</label>
+              <label className="nav-label">Как</label>
               <span
                 onClick={() => setShow1((prev) => !prev)}
                 className="choose-btn choose-btn-round"
@@ -66,7 +66,7 @@ const FilterWorker = () => {
               </div>
             </li>
             <li className="nav-search_type select-choose">
-              <label>Деятельности мастера</label>
+              <label className="nav-label">Деятельности мастера</label>
               <a
                 className="choose-btn choose-btn-link"
                 id="choose-type"
@@ -118,43 +118,15 @@ const FilterWorker = () => {
               </div>
             </li>
             <li className="nav-search_address">
-              <label>Адрес</label>
-              <YMaps
-                    query={{
-                      apikey: "29294198-6cdc-4996-a870-01e89b830f3e",
-                      lang: "en_RU",
-                    }}
-                  >
-                    <Map
-                      // {...mapOptions}
-                      // // state={state}s
-                      // state={{
-                      //   center: state?.center,
-                      //   zoom: 12,
-                      // }}
-                      onLoad={setMapConstructor}
-                      // onBoundsChange={handleBoundsChange}
-                      // instanceRef={mapRef}
-                    >
-                      <div
-                        style={{
-                          width: "1rem",
-                          height: "1rem",
-                          background: "#000",
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -100%)",
-                          zIndex: 3000,
-                        }}
-                      ></div>
-                    </Map>
-                  </YMaps>
+              <label className="nav-label">Адрес</label>
               <a href="#">
                 <svg className="svg-sprite-icon icon-fi_navigation w-16">
                   <use href={`${spirite}#fi_navigation`}></use>
                 </svg>
-                <input ref={searchRef} type="text" placeholder="г.Ташкент, ул. Амир Темур 65 А дом" />
+                <input
+                  type="text"
+                  placeholder="г.Ташкент, ул. Амир Темур 65 А дом"
+                />
               </a>
             </li>
             <li>

@@ -5,6 +5,7 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 // img/symbol/sprite.svg#dots
 const UserContents = ({ data }) => {
   const [display, setDisplay] = useState(false);
+  // console.log(data.images?.map((item) => item));
   return (
     <li className="advert-item">
       <div className="advert-item__top">
@@ -69,8 +70,8 @@ const UserContents = ({ data }) => {
         <picture>
           {"images" in data ? (
             <>
-              <source srcSet={data.images[0].images} type="image/webp" />
-              <img src={data.images[0].images} alt="Картинка Объявления" />
+              <source srcSet={data.images[0]?.images} type="image/webp" />
+              <img src={data.images[0]?.images} alt="Картинка Объявления" />
             </>
           ) : (
             <>
@@ -116,6 +117,7 @@ const UserContents = ({ data }) => {
         </p>
       </div>
     </li>
+    // <h1>fjadsl</h1>
   );
 };
 

@@ -83,7 +83,7 @@ const CreateProduct = () => {
         console.log(err);
         toast.error("Something went wrong!");
       });
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -116,10 +116,11 @@ const CreateProduct = () => {
       formData.append("uploaded_images", fi);
     }
 
-    //  console.log(formData);
     postData(formData)
   };
-  const handeDraftData = () => {
+  
+  const handeDraftData = (e) => {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("descriptions", form.descriptions);
@@ -149,7 +150,6 @@ const CreateProduct = () => {
       formData.append("uploaded_images", fi);
     }
 
-    //  console.log(formData);
     postData(formData)
   };
 
@@ -264,8 +264,6 @@ const CreateProduct = () => {
             <form
               className="create-product__left"
               id="create-product"
-              onSubmit={handleSubmit}
-              encType={"multipart/form-data"}
             >
               <h2>
                 Добавить новое <br />
@@ -805,16 +803,13 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                 </label>
               </div>
               <div className="btns">
-                <button
-                  className="btn btn-black"
-                  onClick={handeDraftData}
-                >
+                <button className="btn btn-black" onClick={handeDraftData}>
                   Сохранить как черновик
                 </button>
                 <button
                   className="btn btn-orange"
                   type="submit"
-                  onSubmit={handleSubmit}
+                  onClick={handleSubmit}
                 >
                   Опубликовать объявление
                 </button>

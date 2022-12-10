@@ -171,7 +171,6 @@ export default function CreateIndustriya() {
       };
     });
   };
-  console.log(img);
 
   const { form, changeHandler } = useForm({
     name: "",

@@ -33,6 +33,7 @@
 		}
 	}
 	&-list {
+		position: relative;
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		margin-bottom: rem(40px);

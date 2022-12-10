@@ -24,8 +24,6 @@ const SingleProduct = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(houseData);
-  console.log(id);
 
   return (
     <div

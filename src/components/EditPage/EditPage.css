@@ -60,7 +60,7 @@
   justify-content: space-between;
 }
 
-input {
+.edit-page input {
   padding: 0px 10px;
   width: 204px;
   height: 44px;
@@ -69,11 +69,11 @@ input {
   border-radius: 4px;
 }
 
-span {
+.edit-page span {
   margin-left: 3px;
 }
 
-label {
+.edit-page label {
   display: flex;
   flex-direction: column;
 }
@@ -228,7 +228,7 @@ label {
   color: #c56622;
 }
 
-textarea{
+.edit-page textarea{
   resize: none;
 }
 .price__select{

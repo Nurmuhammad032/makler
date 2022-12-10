@@ -21,6 +21,7 @@ const UserCabinet = () => {
   const { getUserData, userData } = useContext(ContextApp);
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
+  const [filtered, setFiltered] = useState();
   const [draft, setDraft] = useState(null);
   const navigate = useNavigate();
 
@@ -43,7 +44,13 @@ const UserCabinet = () => {
     setHouses(userData?.houses);
   }, [userData]);
 
-  console.log(houses);
+  useEffect(() => {
+    const filteredHouses = houses?.filter((item) => {
+      return item.product_status !== 3 && item.draft !== true;
+    });
+    setFiltered(filteredHouses);
+  }, [houses]);
+
 
   return (
     <section className="cabinet-s">
@@ -76,15 +83,9 @@ const UserCabinet = () => {
                       ?.map((item) => (
                         <UserContents key={item.id} data={item} />
                       ))}
-                  {houses &&
-                    houses
-                      ?.filter(
-                        (item) =>
-                          item.product_status !== 3 && item.draft !== true
-                      )
-                      ?.map((item) => (
-                        <UserContents key={item.id} data={item} />
-                      ))}
+                  {filtered?.map((item, i) => (
+                    <UserContents key={i} data={item} />
+                  ))}
                 </ul>
               </div>
             </div>

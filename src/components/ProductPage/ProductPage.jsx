@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { height } from "@mui/system";
 
 export default function ProductCard({ data }) {
-  console.log(data);
   return (
     <Link
       to={`${data.id}`}

@@ -347,7 +347,7 @@
 					margin-top: 30px;
 				}
 			}
-			label {
+			label.nav-label {
 				position: absolute;
 				top: -30px;
 			}
@@ -431,8 +431,10 @@
 	& > * {&:not(:last-child) {
 		margin-right: 10px;
 	}}
-	a {
-		width: rem(181px);
+	a, label {
+		width: rem(181px);	
+		display: flex;
+		align-items: center;
 	}
 	&.active {
 	visibility: visible;
@@ -445,7 +447,7 @@
 		margin-right: rem(5px);
 	}}
 	li {
-		a {
+		a, label {
 			border-radius: rem(50px);
 			background: $gray;
 			display: flex;

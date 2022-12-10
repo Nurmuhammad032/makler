@@ -12,14 +12,6 @@ const Workers = () => {
   const [nextUrl, setNextUrl] = useState();
   const [prevUrl, setPrevUrl] = useState();
 
-  // const init = async () => {
-  //   const res = await axios.get(url);
-
-  //   setDisplayData(res.data.results);
-  //   setNextUrl(res.data.next);
-  //   setPrevUrl(res.data.previous);
-  //   console.log(res);
-  // };
   const [limit, setLimit] = useState(6);
   useEffect(() => {
     axios
@@ -27,14 +19,6 @@ const Workers = () => {
       .then((data) => setDisplayData(data.data.results))
       .catch((err) => console.log(err));
   }, [limit]);
-
-  // const handleNext = () => {
-  //   setUrl(nextUrl);
-  // };
-
-  // const handlePrev = () => {
-  //   setUrl(prevUrl);
-  // };
 
   return (
     <section className="content">

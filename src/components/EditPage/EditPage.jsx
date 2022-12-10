@@ -81,7 +81,6 @@ export default function EditPage() {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log(value);
   };
   const initialState = {
     title: "",
@@ -195,7 +194,7 @@ export default function EditPage() {
   };
 
   return (
-    <div className="container">
+    <div className="container edit-page">
       <div className="create-product-s">
         <div className="create-product">
           <form className="create-product__left" onSubmit={handeSubmit}>

@@ -9,7 +9,6 @@ const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const { userData } = useContext(ContextApp);
   const userId = localStorage.getItem("userId");
-  console.log(userId);
 
   const access = localStorage.getItem("access");
   useEffect(() => {

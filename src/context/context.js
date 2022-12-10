@@ -8,6 +8,7 @@ export const ContextProvider = ({ children }) => {
   const [data, setData] = useState({});
   const [openLoginModal, setOpenLoginModal] = useState(false);
   const [userData, setUserData] = useState();
+  const [homeHouses, setHomeHouses] = useState();
   const [houseData, setHouseData] = useState();
   const [userId, setUserId] = useState();
 
@@ -22,6 +23,9 @@ export const ContextProvider = ({ children }) => {
   };
   const getHouseData = (newState) => {
     setHouseData(newState);
+  };
+  const homeHousesFilter = (newState) => {
+    setHomeHouses(newState);
   };
 
   useEffect(() => {
@@ -38,6 +42,8 @@ export const ContextProvider = ({ children }) => {
         getUserData,
         getHouseData,
         getUserId,
+        homeHousesFilter,
+        homeHouses,
         houseData,
         userId,
       }}
