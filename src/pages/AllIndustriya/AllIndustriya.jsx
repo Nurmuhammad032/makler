@@ -18,6 +18,7 @@ const AllIndustriya = () => {
     useFor: "",
     search: "",
   });
+
   const { search, useFor } = form;
   useEffect(() => {
     axios

@@ -72,7 +72,7 @@ const FilterIndustria = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{profess}</span>
+                <span>{profess ? profess : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>

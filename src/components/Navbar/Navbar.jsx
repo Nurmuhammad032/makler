@@ -53,14 +53,6 @@ const Navbar = () => {
                     <Link to={item}>{item}</Link>
                   </li>
                 ))}
-              {/* <li>
-                {" "}
-                <a href="#">Сантехник</a>
-              </li>
-              <li>
-                {" "}
-                <a href="#">Abduvali Eshonqulov </a>
-              </li> */}
             </ul>
           </div>
           <div className="header-nav">
@@ -113,23 +105,27 @@ const Navbar = () => {
                 )}
               </li>
               <li>
-                <Link className="btn btn-orange-text" to="/create">
-                  <svg
-                    width="16"
-                    height="16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 3.333v9.334M3.333 8h9.333"
-                      stroke="#C56622"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span>разместить объявление</span>
-                </Link>
+                {isLogin ? (
+                  <Link className="btn btn-orange-text" to="/create">
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8 3.333v9.334M3.333 8h9.333"
+                        stroke="#C56622"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span>разместить объявление</span>
+                  </Link>
+                ) : (
+                  ""
+                )}
               </li>
             </ul>
           </div>

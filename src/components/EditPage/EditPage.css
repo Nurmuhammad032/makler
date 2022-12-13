@@ -16,13 +16,13 @@
 }
 
 .card__header {
-   width: 459px;
+  width: 459px;
   height: 116px;
   background: #ffffff;
   border-radius: 3px;
   display: flex;
   align-items: center;
-} 
+}
 
 .avatar__img {
   margin-left: 10px;
@@ -60,7 +60,7 @@
   justify-content: space-between;
 }
 
-.edit-page input {
+.edit-page input:not(.checkbox__input) {
   padding: 0px 10px;
   width: 204px;
   height: 44px;
@@ -228,16 +228,16 @@
   color: #c56622;
 }
 
-.edit-page textarea{
+.edit-page textarea {
   resize: none;
 }
-.price__select{
+.price__select {
   margin: 10px 0;
 }
-.price-name{
+.price-name {
   margin-top: 20px;
 }
 
-.phone-number{
+.phone-number {
   width: 435px;
 }

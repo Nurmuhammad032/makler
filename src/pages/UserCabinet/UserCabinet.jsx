@@ -19,6 +19,7 @@ import Loading from "../../components/Loading/Loading";
 
 const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
+  const router = useNavigate();
   const { getUserData, userData } = useContext(ContextApp);
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
@@ -53,6 +54,12 @@ const UserCabinet = () => {
     });
     setFiltered(filteredHouses);
   }, [houses]);
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    router("/");
+    window.location.reload();
+  };
 
   return (
     <section className="cabinet-s">
@@ -342,7 +349,14 @@ const UserCabinet = () => {
                 </li>
               ))}
             </ul>
-            <a className="logout-link left-icon" href="#" id="log-out">
+            <a
+              className="logout-link left-icon"
+              onClick={handleLogOut}
+              id="log-out"
+              style={{
+                cursor: "pointer",
+              }}
+            >
               <svg className="svg-sprite-icon icon-fi_log-out-o fill-n w-16">
                 <use href={`${spirite}#fi_log-out-o`}></use>
               </svg>

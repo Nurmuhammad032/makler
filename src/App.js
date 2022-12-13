@@ -19,6 +19,7 @@ import {
   Workers,
 } from "./pages";
 import { ToastContainer } from "react-toastify";
+import CreatePageProtect from "./components/CreatePageProtect/CreatePageProtect";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -41,7 +42,14 @@ function App() {
           {openLoginModal && <LoginModal />}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/create" element={<CreatePage />} />
+            <Route
+              path="/create"
+              element={
+                <CreatePageProtect user={isLogin}>
+                  <CreatePage />
+                </CreatePageProtect>
+              }
+            />
             <Route path="/cabinet/:id" element={<UserCabinet />} />
             <Route path="/create/master" element={<EditPage />} />
             <Route path="/create/house" element={<CreateProduct />} />

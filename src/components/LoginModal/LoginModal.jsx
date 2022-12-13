@@ -19,7 +19,6 @@ const LoginModal = () => {
     const info = {
       phone_number: form.number.toString(),
     };
-    // localStorage.setItem("access", data?.token?.access)
     axios
       .post(`${baseURL}/authorization/signup/`, info)
       .then((data) => {
@@ -28,7 +27,10 @@ const LoginModal = () => {
         setDa(data);
       })
       .catch(() => toast.error("Something went wrong!"))
-      .finally(() => loginModalFunc(false));
+      .finally(() => {
+        loginModalFunc(false);
+        window.location.reload();
+      });
   };
 
   return (

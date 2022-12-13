@@ -20,7 +20,7 @@ const Filter = ({ value, change, start, setFocus }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{value.typeRoom}</span>
+                <span>{value.typeRoom ? value.typeRoom : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -84,7 +84,7 @@ const Filter = ({ value, change, start, setFocus }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{value.building}</span>
+                <span>{value.building ? value.building : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
