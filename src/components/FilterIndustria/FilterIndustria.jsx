@@ -1,56 +1,29 @@
-import { Map, YMaps } from "@pbe/react-yandex-maps";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
-const FilterWorker = ({ change, value }) => {
+const FilterIndustria = ({ change, value }) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
-  const [show3, setShow3] = useState(false);
-  const [profess, setProfess] = useState();
-  const [mapConstructor, setMapConstructor] = useState(null);
-  const [state, setState] = useState(null);
-  const searchRef = useRef(null);
-
-  const { profession } = value;
+  const [profess, setProfess] = useState("");
   const option1 = [
     {
-      label: "Ingener",
+      label: "For who",
       value: 1,
     },
     {
-      label: "Santexnik",
+      label: "For who 2",
       value: 2,
     },
     {
-      label: "Master",
+      label: "For house",
       value: 3,
     },
-    {
-      label: "Oyna ustasi",
-      value: 4,
-    },
   ];
+  const { useFor } = value;
+
   useEffect(() => {
-    setProfess(option1[profession - 1]?.label);
-  }, [profession]);
-
-  // useEffect(() => {
-  //   if (mapConstructor) {
-  //     new mapConstructor.SuggestView(searchRef.current).events.add(
-  //       "select",
-  //       function (e) {
-  //         const selectedName = e.get("item")?.value;
-  //         mapConstructor?.geocode(selectedName).then((result) => {
-  //           const newCoords = result?.geoObjects
-  //             ?.get(0)
-  //             ?.geometry?.getCoordinates();
-  //           setState((prevState) => ({ ...prevState, center: newCoords }));
-  //         });
-  //       }
-  //     );
-  //   }
-  // }, [mapConstructor]);
-
+    setProfess(option1[useFor - 1]?.label);
+  }, [useFor]);
   return (
     <section className="main-s">
       <div className="nav-search">
@@ -109,16 +82,16 @@ const FilterWorker = ({ change, value }) => {
                   {option1.map((item) => (
                     <li key={item.value}>
                       <label
-                        htmlFor={`room${item.value}`}
+                        htmlFor={`useFor${item.value}`}
                         className={`btn btn-orange-light ${
-                          Number(profession) === item.value ? "active" : ""
+                          Number(useFor) === item.value ? "active" : ""
                         }`}
                       >
                         {item.label}
                         <input
                           type="text"
-                          id={`room${item.value}`}
-                          name="profession"
+                          id={`useFor${item.value}`}
+                          name="useFor"
                           value={item.value}
                           onClick={(e) => {
                             change(e);
@@ -170,4 +143,4 @@ const FilterWorker = ({ change, value }) => {
   );
 };
 
-export default FilterWorker;
+export default FilterIndustria;

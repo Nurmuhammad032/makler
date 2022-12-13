@@ -1,6 +1,11 @@
 import "./SingleProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
-import { DownloadApp, FooterMenu, SliderContent } from "../../components";
+import {
+  DownloadApp,
+  FooterMenu,
+  LoadingPost,
+  SliderContent,
+} from "../../components";
 import img1 from "../../assets/img/slider/1.png";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -13,6 +18,7 @@ const img = [img1, img1, img1, img1];
 
 const SingleProduct = () => {
   const { id } = useParams();
+  const [loading, setLaoding] = useState(true);
   const { houseData, getHouseData } = useContext(ContextApp);
 
   useEffect(() => {
@@ -22,7 +28,8 @@ const SingleProduct = () => {
         getHouseData(data.data);
         console.log(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLaoding(false));
   }, []);
 
   return (
@@ -31,6 +38,7 @@ const SingleProduct = () => {
         padding: "2rem 0",
       }}
     >
+      {loading && <LoadingPost />}
       <section className="slider-s">
         <div className="container">
           <div className="slider-body">

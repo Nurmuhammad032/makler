@@ -1,19 +1,60 @@
 import axios from "axios";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useContext, useEffect } from "react";
-import { ProductSingle } from "../../components";
+import { FilterIndustria, ProductSingle } from "../../components";
+import Loading from "../../components/Loading/Loading";
 import ContextApp from "../../context/context";
+import useForm from "../../hooks/useForm";
+import { baseURL } from "../../requests/requests";
 
 const AllIndustriya = () => {
   const { stores } = useContext(ContextApp);
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [limit, setLimit] = useState(9);
+  const [loading, setLoading] = useState(true);
+  const [searchLimit, setSearchLimit] = useState(8);
+  const [searchData, setSearchData] = useState([]);
+  const { form, changeHandler } = useForm({
+    useFor: "",
+    search: "",
+  });
+  const { search, useFor } = form;
   useEffect(() => {
     axios
-      .get(`https://fathulla.tk/store2/api/v1/store/?limit=${limit}`)
+      .get(`${baseURL}/store2/api/v1/store/`)
       .then((data) => setData(data.data.results))
-      .catch((err) => console.log(err));
-  }, [limit]);
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, []);
+  console.log(form);
+
+  useMemo(() => {
+    setLoading(true);
+    axios
+      .get(`${baseURL}/store2/api/v1/store/?use_for=${useFor}`)
+      .then((data) => setData(data.data.results))
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [useFor]);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${baseURL}/store2/api/v1/store/search?search=${search}`)
+      .then((res) => setSearchData(res.data.results))
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [search]);
+
+  const handleLoad = () => {
+    if (!search) {
+      setLimit((prev) => (prev += 8));
+    } else {
+      setSearchLimit((prev) => (prev += 8));
+    }
+  };
   return (
     <section className="content">
       <div className="container">
@@ -22,21 +63,44 @@ const AllIndustriya = () => {
             padding: "2rem 0",
           }}
         >
-          <div className="app__cards--wrapper">
-            {data &&
-              data?.map((data) => (
-                <div
-                  style={{
-                    marginRight: "0.5rem",
-                  }}
-                  key={data.id}
-                >
-                  <ProductSingle data={data} />
-                </div>
-              ))}
-          </div>
+          <FilterIndustria change={changeHandler} value={form} />
+          {!loading ? (
+            <div className="app__cards--wrapper">
+              {!search.length ? (
+                data.length ? (
+                  data?.slice(0, limit)?.map((data) => (
+                    <div
+                      style={{
+                        marginRight: "0.5rem",
+                      }}
+                      key={data.id}
+                    >
+                      <ProductSingle data={data} />
+                    </div>
+                  ))
+                ) : (
+                  <h1>No items.</h1>
+                )
+              ) : searchData.length ? (
+                searchData?.slice(0, searchLimit)?.map((data, i) => (
+                  <div
+                    style={{
+                      marginRight: "0.5rem",
+                    }}
+                    key={data.id}
+                  >
+                    <ProductSingle data={data} />
+                  </div>
+                ))
+              ) : (
+                <h1>Items not found!</h1>
+              )}
+            </div>
+          ) : (
+            <Loading />
+          )}
           <button
-            onClick={() => setLimit((prev) => (prev += 9))}
+            onClick={handleLoad}
             className="btn btn-big btn-white"
             id="show-more"
             style={{

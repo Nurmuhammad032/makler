@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { EditPage, Footer, Navbar } from "./components";
-import { ContextProvider } from "./context/context";
+import { EditPage, Footer, LoginModal, Navbar } from "./components";
+import ContextApp, { ContextProvider } from "./context/context";
 import ProtectedRoute from "./helpers/ProtectedRoute";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import {
   AllIndustriya,
+  AllProducts,
   CreateIndustriya,
   CreatePage,
   CreateProduct,
@@ -21,7 +22,7 @@ import { ToastContainer } from "react-toastify";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-
+  const { openLoginModal } = useContext(ContextApp);
   useEffect(() => {
     let access = localStorage.getItem("access");
     if (access) {
@@ -31,13 +32,13 @@ function App() {
     }
   }, []);
 
-
   return (
     <Router>
-      <ContextProvider>
+      <>
         <div className="wrapper">
-        <ToastContainer />
+          <ToastContainer />
           <Navbar />
+          {openLoginModal && <LoginModal />}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<CreatePage />} />
@@ -46,6 +47,7 @@ function App() {
             <Route path="/create/house" element={<CreateProduct />} />
             <Route path="/save-products" element={<SavedProduct />} />
             <Route path="/product/:id" element={<SingleProduct />} />
+            <Route path="/product" element={<AllProducts />} />
             <Route path="/master" element={<Workers />} />
             <Route path="/master/:id" element={<MasterPage />} />
             <Route path="/industria/:id" element={<Industriya />} />
@@ -54,7 +56,7 @@ function App() {
           </Routes>
           <Footer />
         </div>
-      </ContextProvider>
+      </>
     </Router>
   );
 }

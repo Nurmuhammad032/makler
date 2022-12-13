@@ -1,15 +1,18 @@
 import "./Navbar.scss";
 import logo from "../../assets/img/logo_site2.png";
 import spirite from "../../assets/img/symbol/sprite.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import ContextApp from "../../context/context";
 
 const Navbar = () => {
+  const router = useLocation();
+  console.log(router.pathname.split("/"));
   const [isLogin, setIsLogin] = useState(false);
-  const { userData } = useContext(ContextApp);
+  const { userData, loginModalFunc } = useContext(ContextApp);
   const userId = localStorage.getItem("userId");
-
+  console.log(router.pathname.split("/").forEach((item) => item));
+  console.log(router.pathname);
   const access = localStorage.getItem("access");
   useEffect(() => {
     if (access) {
@@ -40,17 +43,24 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                {" "}
-                <a href="#">Ремонт</a>
+                <Link to={"/"}>Home</Link>
               </li>
-              <li>
+              {router.pathname
+                .split("/")
+                .filter((item) => item !== "")
+                .map((item, i) => (
+                  <li key={i}>
+                    <Link to={item}>{item}</Link>
+                  </li>
+                ))}
+              {/* <li>
                 {" "}
                 <a href="#">Сантехник</a>
               </li>
               <li>
                 {" "}
                 <a href="#">Abduvali Eshonqulov </a>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div className="header-nav">
@@ -85,7 +95,21 @@ const Navbar = () => {
                     <span>Профиль </span>
                   </Link>
                 ) : (
-                  <h1>Avall kir login qilib</h1>
+                  <button
+                    onClick={() => loginModalFunc(true)}
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      fontWeight: "600",
+                      fontSize: "0.8125rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <svg className="svg-sprite-icon icon-fi_log-in w-16">
+                      <use href={`${spirite}#fi_log-in`}></use>
+                    </svg>
+                    Войти{" "}
+                  </button>
                 )}
               </li>
               <li>

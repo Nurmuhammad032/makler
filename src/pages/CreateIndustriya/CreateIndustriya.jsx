@@ -2,7 +2,7 @@ import React from "react";
 import avatar_image from "./../../assets/img/avatar_change.png";
 import { useState, useRef, useEffect } from "react";
 import sprite from "../../assets/img/symbol/sprite.svg";
-import "./../../components/EditPage/EditPage.css";
+import "../../components/EditPage/EditPage.css";
 import {
   Box,
   MenuItem,
@@ -23,6 +23,7 @@ import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate } from "react-router-dom";
+import { LoadingPost } from "../../components";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -61,6 +62,7 @@ function getStyles(name, personName, theme) {
 
 export default function CreateIndustriya() {
   const theme = useTheme();
+  const [loading, setLoading] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
   const [navActive, setNavActive] = useState(false);
   const [personName, setPersonName] = React.useState([]);
@@ -186,6 +188,8 @@ export default function CreateIndustriya() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    console.log("init");
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("price_type", Number(form.price_type));
@@ -219,13 +223,15 @@ export default function CreateIndustriya() {
       .catch((err) => {
         console.log(err);
         toast.error("Something went wrong!");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="container">
+      {loading && <LoadingPost />}
       <div className="create-product-s">
-        <div className="create-product">
+        <div className="create-product edit-page">
           <form className="create-product__left" onSubmit={handleSubmit}>
             <h1 className="edit__card__title">
               Регистрируйтес как мастер, получите работы
@@ -560,7 +566,15 @@ export default function CreateIndustriya() {
             </div>
 
             <div className="register">
-              <button className="register__btn">Зарегистрироватся</button>
+              <button
+                className="register__btn"
+                type="submit"
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                Зарегистрироватся
+              </button>
             </div>
           </form>
           <div className="create-product__right">

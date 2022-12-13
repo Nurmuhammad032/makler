@@ -21,6 +21,7 @@ import {
 import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { toast } from "react-toastify";
+import LoadingPost from "../LoadingPost/LoadingPost";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -61,6 +62,7 @@ export default function EditPage() {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
+  const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState();
   const fileHandle = (e) => {
     const img = e.target.files[0];
@@ -160,6 +162,7 @@ export default function EditPage() {
 
   const handeSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("email", form.email);
@@ -190,11 +193,13 @@ export default function EditPage() {
       .catch((err) => {
         console.log(err);
         toast.error("Something went wrong!");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="container edit-page">
+      {loading && <LoadingPost />}
       <div className="create-product-s">
         <div className="create-product">
           <form className="create-product__left" onSubmit={handeSubmit}>

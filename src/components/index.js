@@ -14,4 +14,5 @@ export { default as UserSingle } from "./UserSingle/UserSingle";
 export { default as ProductSingle } from "./ProductPage/ProductPage";
 export { default as EditPage } from "./EditPage/EditPage";
 export { default as SearchResults } from "./SearchResults/SearchResults";
-
+export { default as LoadingPost } from "./LoadingPost/LoadingPost";
+export { default as FilterIndustria } from "./FilterIndustria/FilterIndustria";

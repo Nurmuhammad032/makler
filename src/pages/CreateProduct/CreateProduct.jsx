@@ -1,7 +1,7 @@
 import "./CreateProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import { useContext, useEffect, useState } from "react";
-import { LoginModal } from "../../components";
+import { LoadingPost, LoginModal } from "../../components";
 import ContextApp from "../../context/context";
 import { useRef } from "react";
 import {
@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 const CreateProduct = () => {
   const [navActive, setNavActive] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
+  const [loading, setLoading] = useState(false);
   const { loginModalFunc, openLoginModal } = useContext(ContextApp);
   const initialState = {
     title: "",
@@ -63,6 +64,7 @@ const CreateProduct = () => {
   });
 
   const postData = (data) => {
+    setLoading(true);
     const userToken = localStorage.getItem("access");
 
     axios
@@ -82,7 +84,8 @@ const CreateProduct = () => {
       .catch((err) => {
         console.log(err);
         toast.error("Something went wrong!");
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleSubmit = (e) => {
@@ -116,9 +119,9 @@ const CreateProduct = () => {
       formData.append("uploaded_images", fi);
     }
 
-    postData(formData)
+    postData(formData);
   };
-  
+
   const handeDraftData = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -150,7 +153,7 @@ const CreateProduct = () => {
       formData.append("uploaded_images", fi);
     }
 
-    postData(formData)
+    postData(formData);
   };
 
   const handleChange = (e) => {
@@ -259,12 +262,10 @@ const CreateProduct = () => {
   return (
     <>
       <section className="create-product-s">
+        {loading && <LoadingPost />}
         <div className="container">
           <div className="create-product">
-            <form
-              className="create-product__left"
-              id="create-product"
-            >
+            <form className="create-product__left" id="create-product">
               <h2>
                 Добавить новое <br />
                 объявление
@@ -864,7 +865,6 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
           </div>
         </div>
       </section>
-      {openLoginModal && <LoginModal />}
     </>
   );
 };

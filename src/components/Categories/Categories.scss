@@ -5,8 +5,10 @@
   }
   ul {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: rem(10px);
+    margin-bottom: 2rem;
+
     @include tablet {
       flex-wrap: wrap;
       grid-template-columns: repeat(2, 1fr);
@@ -27,6 +29,7 @@
             font-family: SFProDisplay_600;
             font-size: rem(17px);
             line-height: rem(22px);
+            font-weight: 700;
             margin-bottom: rem(10px);
             color: $black;
           }

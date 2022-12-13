@@ -26,15 +26,7 @@ const CreatePage = () => {
         <div>
           <div className="container">
             <div className="categories">
-              <ul
-                style={{
-                  // gridTemplateColumns: "none",
-                  display: "flex",
-                  justifyContent: "center",
-                  // background: "#000",
-                  // placeItems: 'center'
-                }}
-              >
+              <ul>
                 {categories?.map((item, i) => (
                   <li key={i}>
                     <Link to={`${item.url}`}>

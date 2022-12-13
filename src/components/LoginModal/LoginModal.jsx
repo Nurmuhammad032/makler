@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseURL } from "../../requests/requests";
 import { useContext, useState } from "react";
 import ContextApp from "../../context/context";
+import { toast } from "react-toastify";
 
 const LoginModal = () => {
   const { loginModalFunc, getUserId } = useContext(ContextApp);
@@ -24,12 +25,10 @@ const LoginModal = () => {
       .then((data) => {
         localStorage.setItem("access", data?.data.token?.access);
         localStorage.setItem("userId", data.data?.token?.id);
-        // window.location.reload();
         setDa(data);
-        // getUserId(data.data?.token?.id);
-        console.log(data.data);
       })
-      .catch((err) => console.log(err));
+      .catch(() => toast.error("Something went wrong!"))
+      .finally(() => loginModalFunc(false));
   };
 
   return (

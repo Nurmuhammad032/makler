@@ -1,6 +1,7 @@
 import { fabClasses } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import {
   Categories,
@@ -9,23 +10,26 @@ import {
   Filter,
   FooterMenu,
   Houses,
+  LoginModal,
   ProductSingle,
   SearchResults,
 } from "../components";
+import ContextApp from "../context/context";
 import useForm from "../hooks/useForm";
 import { baseURL } from "../requests/requests";
 
 const Home = () => {
   const { form, changeHandler } = useForm({
-    typeRoom: "for_sale",
-    room: '',
-    building: "brick",
+    typeRoom: "",
+    room: "",
+    building: "",
     search: "",
   });
 
   console.log(form);
   const [start, setStart] = useState(1);
   const [focus, setFocus] = useState(false);
+  const { openLoginModal } = useContext(ContextApp);
   const [searchData, setSearchData] = useState(false);
   const [loading, setLoading] = useState(false);
 

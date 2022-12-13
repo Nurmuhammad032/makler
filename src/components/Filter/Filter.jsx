@@ -91,96 +91,86 @@ const Filter = ({ value, change, start, setFocus }) => {
               </a>
               <div className={`nav-body-choose ${show2 ? "active" : ""}`}>
                 <ul>
-                  <li>
-                    <label
-                      htmlFor="building1"
-                      className={`btn btn-orange-light ${
-                        value.building === "brick" ? "active" : ""
-                      }`}
-                    >
-                      Brick
-                      <input
-                        type="text"
-                        id="building1"
-                        name="building"
-                        value={"brick"}
-                        onClick={(e) => {
-                          change(e);
-                          setShow2(false);
-                        }}
-                        onChange={change}
-                        style={{ display: "none" }}
-                      />
-                    </label>
-                  </li>
-                  <li>
-                    <label
-                      htmlFor="building2"
-                      className={`btn btn-orange-light ${
-                        value.building === "monolith" ? "active" : ""
-                      }`}
-                    >
-                      Monolith
-                      <input
-                        type="text"
-                        id="building2"
-                        name="building"
-                        value={"monolith"}
-                        onClick={(e) => {
-                          change(e);
-                          setShow2(false);
-                        }}
-                        onChange={change}
-                        style={{ display: "none" }}
-                      />
-                    </label>
-                  </li>
+                  {[
+                    {
+                      label: "Flat",
+                      value: "flat",
+                    },
+                    {
+                      label: "Room",
+                      value: "room",
+                    },
+                    {
+                      label: "Summer cottage",
+                      value: "summer_cottage",
+                    },
+                  ].map((item, i) => (
+                    <li key={i}>
+                      <label
+                        htmlFor={item.value}
+                        className={`btn btn-orange-light ${
+                          value.building === item.value ? "active" : ""
+                        }`}
+                      >
+                        {item.label}
+                        <input
+                          type="text"
+                          id={item.value}
+                          name="building"
+                          value={item.value}
+                          onClick={(e) => {
+                            change(e);
+                            setShow2(false);
+                          }}
+                          onChange={change}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </li>
+                  ))}
                 </ul>
                 <ul>
-                  <li>
-                    <label
-                      htmlFor="building3"
-                      className={`btn btn-orange-light ${
-                        value.building === "panel" ? "active" : ""
-                      }`}
-                    >
-                      Panel
-                      <input
-                        type="text"
-                        id="building3"
-                        name="building"
-                        value={"panel"}
-                        onClick={(e) => {
-                          change(e);
-                          setShow2(false);
-                        }}
-                        onChange={change}
-                        style={{ display: "none" }}
-                      />
-                    </label>
-                  </li>
-                  <li>
-                    <label
-                      htmlFor="building4"
-                      className={`btn btn-orange-light ${
-                        value.building === "blocky" ? "active" : ""
-                      }`}
-                    >
-                      Blocky
-                      <input
-                        type="text"
-                        id="building4"
-                        name="building"
-                        value={"blocky"}
-                        onClick={(e) => {
-                          change(e);
-                          setShow2(false);
-                        }}
-                        onChange={change}
-                        style={{ display: "none" }}
-                      />
-                    </label>
-                  </li>
+                  {[
+                    {
+                      label: "House",
+                      value: "house",
+                    },
+                    {
+                      label: "Part house",
+                      value: "part_house",
+                    },
+                    {
+                      label: "Town house",
+                      value: "townhouse",
+                    },
+                    {
+                      label: "Bed space",
+                      value: "bed_space",
+                    },
+                  ].map((item) => (
+                    <li key={item.value}>
+                      <label
+                        htmlFor={item.value}
+                        className={`btn btn-orange-light ${
+                          value.building === item.value ? "active" : ""
+                        }`}
+                      >
+                        {item.label}
+                        <input
+                          type="text"
+                          id={item.value}
+                          name="building"
+                          value={item.value}
+                          onClick={(e) => {
+                            change(e);
+                            setShow2(false);
+                          }}
+                          onChange={change}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </li>
@@ -203,7 +193,7 @@ const Filter = ({ value, change, start, setFocus }) => {
               <label className="nav-label">Кол-во комнат</label>
               <ul className="rooms-list" id="choose-room">
                 {[1, 2, 3, 4, 5].map((item) => (
-                  <li>
+                  <li key={item}>
                     <label
                       htmlFor={`room${item}`}
                       className={`btn btn-orange-light ${

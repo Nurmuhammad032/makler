@@ -1,6 +1,6 @@
 import "./UserCabinet.scss";
 import avatar from "../../assets/img/avatar-big.png";
-import { UserContents } from "../../components";
+import { LoadingPost, UserContents } from "../../components";
 import spirite from "../../assets/img/symbol/sprite.svg";
 import {
   announceData,
@@ -15,6 +15,7 @@ import axios from "axios";
 import { baseURL } from "../../requests/requests";
 import ContextApp from "../../context/context";
 import { useStepContext } from "@mui/material";
+import Loading from "../../components/Loading/Loading";
 
 const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
@@ -22,6 +23,7 @@ const UserCabinet = () => {
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
   const [filtered, setFiltered] = useState();
+  const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState(null);
   const navigate = useNavigate();
 
@@ -36,7 +38,8 @@ const UserCabinet = () => {
         },
       })
       .then((data) => getUserData(data.data))
-      .catch(() => navigate("/"));
+      .catch(() => navigate("/"))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -50,7 +53,6 @@ const UserCabinet = () => {
     });
     setFiltered(filteredHouses);
   }, [houses]);
-
 
   return (
     <section className="cabinet-s">
@@ -76,17 +78,21 @@ const UserCabinet = () => {
                     <a href="#">Подробнее </a>
                   </div>
                 </div>
-                <ul className="advert-list">
-                  {stores &&
-                    stores
-                      ?.filter((item) => item.product_status !== 3)
-                      ?.map((item) => (
-                        <UserContents key={item.id} data={item} />
-                      ))}
-                  {filtered?.map((item, i) => (
-                    <UserContents key={i} data={item} />
-                  ))}
-                </ul>
+                {!loading ? (
+                  <ul className="advert-list">
+                    {stores &&
+                      stores
+                        ?.filter((item) => item.product_status !== 3)
+                        ?.map((item) => (
+                          <UserContents key={item.id} data={item} />
+                        ))}
+                    {filtered?.map((item, i) => (
+                      <UserContents key={i} data={item} />
+                    ))}
+                  </ul>
+                ) : (
+                  <Loading />
+                )}
               </div>
             </div>
           </section>
