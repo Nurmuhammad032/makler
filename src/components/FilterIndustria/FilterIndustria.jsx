@@ -5,6 +5,7 @@ const FilterIndustria = ({ change, value }) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [profess, setProfess] = useState("");
+  const [profess2, setProfess2] = useState("");
   const option1 = [
     {
       label: "For who",
@@ -19,11 +20,28 @@ const FilterIndustria = ({ change, value }) => {
       value: 3,
     },
   ];
-  const { useFor } = value;
+  const option2 = [
+    {
+      label: "For who",
+      value: 1,
+    },
+    {
+      label: "For who 2",
+      value: 2,
+    },
+    {
+      label: "For house",
+      value: 3,
+    },
+  ];
+  const { useFor, how_store_service } = value;
 
   useEffect(() => {
     setProfess(option1[useFor - 1]?.label);
   }, [useFor]);
+  useEffect(() => {
+    setProfess2(option2[how_store_service - 1]?.label);
+  }, [how_store_service]);
   return (
     <section className="main-s">
       <div className="nav-search">
@@ -40,25 +58,39 @@ const FilterIndustria = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>Купить</span>
+                <span>{profess2 ? profess2 : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
               </span>
               <div className={`nav-body-choose ${show1 ? "active" : ""}`}>
                 <ul>
-                  <li>
-                    {" "}
-                    <a className="btn btn-orange-light active" href="#">
-                      Купить{" "}
-                    </a>
-                  </li>
-                  <li>
-                    {" "}
-                    <a className="btn btn-orange-light" href="#">
-                      Продать{" "}
-                    </a>
-                  </li>
+                  {option2.map((item) => (
+                    <li key={item.value}>
+                      <label
+                        htmlFor={`how_store_service${item.value}`}
+                        className={`btn btn-orange-light ${
+                          Number(how_store_service) === item.value
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        {item.label}
+                        <input
+                          type="text"
+                          id={`how_store_service${item.value}`}
+                          name="how_store_service"
+                          value={item.value}
+                          onClick={(e) => {
+                            change(e);
+                            setShow1(false);
+                          }}
+                          onChange={change}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </li>

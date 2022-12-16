@@ -17,9 +17,9 @@ const Workers = () => {
   const { form, changeHandler } = useForm({
     profession: "",
     search: "",
+    service: "",
   });
-  const { search, profession } = form;
-
+  const { search, profession, service } = form;
   useEffect(() => {
     axios
       .get(`https://fathulla.tk/master/api/v1/maklers/`)
@@ -30,15 +30,25 @@ const Workers = () => {
 
   useMemo(() => {
     setLoading(true);
+    const params = {
+      profession,
+      how_service: service,
+    };
+    if (!profession) {
+      delete params.profession;
+    } else if (!service) {
+      delete params.how_service;
+    }
     axios
-      .get(
-        `https://fathulla.tk/master/api/v1/maklers/?profession=${form.profession}`
-      )
-      .then((data) => setDisplayData(data.data.results))
+      .get(`https://fathulla.tk/master/api/v1/maklers/`, {
+        params,
+      })
+      .then((data) => {
+        setDisplayData(data.data.results);
+      })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-    console.log("init...........");
-  }, [profession]);
+  }, [profession, service]);
 
   useEffect(() => {
     setLoading(true);

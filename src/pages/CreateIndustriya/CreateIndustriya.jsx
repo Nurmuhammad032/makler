@@ -22,7 +22,7 @@ import {
 import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LoadingPost } from "../../components";
 
 const ITEM_HEIGHT = 48;
@@ -184,6 +184,7 @@ export default function CreateIndustriya() {
     use_for: "",
     phoneNumber: 0,
     email: "",
+    how_store_service: 1,
   });
 
   const handleSubmit = (e) => {
@@ -511,6 +512,7 @@ export default function CreateIndustriya() {
                 </YMaps>
               </div>
             </div>
+
             <div
               style={{
                 marginTop: "2rem",
@@ -552,6 +554,48 @@ export default function CreateIndustriya() {
                   )}
                 </ul>
               </div>
+            </div>
+            <div
+              style={{
+                marginTop: "2rem",
+              }}
+            >
+              <span
+                style={{
+                  marginBottom: "1rem",
+                  display: "block",
+                }}
+              >
+                Как
+              </span>
+              <ul className="radio-list mb-50">
+                {[
+                  {
+                    text: "Аренда",
+                    value: 1,
+                  },
+                  {
+                    text: "Ремонт",
+                    value: 2,
+                  },
+                  {
+                    text: "Ремонт",
+                    value: 3,
+                  },
+                ].map(({ text, value }) => (
+                  <li className="radio-btn" key={value}>
+                    <input
+                      type="radio"
+                      id={text}
+                      name="how_store_service"
+                      onChange={changeHandler}
+                      value={value}
+                      checked={Number(form.how_store_service) === value}
+                    />
+                    <label htmlFor={text}>{text}</label>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="checkbox">
               <input

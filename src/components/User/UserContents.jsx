@@ -73,6 +73,11 @@ const UserContents = ({ data }) => {
               <source srcSet={data.images[0]?.images} type="image/webp" />
               <img src={data.images[0]?.images} alt="Картинка Объявления" />
             </>
+          ) : "avatar" in data ? (
+            <>
+              <source srcSet={data.avatar} type="image/webp" />
+              <img src={data.avatar} alt="Картинка Объявления" />
+            </>
           ) : (
             <>
               <source srcSet={data.image} type="image/webp" />

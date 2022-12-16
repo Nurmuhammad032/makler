@@ -4,14 +4,11 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 
 const FilterWorker = ({ change, value }) => {
   const [show1, setShow1] = useState(false);
+  const [serviceTypeValue, setServiceText] = useState("");
   const [show2, setShow2] = useState(false);
-  const [show3, setShow3] = useState(false);
   const [profess, setProfess] = useState();
-  const [mapConstructor, setMapConstructor] = useState(null);
-  const [state, setState] = useState(null);
-  const searchRef = useRef(null);
 
-  const { profession } = value;
+  const { profession, service } = value;
   const option1 = [
     {
       label: "Ingener",
@@ -21,18 +18,32 @@ const FilterWorker = ({ change, value }) => {
       label: "Santexnik",
       value: 2,
     },
+    // {
+    //   label: "Master",
+    //   value: 3,
+    // },
+    // {
+    //   label: "Oyna ustasi",
+    //   value: 4,
+    // },
+  ];
+  const serviceType = [
     {
-      label: "Master",
-      value: 3,
+      label: "Remont",
+      value: 1,
     },
     {
-      label: "Oyna ustasi",
-      value: 4,
+      label: "Arenda",
+      value: 2,
     },
   ];
   useEffect(() => {
     setProfess(option1[profession - 1]?.label);
+    setServiceText(serviceType[service - 1]?.label);
   }, [profession]);
+  useEffect(() => {
+    setServiceText(serviceType[service - 1]?.label);
+  }, [service]);
 
   // useEffect(() => {
   //   if (mapConstructor) {
@@ -67,25 +78,37 @@ const FilterWorker = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>Купить</span>
+                <span>{serviceTypeValue ? serviceTypeValue : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
               </span>
               <div className={`nav-body-choose ${show1 ? "active" : ""}`}>
                 <ul>
-                  <li>
-                    {" "}
-                    <a className="btn btn-orange-light active" href="#">
-                      Купить{" "}
-                    </a>
-                  </li>
-                  <li>
-                    {" "}
-                    <a className="btn btn-orange-light" href="#">
-                      Продать{" "}
-                    </a>
-                  </li>
+                  {serviceType.map((item) => (
+                    <li key={item.value}>
+                      <label
+                        htmlFor={`service${item.value}`}
+                        className={`btn btn-orange-light ${
+                          Number(service) === item.value ? "active" : ""
+                        }`}
+                      >
+                        {item.label}
+                        <input
+                          type="text"
+                          id={`service${item.value}`}
+                          name="service"
+                          value={item.value}
+                          onClick={(e) => {
+                            change(e);
+                            setShow1(false);
+                          }}
+                          onChange={change}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </li>

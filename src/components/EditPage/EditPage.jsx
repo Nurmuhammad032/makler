@@ -158,7 +158,9 @@ export default function EditPage() {
     profession: [],
     descriptions: "",
     experience: 0,
+    serviceType: 1,
   });
+  console.log(form);
 
   const handeSubmit = (e) => {
     e.preventDefault();
@@ -172,10 +174,14 @@ export default function EditPage() {
     formData.append("address_longitude", form.address_longitude);
     formData.append("password", form.password);
     formData.append("avatar", file);
-    formData.append(
-      "profession",
-      form.profession.map((data) => data.value)
-    );
+    formData.append("how_service", form.serviceType);
+    // formData.append(
+    //   "profession",
+    //   form.profession.map((data) => data.value)
+    // );
+    for (const fi of form.profession) {
+      formData.append("profession", fi.value);
+    }
     formData.append("descriptions", form.descriptions);
     formData.append("experience", form.experience);
     const userToken = localStorage.getItem("access");
@@ -186,8 +192,7 @@ export default function EditPage() {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         toast.success("Successfully created");
       })
       .catch((err) => {
@@ -321,7 +326,7 @@ export default function EditPage() {
                 <p className="second__card__text">Введите род деятельности!</p>
               </div>
               <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
-                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+                <InputLabel id="demo-multiple-chip-label">-------</InputLabel>
                 <Select
                   labelId="demo-multiple-chip-label"
                   id="demo-multiple-chip"
@@ -424,13 +429,51 @@ export default function EditPage() {
                 </YMaps>
               </div>
             </div>
-
+            <div
+              style={{
+                marginTop: "2rem",
+              }}
+            >
+              <span
+                style={{
+                  marginBottom: "1rem",
+                  display: "block",
+                }}
+              >
+                Как
+              </span>
+              <ul className="radio-list mb-50">
+                {[
+                  {
+                    text: "Аренда",
+                    value: 1,
+                  },
+                  {
+                    text: "Ремонт",
+                    value: 2,
+                  },
+                ].map(({ text, value }) => (
+                  <li className="radio-btn" key={value}>
+                    <input
+                      type="radio"
+                      id={text}
+                      name="serviceType"
+                      onChange={changeHandler}
+                      value={value}
+                      checked={Number(form.serviceType) === value}
+                    />
+                    <label htmlFor={text}>{text}</label>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div className="checkbox">
               <input
                 className="checkbox__input"
                 type={"checkbox"}
                 name=""
                 id=""
+                required
               />
               <span className="checkbox__text">
                 Я прочитал и согласен с условиями использования и публикации!

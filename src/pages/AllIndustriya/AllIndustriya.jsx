@@ -17,9 +17,10 @@ const AllIndustriya = () => {
   const { form, changeHandler } = useForm({
     useFor: "",
     search: "",
+    how_store_service: "",
   });
 
-  const { search, useFor } = form;
+  const { search, useFor, how_store_service } = form;
   useEffect(() => {
     axios
       .get(`${baseURL}/store2/api/v1/store/`)
@@ -27,16 +28,20 @@ const AllIndustriya = () => {
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
-  console.log(form);
 
   useMemo(() => {
     setLoading(true);
     axios
-      .get(`${baseURL}/store2/api/v1/store/?use_for=${useFor}`)
+      .get(`${baseURL}/store2/api/v1/store/`, {
+        params: {
+          use_for: useFor,
+          how_store_service,
+        },
+      })
       .then((data) => setData(data.data.results))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, [useFor]);
+  }, [useFor, how_store_service]);
 
   useEffect(() => {
     setLoading(true);

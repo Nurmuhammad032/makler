@@ -60,6 +60,7 @@ const CreateProduct = () => {
     app_new_building: "",
     amenities: [1],
     phone_number: "+99895",
+    how_sale: [1],
     isBookmarked: false,
   });
 
@@ -114,6 +115,7 @@ const CreateProduct = () => {
     formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
+    formData.append("how_sale", form.how_sale);
     formData.append("draft", false);
     for (const fi of file) {
       formData.append("uploaded_images", fi);
@@ -148,6 +150,7 @@ const CreateProduct = () => {
     formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
+    formData.append("how_sale", form.how_sale);
     formData.append("draft", true);
     for (const fi of file) {
       formData.append("uploaded_images", fi);

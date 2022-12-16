@@ -21,8 +21,10 @@ const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
   const router = useNavigate();
   const { getUserData, userData } = useContext(ContextApp);
+  console.log(userData);
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
+  const [maklers, setMaklers] = useState([]);
   const [filtered, setFiltered] = useState();
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState(null);
@@ -46,6 +48,7 @@ const UserCabinet = () => {
   useEffect(() => {
     setStores(userData?.stores);
     setHouses(userData?.houses);
+    setMaklers(userData?.maklers);
   }, [userData]);
 
   useEffect(() => {
@@ -54,7 +57,7 @@ const UserCabinet = () => {
     });
     setFiltered(filteredHouses);
   }, [houses]);
-
+  console.log(userData);
   const handleLogOut = () => {
     localStorage.clear();
     router("/");
@@ -94,6 +97,9 @@ const UserCabinet = () => {
                           <UserContents key={item.id} data={item} />
                         ))}
                     {filtered?.map((item, i) => (
+                      <UserContents key={i} data={item} />
+                    ))}
+                    {maklers?.map((item, i) => (
                       <UserContents key={i} data={item} />
                     ))}
                   </ul>
