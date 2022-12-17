@@ -14,7 +14,7 @@ const UserSingle = ({ data, id }) => {
   const [masterData, setMasterData] = useState([]);
   const [storeData, setStoreData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(masterData);
+
   const router = useLocation();
   const getData = (url, setData) => {
     setIsLoading(true);
@@ -141,7 +141,6 @@ const UserSingle = ({ data, id }) => {
                 )}
               </div>
             </div>
-            {/* <div>lfjadsk;jfdslk</div> */}
           </div>
         </section>
       ) : (

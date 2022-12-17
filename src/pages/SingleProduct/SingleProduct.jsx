@@ -13,25 +13,39 @@ import axios from "axios";
 import { useState } from "react";
 import { useContext } from "react";
 import ContextApp from "../../context/context";
+import { baseURL } from "../../requests/requests";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import Loading from "../../components/Loading/Loading";
 
 const img = [img1, img1, img1, img1];
 
 const SingleProduct = () => {
   const { id } = useParams();
   const [loading, setLaoding] = useState(true);
+  const [recomendLoading, setRecomendLoading] = useState(false);
+  const [recomdend, setRecomdend] = useState([]);
   const { houseData, getHouseData } = useContext(ContextApp);
-  console.log(houseData);
+  // console.log(houseData);
   useEffect(() => {
+    setLaoding(true);
     axios
-      .get(`https://fathulla.tk/products/web/api/v1/houses/${id}`)
+      .get(`${baseURL}/products/web/api/v1/houses/${id}`)
       .then((data) => {
         getHouseData(data.data);
-        console.log(data);
       })
       .catch((err) => console.log(err))
       .finally(() => setLaoding(false));
-  }, []);
-  // console.log(houseData);
+  }, [id]);
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/products/web/api/v1/all-web-houses/popular`)
+      .then((res) => {
+        setRecomdend(res.data.results);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
   return (
     <div
       style={{
@@ -190,80 +204,13 @@ const SingleProduct = () => {
             </div>
           </div>
           <div className="cards">
-            {/* <ul className="cards-list"> 
-                <li className="cards-item"> <a href="#"> 
-                    <div className="cards-item__top"> 
-                      <button className="btn-save">
-                        <svg className="svg-sprite-icon icon-save">
-                          <use href={`${sprite}#save`}></use>
-                        </svg>
-                      </button><img src="img/cards/1.png" alt="">
-                    </div>
-                    <div className="cards-item__bottom">
-                      <div className="cards-item-info"> 
-                        <div className="cards-item-info__top">
-                          <p>2 Комнатая кв, 63м²</p><span>400$</span>
-                        </div>
-                        <div className="cards-item-info__bottom"> 
-                          <p>Ташкент, Шайхантахурский район</p><span>22:52</span>
-                        </div>
-                      </div>
-                    </div></a></li>
-                <li className="cards-item"> <a href="#"> 
-                    <div className="cards-item__top"> 
-                      <button className="btn-save">
-                        <svg className="svg-sprite-icon icon-save">
-                          <use href={`${sprite}#save`}></use>
-                        </svg>
-                      </button><img src="img/cards/2.png" alt="">
-                    </div>
-                    <div className="cards-item__bottom">
-                      <div className="cards-item-info"> 
-                        <div className="cards-item-info__top">
-                          <p>2 Комнатая кв, 63м²</p><span>400$</span>
-                        </div>
-                        <div className="cards-item-info__bottom"> 
-                          <p>Ташкент, Шайхантахурский район</p><span>22:52</span>
-                        </div>
-                      </div>
-                    </div></a></li>
-                <li className="cards-item"> <a href="#"> 
-                    <div className="cards-item__top"> 
-                      <button className="btn-save">
-                        <svg className="svg-sprite-icon icon-save">
-                          <use href={`${sprite}#save`}></use>
-                        </svg>
-                      </button><img src="img/cards/3.png" alt="">
-                    </div>
-                    <div className="cards-item__bottom">
-                      <div className="cards-item-info"> 
-                        <div className="cards-item-info__top">
-                          <p>2 Комнатая кв, 63м²</p><span>400$</span>
-                        </div>
-                        <div className="cards-item-info__bottom"> 
-                          <p>Ташкент, Шайхантахурский район</p><span>22:52</span>
-                        </div>
-                      </div>
-                    </div></a></li>
-                <li className="cards-item"> <a href="#"> 
-                    <div className="cards-item__top"> 
-                      <button className="btn-save">
-                        <svg className="svg-sprite-icon icon-save">
-                          <use href={`${sprite}#save`}></use>
-                        </svg>
-                      </button><img src="img/cards/4.png" alt="">
-                    </div>
-                    <div className="cards-item__bottom">
-                      <div className="cards-item-info"> 
-                        <div className="cards-item-info__top">
-                          <p>2 Комнатая кв, 63м²</p><span>400$</span>
-                        </div>
-                        <div className="cards-item-info__bottom"> 
-                          <p>Ташкент, Шайхантахурский район</p><span>22:52</span>
-                        </div>
-                      </div>
-                    </div></a></li>
-              </ul> */}
+            <ul className="cards-list">
+              {recomdend
+                ?.filter((_, i) => i <= 3)
+                ?.map((item, i) => (
+                  <ProductCard key={i} data={item} />
+                ))}
+            </ul>
           </div>
         </div>
       </section>

@@ -23,8 +23,8 @@ html {
   height: 100%;
   font-family: "Inter", sans-serif;
   font-style: 16px;
-  overflow-x: hidden;
-  position: relative;
+  // overflow: auto;
+  // position: relative;
   @include laptop-max {
     font-size: 15px;
   }
@@ -34,7 +34,7 @@ html {
 }
 
 body {
-  overflow-x: hidden;
+  // overflow-x: hidden;
   font-size: rem(12px);
   line-height: rem(15px);
   height: 100%;

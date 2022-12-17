@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { EditPage, Footer, LoginModal, Navbar } from "./components";
+import { EditPage, Footer, LoginModal, Navbar, ScrollTop } from "./components";
 import ContextApp, { ContextProvider } from "./context/context";
 import ProtectedRoute from "./helpers/ProtectedRoute";
 import "react-toastify/dist/ReactToastify.css";
@@ -38,6 +38,7 @@ function App() {
       <>
         <div className="wrapper">
           <ToastContainer />
+          <ScrollTop />
           <Navbar />
           {openLoginModal && <LoginModal />}
           <Routes>
