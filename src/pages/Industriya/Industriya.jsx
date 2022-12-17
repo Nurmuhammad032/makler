@@ -14,12 +14,12 @@ const Industriya = () => {
       .then((data) => setData(data.data))
       .catch((err) => console.log(err))
       .finally(() => setLaoding(false));
-  }, []);
+  }, [id]);
 
   return (
     <section className="content">
       {loading && <LoadingPost />}
-      <UserSingle data={data} />
+      <UserSingle data={data} id={id} />
     </section>
   );
 };

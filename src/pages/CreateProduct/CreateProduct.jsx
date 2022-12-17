@@ -1,7 +1,7 @@
 import "./CreateProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import { useContext, useEffect, useState } from "react";
-import { LoadingPost, LoginModal } from "../../components";
+import { LoadingPost } from "../../components";
 import ContextApp from "../../context/context";
 import { useRef } from "react";
 import {
@@ -29,6 +29,7 @@ const CreateProduct = () => {
 
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
+  const [aminities, setAminities] = useState([]);
   const [file, setFile] = useState([]);
   const [img, setImg] = useState([]);
   const [fileDataURL, setFileDataURL] = useState(null);
@@ -58,7 +59,6 @@ const CreateProduct = () => {
     app_ipoteka: "",
     app_mebel: "",
     app_new_building: "",
-    amenities: [1],
     phone_number: "+99895",
     how_sale: [1],
     isBookmarked: false,
@@ -88,7 +88,17 @@ const CreateProduct = () => {
       })
       .finally(() => setLoading(false));
   };
-
+  const handleAmite = (e) => {
+    let value = +e.target.value;
+    setAminities((prev) => {
+      if (!prev.includes(value)) {
+        return [...prev, value];
+      } else {
+        return prev.filter((item) => item !== value);
+      }
+    });
+  };
+  console.log(aminities);
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -102,6 +112,7 @@ const CreateProduct = () => {
     formData.append("object", form.object);
     formData.append("web_address_title", searchRef.current?.value);
     formData.append("web_address_latitude", initialState.center[0]);
+    formData.append("web_address_longtitude", initialState.center[1]);
     formData.append("pm_general", form.pm_general);
     formData.append("pm_residential", form.pm_residential);
     formData.append("pm_kitchen", form.pm_kitchen);
@@ -112,7 +123,7 @@ const CreateProduct = () => {
     formData.append("app_ipoteka", Boolean(form.app_ipoteka));
     formData.append("app_mebel", form.app_mebel);
     formData.append("app_new_building", form.app_new_building);
-    formData.append("amenities", form.amenities);
+    // formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
     formData.append("how_sale", form.how_sale);
@@ -120,10 +131,12 @@ const CreateProduct = () => {
     for (const fi of file) {
       formData.append("uploaded_images", fi);
     }
+    for (const aminit of aminities) {
+      formData.append("amenities", aminit);
+    }
 
     postData(formData);
   };
-
   const handeDraftData = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -136,7 +149,8 @@ const CreateProduct = () => {
     formData.append("property_type", form.property_type);
     formData.append("object", form.object);
     formData.append("web_address_title", searchRef.current?.value);
-    formData.append("web_address_latitude", initialState.center[0]);
+    formData.append("web_address_latitude", initialState?.center[0]);
+    formData.append("web_address_longtitude", initialState?.center[1]);
     formData.append("pm_general", form.pm_general);
     formData.append("pm_residential", form.pm_residential);
     formData.append("pm_kitchen", form.pm_kitchen);
@@ -154,6 +168,9 @@ const CreateProduct = () => {
     formData.append("draft", true);
     for (const fi of file) {
       formData.append("uploaded_images", fi);
+    }
+    for (const aminit of aminities) {
+      formData.append("amenities", aminit);
     }
 
     postData(formData);
@@ -248,6 +265,7 @@ const CreateProduct = () => {
     }
   }, [mapConstructor]);
 
+  console.log(initialState?.center);
   // change title
   const handleBoundsChange = (e) => {
     const newCoords = mapRef.current.getCenter();
@@ -793,7 +811,79 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                 </li>
               </ul>
               <h5>Все удобства</h5>
-              <ul className="checkbox-list mb-40" id="amenities-list"></ul>
+              <ul className="checkbox-list mb-40" id="amenities-list">
+                {[
+                  {
+                    text: "Долгосрочная аренда",
+                    value: 1,
+                  },
+                  {
+                    text: "Family",
+                    value: 2,
+                  },
+                  {
+                    text: "3 room",
+                    value: 3,
+                  },
+                  {
+                    text: "Нотариус",
+                    value: 4,
+                  },
+                  {
+                    text: "TV",
+                    value: 5,
+                  },
+                  {
+                    text: "Рядом Корзинка",
+                    value: 6,
+                  },
+                  {
+                    text: "Wi-Fi",
+                    value: 7,
+                  },
+                ].map(({ text, value }, i) => (
+                  <li key={i}>
+                    <label
+                      htmlFor={`html${value}`}
+                      style={{
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        background: `${
+                          aminities.includes(value) ? "orange" : "white"
+                        }`,
+                        padding: "0.8rem 1.5rem",
+                        display: "flex",
+                        borderRadius: "2rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <svg
+                        className={`svg-sprite-icon icon-tags-${i + 1} w-16`}
+                      >
+                        <use href={`${sprite}#tags-${i + 1}`}></use>
+                      </svg>
+                      <p
+                        style={{
+                          marginLeft: "0.4rem",
+                        }}
+                      >
+                        {text}
+                      </p>
+                    </label>
+                    <input
+                      type="text"
+                      id={`html${value}`}
+                      name="amenities"
+                      value={value}
+                      onChange={handleAmite}
+                      onClick={handleAmite}
+                      style={{
+                        display: "none",
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
               <div className="confirm-checkbox">
                 <input type="checkbox" id="confirm-data" />
                 <label htmlFor="confirm-data">

@@ -1,37 +1,44 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import { LoadingPost } from "../../components";
+import ProductCard from "../../components/ProductCard/ProductCard";
 
 const SavedProduct = () => {
+  const [saveProducts, setSaveProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mount, setDeleteMount] = useState(true);
+  useEffect(() => {
+    const userid = localStorage.getItem("userId");
+    axios
+      .get(
+        `https://fathulla.tk/products/api/v1/houses/get-wishlist-houses?user=${userid}`
+      )
+      .then((data) => setSaveProducts(data.data.results))
+      .catch((er) => console.log(er))
+      .finally(() => setIsLoading(false));
+  }, [mount]);
+  console.log(saveProducts);
   return (
     <div className="content">
+      {isLoading && <LoadingPost />}
       <section className="save-products-s">
         <div className="container">
           <div className="save-products">
             <ul className="cards-list">
-              <li className="cards-item">
-                {" "}
-                <a href="/product.html">
-                  <div className="cards-item__top">
-                    <button className="btn-save save">
-                      <svg className="svg-sprite-icon icon-save">
-                        <use href={`${sprite}#save`}></use>
-                      </svg>
-                    </button>
-                    <img src="img/cards/1.png" alt="" />
-                  </div>
-                  <div className="cards-item__bottom">
-                    <div className="cards-item-info">
-                      <div className="cards-item-info__top">
-                        <p>2 Комнатая кв, 63м²</p>
-                        <span>400$</span>
-                      </div>
-                      <div className="cards-item-info__bottom">
-                        <p>Ташкент, Шайхантахурский район</p>
-                        <span>22:52</span>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
+              {saveProducts?.length ? (
+                saveProducts.map((item, i) => (
+                  <ProductCard
+                    data={item.product}
+                    wishId={item.id}
+                    deleteMount={setDeleteMount}
+                    key={i}
+                    wishlist={true}
+                  />
+                ))
+              ) : (
+                <h1>No wishlist items yet!</h1>
+              )}
             </ul>
           </div>
         </div>

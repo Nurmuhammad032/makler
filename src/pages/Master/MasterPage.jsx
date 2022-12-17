@@ -15,12 +15,12 @@ const MasterPage = () => {
       .then((data) => setData(data.data))
       .catch((err) => console.log(err))
       .finally(() => setLaoding(false));
-  }, []);
+  }, [id]);
 
   return (
     <div className="content">
       {loading && <LoadingPost />}
-      <UserSingle data={data} />
+      <UserSingle data={data} id={id} />
     </div>
   );
 };

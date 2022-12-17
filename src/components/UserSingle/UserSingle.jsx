@@ -1,10 +1,39 @@
 import "./UserSingle.scss";
 import UserImg from "../../assets/img/avatar-big.png";
-import { UserCard } from "../../components";
+import { LoadingPost, ProductSingle, UserCard } from "../../components";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { baseURL } from "../../requests/requests";
+import { toast } from "react-toastify";
+import Loading from "../Loading/Loading";
+import { useLocation, useNavigate } from "react-router-dom";
 {
   /*  */
 }
-const UserSingle = ({ data }) => {
+const UserSingle = ({ data, id }) => {
+  const [masterData, setMasterData] = useState([]);
+  const [storeData, setStoreData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(masterData);
+  const router = useLocation();
+  const getData = (url, setData) => {
+    setIsLoading(true);
+    axios
+      .get(`${baseURL}/${url}`)
+      .then((res) => setData(res.data.results))
+      .catch(() => {
+        toast.error("Something went wrong while uploading recommends");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  useEffect(() => {
+    getData("store2/api/v1/store/popular", setStoreData);
+  }, [id]);
+  useEffect(() => {
+    getData("master/api/v1/maklers/popular", setMasterData);
+  }, [id]);
+
   return (
     <>
       {data ? (
@@ -93,17 +122,30 @@ const UserSingle = ({ data }) => {
               >
                 Рекомендуем похожие
               </h1>
-              <div className="workers-group">
-                {[1, 1, 1, 1].map((item, i) => (
-                  // <UserCard key={i} />
-                  <div key={i}>{item}</div>
-                ))}
+              <div
+                className="workers-group"
+                style={{
+                  minHeight: "450px",
+                }}
+              >
+                {isLoading ? (
+                  <Loading />
+                ) : router.pathname.includes("industria") ? (
+                  storeData
+                    ?.filter((_, i) => i <= 3)
+                    ?.map((item, i) => <ProductSingle key={i} data={item} />)
+                ) : (
+                  masterData
+                    ?.filter((_, i) => i <= 3)
+                    ?.map((item, i) => <UserCard key={i} data={item} />)
+                )}
               </div>
             </div>
+            {/* <div>lfjadsk;jfdslk</div> */}
           </div>
         </section>
       ) : (
-        <h1>Something went wrong!</h1>
+        ""
       )}
     </>
   );

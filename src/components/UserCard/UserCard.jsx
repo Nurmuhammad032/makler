@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const UserCard = ({ data }) => {
   return (
-    <Link to={`${data?.pk}`}>
+    <Link to={`/master/${"pk" in data ? data?.pk : data?.id}`}>
       <div
         className="main-card"
         style={{
@@ -15,7 +15,7 @@ const UserCard = ({ data }) => {
         <div className="master-card">
           <div className="user-card">
             <img
-              src={data.avatar}
+              src={"avatar" in data ? data.avatar : data.image}
               alt="User image"
               width={"40px"}
               height="40px"
@@ -29,7 +29,7 @@ const UserCard = ({ data }) => {
               <p className="user-level">Мастер, {data.experience} года опыта</p>
             </div>
             <div className="info-cards">
-              {data.profession.map((item) => (
+              {data?.profession?.map((item) => (
                 <span
                   className="info-box"
                   style={{

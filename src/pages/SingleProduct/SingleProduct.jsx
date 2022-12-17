@@ -20,7 +20,7 @@ const SingleProduct = () => {
   const { id } = useParams();
   const [loading, setLaoding] = useState(true);
   const { houseData, getHouseData } = useContext(ContextApp);
-
+  console.log(houseData);
   useEffect(() => {
     axios
       .get(`https://fathulla.tk/products/web/api/v1/houses/${id}`)
@@ -31,7 +31,7 @@ const SingleProduct = () => {
       .catch((err) => console.log(err))
       .finally(() => setLaoding(false));
   }, []);
-
+  // console.log(houseData);
   return (
     <div
       style={{
@@ -83,92 +83,106 @@ const SingleProduct = () => {
               </div>
             </div>
             <div className="info-product-main">
-              <h2 className="info-product-title">
-                Аренда для девушек - студенток.Метро Максима Горького.
-              </h2>
+              <h2 className="info-product-title">{houseData?.title}</h2>
               <h5 className="product-small-title">Вся информация</h5>
               <ul className="tags-list">
                 <li className="tags-item">
                   {" "}
                   <span>Тип аренды</span>
-                  <p>Длительно</p>
+                  <p>{houseData?.rental_type}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Тип недвижимости</span>
-                  <p>Жилая</p>
+                  <p>{houseData?.property_type}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Объект</span>
-                  <p>Квартира</p>
+                  <p>{houseData?.object}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Этаж</span>
-                  <p>3</p>
+                  <p>{houseData?.floor}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Жилая площадь</span>
-                  <p>54 кв</p>
-                </li>
-                <li className="tags-item">
-                  {" "}
-                  <span>Плошадь Кухня</span>
-                  <p>24 кв</p>
+                  <p>{houseData?.pm_residential}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Кол-во комнат</span>
-                  <p>4</p>
+                  <p>{houseData?.number_of_rooms}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Общая плошадь</span>
-                  <p>53 кв</p>
+                  <p>{houseData?.pm_general}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Этажность дома</span>
-                  <p>9</p>
+                  <p>{houseData?.floor_from}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Тип строения</span>
-                  <p>Кирпич</p>
+                  <p>{houseData?.building_type}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Ипотека</span>
-                  <p>Да</p>
+                  <p>{houseData?.app_ipoteka ? "Да" : "Нет"}</p>
                 </li>
                 <li className="tags-item">
                   {" "}
                   <span>Мебелирование</span>
-                  <p>Да</p>
+                  <p>{houseData?.app_mebel ? "Да" : "Нет"}</p>
                 </li>
               </ul>
               <h5 className="product-small-title">Описание</h5>
-              <p className="product-par par">
-                A warehouse for storing goods is available for rent. There is a
-                free area (land plot of 2 hectares) for the buildings of
-                production workshops, mini-factories, etc. Our warehouse is
-                located in the city of Tashkent, Sergeli industrial zone,
-                opposite the Sergeli Logistic customs post. Convenient location,
-                on a central road, there are all communications, a warehouse of
-                more than 3000 square meters.
-              </p>
+              <p className="product-par par">{houseData?.descriptions}</p>
               <h5 className="product-small-title">Все удобства</h5>
-              <ul className="comfort-tags-list"> </ul>
+              <ul className="comfort-tags-list">
+                {houseData?.amenities?.map((item, i) => (
+                  <li
+                    style={{
+                      backgroundColor: "white",
+                      border: "none",
+                    }}
+                    key={i}
+                    className="comfort-tags-item"
+                  >
+                    <svg className={`svg-sprite-icon icon-tags-${i + 1} w-16`}>
+                      <use href={`${sprite}#tags-${item.id}`}></use>
+                    </svg>
+                    <span
+                      style={{
+                        fontWeight: "600",
+                      }}
+                    >
+                      {item.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
               <div className="show-on-map">
                 <div className="show-on-map-address">
                   <svg className="svg-sprite-icon icon-fi_navigation w-16 fill-w">
                     <use href={`${sprite}#fi_navigation`}></use>
                   </svg>
-                  <span>р.Мирзо Улугбекский, ул. Ахангаран, 65 А кв 1.</span>
+                  <span>{houseData?.web_address_title}</span>
                 </div>
-                <button className="btn btn-black btn-black-big">
+                <button
+                  className="btn btn-black btn-black-big"
+                  onClick={() => {
+                    window.open(
+                      `https://maps.google.com?q=${houseData?.web_address_latitude},${houseData?.web_address_longtitude}`
+                    );
+                  }}
+                >
                   показать на карте
                 </button>
               </div>

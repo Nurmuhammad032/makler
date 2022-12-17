@@ -207,6 +207,7 @@ export default function CreateIndustriya() {
     formData.append("phoneNumber", form.phoneNumber);
     formData.append("address", searchRef.current?.value);
     formData.append("email", form.email);
+    formData.append("how_store_service", form.how_store_service);
 
     const userToken = localStorage.getItem("access");
 

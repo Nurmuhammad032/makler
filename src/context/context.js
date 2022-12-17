@@ -1,6 +1,7 @@
 import { useStepContext } from "@mui/material";
+import axios from "axios";
 import { createContext, useState, useEffect } from "react";
-import { getRequests } from "../requests/requests";
+import { baseURL, getRequests } from "../requests/requests";
 
 const ContextApp = createContext();
 
@@ -24,6 +25,7 @@ export const ContextProvider = ({ children }) => {
   const getHouseData = (newState) => {
     setHouseData(newState);
   };
+
   const homeHousesFilter = (newState) => {
     setHomeHouses(newState);
   };

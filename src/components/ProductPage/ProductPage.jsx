@@ -8,7 +8,7 @@ import { height } from "@mui/system";
 export default function ProductCard({ data }) {
   return (
     <Link
-      to={`${data.id}`}
+      to={`/industria/${data.id}`}
       style={{
         display: "block",
         marginTop: "1rem",
@@ -43,7 +43,15 @@ export default function ProductCard({ data }) {
         </div>
         <div className="product-footer">
           <div className="product-info">
-            <p className="product-name">{data.name}</p>
+            <p
+              className="product-name"
+              style={{
+                // backgroundColor: "orange",
+                lineHeight: "2rem",
+              }}
+            >
+              {data.name}
+            </p>
             <em className="product-type">{data.use_for}</em>
           </div>
           <p className="product-price">{data.price}$</p>

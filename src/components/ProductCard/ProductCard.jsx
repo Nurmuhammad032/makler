@@ -1,18 +1,85 @@
+import axios from "axios";
+import { useEffect, useId } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import { baseURL } from "../../requests/requests";
+import LoadingPost from "../LoadingPost/LoadingPost";
 
-const ProductCard = ({ data }) => {
+const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [wishAllId, setWishAllId] = useState([]);
+  const handleClick = () => {
+    setIsLoading(true);
+    const isThere = wishAllId.some((item) => item === data?.id);
+    if (wishlist) {
+      axios
+        .delete(
+          `https://fathulla.tk/products/api/v1/houses/wishlist-houses/${wishId}/`
+        )
+        .then(() => {
+          deleteMount((prev) => !prev);
+          toast.success("Successfully removed");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong!");
+        })
+        .finally(() => setIsLoading(false));
+      return;
+    }
+    if (!isThere) {
+      const userId = localStorage.getItem("userId");
+      axios
+        .post(`${baseURL}/products/api/v1/houses/wishlist-houses/`, {
+          user: userId,
+          product: data.id,
+        })
+        .then(() => {
+          toast.success("Successfully product added to wishlist!");
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong!");
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      return setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const userid = localStorage.getItem("userId");
+    axios
+      .get(
+        `https://fathulla.tk/products/api/v1/houses/get-wishlist-houses?user=${userid}`
+      )
+      .then((data) => {
+        setWishAllId(() => {
+          return data.data.results.map((item) => item.product.id);
+        });
+      })
+      .catch((er) => console.log(er));
+  }, [isLoading]);
+
   return (
     <li className="cards-item">
+      {isLoading && <LoadingPost />}
+      <button
+        className={`btn-save ${
+          wishAllId.some((item) => item === data?.id) ? "save" : ""
+        }`}
+        onClick={handleClick}
+      >
+        <svg className="svg-sprite-icon icon-save">
+          <use href={`${sprite}#save`}></use>
+        </svg>
+      </button>
       <Link to={`/product/${data.id}`}>
         <div className="cards-item__top">
-          <button className="btn-save">
-            <svg className="svg-sprite-icon icon-save">
-              <use href={`${sprite}#save`}></use>
-            </svg>
-          </button>
           <img
-            src={data.images.length && data.images[0].images}
+            src={data.images?.length && data.images[0].images}
             alt={data.title}
           />
         </div>
