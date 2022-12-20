@@ -6,6 +6,7 @@ import { useRef } from "react";
 import {
   GeolocationControl,
   Map,
+  Placemark,
   YMaps,
   ZoomControl,
 } from "@pbe/react-yandex-maps";
@@ -643,7 +644,7 @@ const EditHouse = () => {
                       onBoundsChange={handleBoundsChange}
                       instanceRef={mapRef}
                     >
-                      <div
+                      {/* <div
                         style={{
                           width: "1rem",
                           height: "1rem",
@@ -654,9 +655,10 @@ const EditHouse = () => {
                           transform: "translate(-50%, -100%)",
                           zIndex: 3000,
                         }}
-                      ></div>
+                      ></div> */}
                       <GeolocationControl {...geolocationOptions} />
                       <ZoomControl />
+                      <Placemark geometry={state.center} />
                     </Map>
                   </YMaps>
                 </div>

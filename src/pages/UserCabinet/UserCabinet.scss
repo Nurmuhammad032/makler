@@ -1,25 +1,30 @@
 @import "../../styles/modules.scss";
 
 .cabinet {
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	&-s {
-		padding: rem(46px) 0 rem(293px);
-	}
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  @include tablet {
+    flex-direction: column;
+    align-items: center;
+  }
+  &-s {
+    padding: rem(46px) 0 rem(293px);
+  }
 }
 
-
 .cabinet-s {
-	.settings-s, .advert-s, .photos-work-s {
-		margin-right: rem(129px);
-		@include laptop {
-			margin-right: 0.625rem
-		}
-	}
-	.photos-work-s {
-		width: rem(459px);
-	}
+  .settings-s,
+  .advert-s,
+  .photos-work-s {
+    margin-right: rem(129px);
+    @include laptop {
+      margin-right: 0.625rem;
+    }
+  }
+  .photos-work-s {
+    width: rem(459px);
+  }
 }
 
 .advert {
