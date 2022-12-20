@@ -25,7 +25,7 @@ const SingleProduct = () => {
   const [recomendLoading, setRecomendLoading] = useState(false);
   const [recomdend, setRecomdend] = useState([]);
   const { houseData, getHouseData } = useContext(ContextApp);
-  // console.log(houseData);
+
   useEffect(() => {
     setLaoding(true);
     axios

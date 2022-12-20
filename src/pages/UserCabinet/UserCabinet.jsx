@@ -21,7 +21,6 @@ const UserCabinet = () => {
   const [holdId, setHoldId] = useState(1);
   const router = useNavigate();
   const { getUserData, userData } = useContext(ContextApp);
-  console.log(userData);
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
   const [maklers, setMaklers] = useState([]);
@@ -57,7 +56,6 @@ const UserCabinet = () => {
     });
     setFiltered(filteredHouses);
   }, [houses]);
-  console.log(userData);
   const handleLogOut = () => {
     localStorage.clear();
     router("/");
@@ -94,13 +92,17 @@ const UserCabinet = () => {
                       stores
                         ?.filter((item) => item.product_status !== 3)
                         ?.map((item) => (
-                          <UserContents key={item.id} data={item} />
+                          <UserContents
+                            key={item.id}
+                            content="store"
+                            data={item}
+                          />
                         ))}
                     {filtered?.map((item, i) => (
-                      <UserContents key={i} data={item} />
+                      <UserContents key={i} data={item} content="house" />
                     ))}
                     {maklers?.map((item, i) => (
-                      <UserContents key={i} data={item} />
+                      <UserContents key={i} data={item} content="master" />
                     ))}
                   </ul>
                 ) : (
@@ -119,7 +121,7 @@ const UserCabinet = () => {
                   {stores
                     ?.filter((item) => item.product_status === 3)
                     ?.map((item) => (
-                      <UserContents key={item.id} data={item} />
+                      <UserContents key={item.id} content="store" data={item} />
                     ))}
                 </ul>
               </div>
@@ -150,7 +152,11 @@ const UserCabinet = () => {
                     houses
                       ?.filter((item) => item.draft === true)
                       ?.map((item) => (
-                        <UserContents key={item.id} data={item} />
+                        <UserContents
+                          key={item.id}
+                          content="house"
+                          data={item}
+                        />
                       ))}
                 </ul>
               </div>

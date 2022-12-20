@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import avatar_image from "../.././assets/img/avatar_change.png";
-import "./EditPage.css";
-import sprite from "../../assets/img/symbol/sprite.svg";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import avatar_image from "../../assets/img/avatar.png";
 import {
   GeolocationControl,
   Map,
@@ -18,10 +16,12 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { toast } from "react-toastify";
-import LoadingPost from "../LoadingPost/LoadingPost";
+import LoadingPost from "../../components/LoadingPost/LoadingPost";
+import { useParams } from "react-router-dom";
+import { baseURL } from "../../requests/requests";
+import ContextApp from "../../context/context";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,12 +58,15 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function EditPage() {
+export default function EditMaster() {
   const theme = useTheme();
+  const { id } = useParams();
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
   const [loading, setLoading] = useState(false);
+  const [editData, setEditData] = useState([]);
   const [imgUrl, setImgUrl] = useState();
+  const { navigateToProfile } = useContext(ContextApp);
   const fileHandle = (e) => {
     const img = e.target.files[0];
     setFile(img);
@@ -144,7 +147,23 @@ export default function EditPage() {
     });
   };
 
-  const { form, changeHandler } = useForm({
+  // const { form, changeHandler } = useForm({
+  //   name: "",
+  //   email: "",
+  //   // image:
+  //   //   "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
+  //   phone: 998,
+  //   address_title: searchRef.current?.value,
+  //   address_latitude: state.center[0],
+  //   address_longitude: state.center[1],
+  //   password: "",
+  //   profession: [],
+  //   descriptions: "",
+  //   experience: 0,
+  //   serviceType: 1,
+  // });
+
+  const [form, setForm] = useState({
     name: "",
     email: "",
     // image:
@@ -159,6 +178,44 @@ export default function EditPage() {
     experience: 0,
     serviceType: 1,
   });
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/master/api/v1/maklers/update/${id}`)
+      .then((res) => {
+        setEditData(res.data);
+        // setAminities((prev) => {
+        //   return [...prev, ...res.data.amenities];
+        // });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const changeHandler = (e) => {
+    setForm((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  useEffect(() => {
+    setForm({
+      name: editData?.name,
+      email: editData?.email,
+      phone: editData?.phone,
+      address_title: editData?.address_title,
+      address_latitude: editData?.address_latitude,
+      address_longitude: editData?.address_longitude,
+      password: editData?.password,
+      profession: editData?.profession,
+      descriptions: editData?.descriptions,
+      experience: editData?.experience,
+      serviceType: editData?.serviceType,
+    });
+  }, [editData]);
+  // console.log(form);
 
   const handeSubmit = (e) => {
     e.preventDefault();
@@ -185,13 +242,14 @@ export default function EditPage() {
     const userToken = localStorage.getItem("access");
 
     axios
-      .post("https://fathulla.tk/master/api/v1/maklers/create/", formData, {
+      .put(`${baseURL}/master/api/v1/maklers/update/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
       .then(() => {
-        toast.success("Successfully created");
+        toast.success("Successfully ");
+        navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
@@ -252,7 +310,7 @@ export default function EditPage() {
                 />
               </div>
             </div>
-            <div className="editpage__input">
+            <div className="editMaster__input">
               <div className="form__input">
                 <label htmlFor="">
                   <span>Имя Фамилия</span>
@@ -261,6 +319,7 @@ export default function EditPage() {
                     id="name"
                     onChange={changeHandler}
                     type={"text"}
+                    value={form.name}
                     placeholder="Abbos Janizakov"
                   />
                 </label>
@@ -270,6 +329,7 @@ export default function EditPage() {
                     name={"email"}
                     type={"email"}
                     onChange={changeHandler}
+                    value={form.email}
                     placeholder="info@gmail.com"
                   />
                 </label>
@@ -278,19 +338,21 @@ export default function EditPage() {
                   <input
                     name={"phone"}
                     type={"number"}
+                    value={form.phone}
                     onChange={changeHandler}
                     placeholder="90 123-45-67"
                   />
                 </label>
-                <label htmlFor="">
+                {/* <label htmlFor="">
                   <span>Пароль</span>
                   <input
                     name={"password"}
                     type="password"
                     onChange={changeHandler}
+                    value={form.password}
                     placeholder="пусто"
                   />
-                </label>
+                </label> */}
                 <label htmlFor="">
                   <span className="text__area">Краткое описание о себе</span>
                   <textarea
@@ -298,6 +360,7 @@ export default function EditPage() {
                     id=""
                     name="descriptions"
                     onChange={changeHandler}
+                    value={form.descriptions}
                     placeholder="пусто"
                   ></textarea>
                 </label>
@@ -308,6 +371,7 @@ export default function EditPage() {
                   type="number"
                   id="e"
                   name="experience"
+                  value={form.experience}
                   onChange={changeHandler}
                   placeholder="experience"
                   style={{

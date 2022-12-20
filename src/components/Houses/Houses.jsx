@@ -9,7 +9,7 @@ import { baseURL } from "../../requests/requests";
 import Loading from "../Loading/Loading";
 
 const Houses = ({ value, start, focus }) => {
-  const { typeRoom, room, search, building } = value;
+  const { typeRoom, room, search, building, sort } = value;
   const { allHouses, houseData } = useContext(ContextApp);
   const [displayData, setDisplayData] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
@@ -58,6 +58,16 @@ const Houses = ({ value, start, focus }) => {
     setPrevUrl(res.data.previous);
     setLoading(false);
   };
+  const init3 = async () => {
+    if (!sort) return;
+    setLoading(true);
+    const res = await axios.get(
+      `https://fathulla.tk/products/web/api/v1/all-web-houses/?ordering=${sort}`
+    );
+
+    setDisplayData(res.data.results);
+    setLoading(false);
+  };
 
   useEffect(() => {
     init();
@@ -66,6 +76,28 @@ const Houses = ({ value, start, focus }) => {
   useMemo(() => {
     init2();
   }, [url, typeRoom, room, building, start]);
+  useMemo(() => {
+    init3();
+  }, [sort]);
+
+  useEffect(() => {
+    if (displayData.length) {
+      switch (sort) {
+        case "price":
+          displayData.sort((a, b) => a.price - b.price);
+          break;
+        case "-price":
+          displayData.sort((a, b) => b.price - a.price);
+          break;
+        case "created_at":
+          displayData.sort((a, b) => a.id - b.id);
+          break;
+        default:
+          break;
+      }
+    }
+  }, [sort]);
+  console.log(sort);
 
   const handleNext = () => {
     setUrl(nextUrl);
@@ -74,8 +106,6 @@ const Houses = ({ value, start, focus }) => {
   const handlePrev = () => {
     setUrl(prevUrl);
   };
-
-  console.log(displayData.length);
 
   const handleLoad = () => {
     if (!search) {

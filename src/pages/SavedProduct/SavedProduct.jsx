@@ -18,7 +18,7 @@ const SavedProduct = () => {
       .catch((er) => console.log(er))
       .finally(() => setIsLoading(false));
   }, [mount]);
-  console.log(saveProducts);
+
   return (
     <div className="content">
       {isLoading && <LoadingPost />}

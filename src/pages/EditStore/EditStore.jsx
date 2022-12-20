@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import avatar_image from "../.././assets/img/avatar_change.png";
-import "./EditPage.css";
+import React from "react";
+import avatar_image from "./../../assets/img/avatar_change.png";
+import { useState, useRef, useEffect } from "react";
 import sprite from "../../assets/img/symbol/sprite.svg";
-import {
-  GeolocationControl,
-  Map,
-  Placemark,
-  YMaps,
-} from "@pbe/react-yandex-maps";
+import "../../components/EditPage/EditPage.css";
 import {
   Box,
   MenuItem,
@@ -18,10 +13,19 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import useForm from "../../hooks/useForm";
+import {
+  GeolocationControl,
+  Placemark,
+  YMaps,
+  Map,
+} from "@pbe/react-yandex-maps";
 import axios from "axios";
 import { toast } from "react-toastify";
-import LoadingPost from "../LoadingPost/LoadingPost";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoadingPost } from "../../components";
+import { baseURL } from "../../requests/requests";
+import { useContext } from "react";
+import ContextApp from "../../context/context";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,20 +62,34 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function EditPage() {
+export default function EditStore() {
   const theme = useTheme();
+  const { id } = useParams();
+  const { navigateToProfile } = useContext(ContextApp);
+  const [loading, setLoading] = useState(false);
+  const [priceText, setPriceText] = useState("y.e");
+  const [navActive, setNavActive] = useState(false);
+  const [editData, setEditData] = useState([]);
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
-  const [loading, setLoading] = useState(false);
-  const [imgUrl, setImgUrl] = useState();
-  const fileHandle = (e) => {
-    const img = e.target.files[0];
+  const [imgUrl, setImgUrl] = useState({
+    brand: null,
+    view: null,
+  });
+
+  const fileHandle = (file, name) => {
+    const img = file;
     setFile(img);
     let reader = new FileReader();
     reader.readAsDataURL(img);
 
     reader.onloadend = function () {
-      setImgUrl(reader.result);
+      setImgUrl((prev) => {
+        return {
+          ...prev,
+          [name]: reader.result,
+        };
+      });
     };
   };
 
@@ -84,11 +102,6 @@ export default function EditPage() {
       typeof value === "string" ? value.split(",") : value
     );
   };
-  const initialState = {
-    title: "",
-    center: [40.783388, 72.350663],
-    zoom: 12,
-  };
   const MenuProps = {
     PaperProps: {
       style: {
@@ -97,6 +110,13 @@ export default function EditPage() {
       },
     },
   };
+
+  const initialState = {
+    title: "",
+    center: [40.783388, 72.350663],
+    zoom: 12,
+  };
+
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
   const mapRef = useRef(null);
@@ -144,54 +164,115 @@ export default function EditPage() {
     });
   };
 
-  const { form, changeHandler } = useForm({
+  const [img, setImg] = useState({
+    brandImg: null,
+    machineImg: null,
+  });
+  const router = useNavigate();
+
+  const imgHandle = (e) => {
+    setImg((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.files[0],
+      };
+    });
+  };
+
+  // const { form, changeHandler } = useForm({
+  //   name: "",
+  //   description: "",
+  //   price_type: 1,
+  //   store_amenitites: [],
+  //   brand: "",
+  //   price: 0,
+  //   use_for: "",
+  //   phoneNumber: 0,
+  //   email: "",
+  //   how_store_service: 1,
+  // });
+
+  const [form, setForm] = useState({
     name: "",
+    description: "",
+    price_type: 1,
+    store_amenitites: [],
+    brand: "",
+    price: 0,
+    use_for: "",
+    phoneNumber: 0,
     email: "",
-    // image:
-    //   "https://fathulla.tk/media/master_image/UIC_Group_-_Google_Chrome_25.11.2022_11_12_00.png",
-    phone: 998,
-    address_title: searchRef.current?.value,
-    address_latitude: state.center[0],
-    address_longitude: state.center[1],
-    password: "",
-    profession: [],
-    descriptions: "",
-    experience: 0,
-    serviceType: 1,
+    how_store_service: 1,
   });
 
-  const handeSubmit = (e) => {
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/store2/api/v1/store/update/${id}`)
+      .then((res) => {
+        setEditData(res.data);
+        // setAminities((prev) => {
+        //   return [...prev, ...res.data.amenities];
+        // });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const changeHandler = (e) => {
+    setForm((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  useEffect(() => {
+    setForm({
+      name: editData?.name,
+      description: editData?.description,
+      price_type: editData?.price_type,
+      store_amenitites: editData?.store_amenitites,
+      brand: editData?.brand,
+      price: editData?.price,
+      use_for: editData?.use_for,
+      phoneNumber: editData?.phoneNumber,
+      email: editData?.email,
+      how_store_service: editData?.how_store_service,
+    });
+  }, [editData]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("price_type", Number(form.price_type));
+    formData.append("image", img.machineImg);
+    formData.append("brand_image", img.brandImg);
+    formData.append("description", form.description);
+    formData.append(
+      "store_amenitites",
+      form.store_amenitites.map((data) => data.value)
+    );
+    formData.append("brand", form.brand);
+    formData.append("price", form.price);
+    formData.append("use_for", [1]);
+    formData.append("phoneNumber", form.phoneNumber);
+    formData.append("address", searchRef.current?.value);
     formData.append("email", form.email);
-    formData.append("phone", Number(form.phone));
-    formData.append("address_title", searchRef.current?.value);
-    formData.append("address_latitude", form.address_latitude);
-    formData.append("address_longitude", form.address_longitude);
-    formData.append("password", form.password);
-    formData.append("avatar", file);
-    formData.append("how_service", form.serviceType);
-    // formData.append(
-    //   "profession",
-    //   form.profession.map((data) => data.value)
-    // );
-    for (const fi of form.profession) {
-      formData.append("profession", fi.value);
-    }
-    formData.append("descriptions", form.descriptions);
-    formData.append("experience", form.experience);
+    formData.append("how_store_service", form.how_store_service);
+
     const userToken = localStorage.getItem("access");
 
     axios
-      .post("https://fathulla.tk/master/api/v1/maklers/create/", formData, {
+      .put(`${baseURL}/store2/api/v1/store/update/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
       .then(() => {
-        toast.success("Successfully created");
+        toast.success("Successfully modified");
+        navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
@@ -201,11 +282,11 @@ export default function EditPage() {
   };
 
   return (
-    <div className="container edit-page">
+    <div className="container">
       {loading && <LoadingPost />}
       <div className="create-product-s">
-        <div className="create-product">
-          <form className="create-product__left" onSubmit={handeSubmit}>
+        <div className="create-product edit-page">
+          <form className="create-product__left" onSubmit={handleSubmit}>
             <h1 className="edit__card__title">
               Регистрируйтес как мастер, получите работы
             </h1>
@@ -219,7 +300,7 @@ export default function EditPage() {
             <div className="card__header">
               <img
                 className="avatar__img"
-                src={imgUrl ? imgUrl : avatar_image}
+                src={imgUrl.brand ? imgUrl.brand : avatar_image}
                 alt="avatar image"
                 width={"96px"}
                 height={"96px"}
@@ -243,7 +324,11 @@ export default function EditPage() {
                 </label>
                 <input
                   type={"file"}
-                  onChange={fileHandle}
+                  onChange={(e) => {
+                    fileHandle(e.target.files[0], "brand");
+                    imgHandle(e);
+                  }}
+                  name="brandImg"
                   id="file"
                   accept="image/png, image/jpeg, image/jpg"
                   style={{
@@ -258,8 +343,9 @@ export default function EditPage() {
                   <span>Имя Фамилия</span>
                   <input
                     name={"name"}
-                    id="name"
                     onChange={changeHandler}
+                    id="name"
+                    value={form.name}
                     type={"text"}
                     placeholder="Abbos Janizakov"
                   />
@@ -268,53 +354,111 @@ export default function EditPage() {
                   <span>Электронная почта</span>
                   <input
                     name={"email"}
-                    type={"email"}
                     onChange={changeHandler}
+                    value={form.email}
+                    type={"email"}
                     placeholder="info@gmail.com"
                   />
                 </label>
                 <label htmlFor="">
                   <span>Номер телефона | Ваше логин</span>
                   <input
-                    name={"phone"}
-                    type={"number"}
+                    name={"phoneNumber"}
                     onChange={changeHandler}
-                    placeholder="90 123-45-67"
+                    value={form.phoneNumber}
+                    type={"number"}
+                    placeholder="+998 90 123-45-67"
                   />
                 </label>
                 <label htmlFor="">
-                  <span>Пароль</span>
+                  <span>brand name</span>
                   <input
-                    name={"password"}
-                    type="password"
-                    onChange={changeHandler}
+                    name={"brand"}
+                    type="text"
                     placeholder="пусто"
+                    onChange={changeHandler}
+                    value={form.brand}
                   />
                 </label>
                 <label htmlFor="">
                   <span className="text__area">Краткое описание о себе</span>
                   <textarea
                     className="textarea"
-                    id=""
-                    name="descriptions"
+                    name="description"
                     onChange={changeHandler}
+                    value={form.description}
+                    id=""
                     placeholder="пусто"
                   ></textarea>
                 </label>
               </div>
-              <label htmlFor="e">
-                <span className="text__area">Краткое описание о себе</span>
-                <input
-                  type="number"
-                  id="e"
-                  name="experience"
-                  onChange={changeHandler}
-                  placeholder="experience"
-                  style={{
-                    width: "100%",
-                  }}
-                />
-              </label>
+              <div
+                style={{
+                  marginTop: "2rem",
+                }}
+              >
+                <h5>Цена</h5>
+                <div className="form-price">
+                  <input
+                    type="number"
+                    placeholder="Стоимость"
+                    required
+                    name="price"
+                    value={form.price}
+                    onChange={changeHandler}
+                  />
+                  <div className="form-price-choose">
+                    <button
+                      className="choose-currency"
+                      type="button"
+                      id="select-currency"
+                      onClick={() => setNavActive((prev) => !prev)}
+                    >
+                      <span>{priceText}</span>
+                      <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
+                        <use href={`${sprite}#fi_chevron-down`}></use>
+                      </svg>
+                    </button>
+                    <div className={`nav-body-choose ${navActive && "active"}`}>
+                      <ul>
+                        {[
+                          { id: 1, text: "y.e" },
+                          { id: 2, text: "som" },
+                        ].map((item) => (
+                          <div>
+                            <label
+                              htmlFor={item.text}
+                              className={`labelcha ${
+                                item.id === Number(form.price_type)
+                                  ? "active"
+                                  : ""
+                              }`}
+                            >
+                              {item.text}
+                            </label>
+                            <input
+                              key={item.id}
+                              type="text"
+                              id={item.text}
+                              name="price_type"
+                              onClick={(e) => {
+                                changeHandler(e);
+                                setNavActive(false);
+                                setPriceText(item.text);
+                              }}
+                              value={item.id}
+                              readOnly
+                              style={{
+                                display: "none",
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="second-card">
               <div className="second__card">
@@ -324,12 +468,12 @@ export default function EditPage() {
                 <p className="second__card__text">Введите род деятельности!</p>
               </div>
               <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
-                <InputLabel id="demo-multiple-chip-label">-------</InputLabel>
+                <InputLabel id="demo-multiple-chip-label">---</InputLabel>
                 <Select
                   labelId="demo-multiple-chip-label"
                   id="demo-multiple-chip"
                   multiple
-                  name="profession"
+                  name="store_amenitites"
                   value={personName}
                   onChange={(e) => {
                     handleChange(e);
@@ -427,6 +571,49 @@ export default function EditPage() {
                 </YMaps>
               </div>
             </div>
+
+            <div
+              style={{
+                marginTop: "2rem",
+              }}
+            >
+              <h5>Изображения объекта</h5>
+              <div className="image-upload mb-50">
+                <div className="image-outer">
+                  <div className="image-outer-info">
+                    <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
+                    <p>Поддерживает: .jpg, .png, .jpeg</p>
+                  </div>
+                  <input
+                    type="file"
+                    name="machineImg"
+                    // onChange={changeHandler}
+                    onChange={(e) => {
+                      fileHandle(e.target.files[0], "view");
+                      imgHandle(e);
+                    }}
+                    // onChange={(e) => handleChange(e)}
+                    id="upload-images"
+                    accept="image/png, image/jpeg, image/jpg"
+                    multiple
+                  />
+                  <label htmlFor="upload-images">открыть</label>
+                </div>
+                <ul className="image-list" id="gallery">
+                  {imgUrl.view && (
+                    <li>
+                      <img
+                        src={imgUrl.view}
+                        alt="house"
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
             <div
               style={{
                 marginTop: "2rem",
@@ -450,15 +637,19 @@ export default function EditPage() {
                     text: "Ремонт",
                     value: 2,
                   },
+                  {
+                    text: "Ремонт",
+                    value: 3,
+                  },
                 ].map(({ text, value }) => (
                   <li className="radio-btn" key={value}>
                     <input
                       type="radio"
                       id={text}
-                      name="serviceType"
+                      name="how_store_service"
                       onChange={changeHandler}
                       value={value}
-                      checked={Number(form.serviceType) === value}
+                      checked={Number(form.how_store_service) === value}
                     />
                     <label htmlFor={text}>{text}</label>
                   </li>
@@ -471,7 +662,6 @@ export default function EditPage() {
                 type={"checkbox"}
                 name=""
                 id=""
-                required
               />
               <span className="checkbox__text">
                 Я прочитал и согласен с условиями использования и публикации!
@@ -479,15 +669,9 @@ export default function EditPage() {
             </div>
 
             <div className="register">
-              <div>
-                <button
-                  type="submit"
-                  onSubmit={handeSubmit}
-                  className="register__btn"
-                >
-                  Зарегистрироватся
-                </button>
-              </div>
+              <button className="register__btn" type="submit">
+                Зарегистрироватся
+              </button>
             </div>
           </form>
           <div className="create-product__right">

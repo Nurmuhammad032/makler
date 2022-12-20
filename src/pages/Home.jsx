@@ -26,12 +26,8 @@ const Home = () => {
     search: "",
   });
 
-  console.log(form);
   const [start, setStart] = useState(1);
   const [focus, setFocus] = useState(false);
-  const { openLoginModal } = useContext(ContextApp);
-  const [searchData, setSearchData] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
   //  searchData?.splice(0, 8);

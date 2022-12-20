@@ -1,4 +1,3 @@
-import "./CreateProduct.scss";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import { useContext, useEffect, useState } from "react";
 import { LoadingPost } from "../../components";
@@ -11,75 +10,154 @@ import {
   ZoomControl,
 } from "@pbe/react-yandex-maps";
 import useForm from "../../hooks/useForm";
-import useNav from "../../hooks/useNav";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CreateProduct = () => {
+const EditHouse = () => {
+  const navigate = useNavigate();
   const [navActive, setNavActive] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
+  const [editData, setEditData] = useState([]);
+  const [aminities, setAminities] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { loginModalFunc, openLoginModal } = useContext(ContextApp);
+  const { loginModalFunc, navigateToProfile } = useContext(ContextApp);
   const initialState = {
     title: "",
     center: [40.783388, 72.350663],
     zoom: 12,
   };
 
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/products/api/v1/houses/updates/${id}`)
+      .then((res) => {
+        setEditData(res.data);
+        setAminities((prev) => {
+          return [...prev, ...res.data.amenities];
+        });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  // console.log(editData);
+
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
-  const [aminities, setAminities] = useState([]);
   const [file, setFile] = useState([]);
   const [img, setImg] = useState([]);
-  const [fileDataURL, setFileDataURL] = useState(null);
-  const mapRef = useRef(null);
-  const searchRef = useRef(null);
-  const [points, setPoints] = useState([]);
-  const { form, changeHandler } = useForm({
+  const [form, setFormData] = useState({
     title: "",
     descriptions: "",
     price: "",
-    price_type: 1,
-    type: "rent",
-    rental_type: "long_time",
-    property_type: "residential",
-    object: "flat",
+    price_type: "",
+    type: "",
+    rental_type: "",
+    property_type: "",
+    object: "",
     web_address_title: "",
     web_address_latitude: "",
     web_address_longtitude: "",
-    // uploaded_images: "",
+    //: '',
     pm_general: "",
     pm_residential: "",
     pm_kitchen: "",
     number_of_rooms: "",
     floor: "",
     floor_from: "",
-    building_type: "brick",
+    building_type: "",
     app_ipoteka: "",
     app_mebel: "",
     app_new_building: "",
-    phone_number: "+99895",
-    how_sale: [1],
-    isBookmarked: false,
+    phone_number: "",
+    how_sale: "",
+    isBookmarked: "",
   });
+  const mapRef = useRef(null);
+  const searchRef = useRef(null);
+  // const { form, changeHandler } = useForm({
+  //   title: editData?.title,
+  //   descriptions: editData?.descriptions,
+  //   price: editData?.price,
+  //   price_type: editData?.price_type,
+  //   type: editData?.type,
+  //   rental_type: editData?.rental_type,
+  //   property_type: editData?.property_type,
+  //   object: editData?.object,
+  //   web_address_title: editData?.web_address_title,
+  //   web_address_latitude: editData?.web_address_latitude,
+  //   web_address_longtitude: editData?.web_address_longtitude,
+  //   // uploaded_images: "",
+  //   pm_general: editData?.pm_general,
+  //   pm_residential: editData?.pm_residential,
+  //   pm_kitchen: editData?.pm_kitchen,
+  //   number_of_rooms: editData?.number_of_rooms,
+  //   floor: editData?.floor,
+  //   floor_from: editData?.floor_from,
+  //   building_type: editData?.building_type,
+  //   app_ipoteka: editData?.app_ipoteka,
+  //   app_mebel: editData?.app_mebel,
+  //   app_new_building: editData?.app_new_building,
+  //   phone_number: editData?.phone_number,
+  //   how_sale: editData?.how_sale,
+  //   isBookmarked: editData?.isBookmarked,
+  // });
+
+  const changeHandler = (e) => {
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  useEffect(() => {
+    setFormData({
+      title: editData?.title,
+      descriptions: editData?.descriptions,
+      price: editData?.price,
+      price_type: editData?.price_type,
+      type: editData?.type,
+      rental_type: editData?.rental_type,
+      property_type: editData?.property_type,
+      object: editData?.object,
+      web_address_title: editData?.web_address_title,
+      web_address_latitude: editData?.web_address_latitude,
+      web_address_longtitude: editData?.web_address_longtitude,
+      // uploaded_images: "",
+      pm_general: editData?.pm_general,
+      pm_residential: editData?.pm_residential,
+      pm_kitchen: editData?.pm_kitchen,
+      number_of_rooms: editData?.number_of_rooms,
+      floor: editData?.floor,
+      floor_from: editData?.floor_from,
+      building_type: editData?.building_type,
+      app_ipoteka: editData?.app_ipoteka,
+      app_mebel: editData?.app_mebel,
+      app_new_building: editData?.app_new_building,
+      phone_number: editData?.phone_number,
+      how_sale: [1],
+      isBookmarked: editData?.isBookmarked,
+    });
+  }, [editData]);
 
   const postData = (data) => {
     setLoading(true);
     const userToken = localStorage.getItem("access");
 
     axios
-      .post(
-        `https://fathulla.tk/products/web/api/v1/web-houses/create/`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        }
-      )
-      .then((res) => {
-        toast.success("Successfully created");
+      .put(`${baseURL}/products/api/v1/houses/updates/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then(() => {
+        toast.success("Successfully modified");
+        navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
@@ -97,6 +175,15 @@ const CreateProduct = () => {
       }
     });
   };
+  // useEffect(() => {
+  //   if (editData?.aminities?.length) {
+  //     setAminities((prev) => {
+  //       return [...prev, editData.amenities];
+  //     });
+  //   }
+  //   console.log(editData.amenities);
+  // }, [editData]);
+  console.log(aminities);
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -121,7 +208,6 @@ const CreateProduct = () => {
     formData.append("app_ipoteka", Boolean(form.app_ipoteka));
     formData.append("app_mebel", form.app_mebel);
     formData.append("app_new_building", form.app_new_building);
-    // formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
     formData.append("how_sale", form.how_sale);
@@ -159,7 +245,6 @@ const CreateProduct = () => {
     formData.append("app_ipoteka", Boolean(form.app_ipoteka));
     formData.append("app_mebel", form.app_mebel);
     formData.append("app_new_building", form.app_new_building);
-    formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
     formData.append("how_sale", form.how_sale);
@@ -170,24 +255,25 @@ const CreateProduct = () => {
     for (const aminit of aminities) {
       formData.append("amenities", aminit);
     }
+    console.log(aminities);
 
     postData(formData);
   };
 
-  const handleChange = (e) => {
-    const { files } = e.target;
-    setFile([...files]);
-    const validimg = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      validimg.push(file);
-    }
-    if (validimg.length) {
-      setImg(validimg);
-      return;
-    }
-    alert("Selected images are not of valid type!");
-  };
+  // const handleChange = (e) => {
+  //   const { files } = e.target;
+  //   setFile([...files]);
+  //   const validimg = [];
+  //   for (let i = 0; i < files.length; i++) {
+  //     const file = files[i];
+  //     validimg.push(file);
+  //   }
+  //   if (validimg.length) {
+  //     setImg(validimg);
+  //     return;
+  //   }
+  //   alert("Selected images are not of valid type!");
+  // };
 
   useEffect(() => {
     const fileReaders = [];
@@ -298,6 +384,7 @@ const CreateProduct = () => {
                   placeholder="пусто"
                   id="title-product"
                   type="text"
+                  value={form.title}
                   name="title"
                   onChange={changeHandler}
                   required
@@ -310,6 +397,7 @@ const CreateProduct = () => {
                   id="description-product"
                   type="text"
                   name="descriptions"
+                  value={form.descriptions}
                   onChange={changeHandler}
                   required
                 ></textarea>
@@ -319,6 +407,7 @@ const CreateProduct = () => {
                 <input
                   type="number"
                   placeholder="Стоимость"
+                  value={form.price}
                   required
                   name="price"
                   onChange={changeHandler}
@@ -356,6 +445,7 @@ const CreateProduct = () => {
                             id={item.text}
                             type="text"
                             name="price_type"
+                            required
                             onClick={(e) => {
                               changeHandler(e);
                               setNavActive(false);
@@ -405,6 +495,7 @@ const CreateProduct = () => {
                     type="radio"
                     id="long"
                     name="rental_type"
+                    required
                     onChange={changeHandler}
                     checked={form.rental_type === "long_time"}
                     value="long_time"
@@ -417,6 +508,7 @@ const CreateProduct = () => {
                     onChange={changeHandler}
                     id="month"
                     name="rental_type"
+                    required
                     value="several_months"
                   />
                   <label htmlFor="month">На несколько месяцев</label>
@@ -427,6 +519,7 @@ const CreateProduct = () => {
                     onChange={changeHandler}
                     id="day"
                     name="rental_type"
+                    required
                     value="daily"
                   />
                   <label htmlFor="day">Посуточно</label>
@@ -440,6 +533,7 @@ const CreateProduct = () => {
                     id="living"
                     value={"residential"}
                     checked={form.property_type === "residential"}
+                    required
                     onChange={changeHandler}
                     name="property_type"
                   />
@@ -451,6 +545,7 @@ const CreateProduct = () => {
                     id="commercial"
                     value={"commercial"}
                     checked={form.property_type === "commercial"}
+                    required
                     onChange={changeHandler}
                     name="property_type"
                   />
@@ -496,56 +591,12 @@ const CreateProduct = () => {
                       name="object"
                       onChange={changeHandler}
                       value={value}
+                      required
                       checked={form.object === value}
                     />
                     <label htmlFor={text}>{text}</label>
                   </li>
                 ))}
-                {/* 
-                <li className="radio-btn">
-                  <input type="radio" id="room" name="object" value="room" />
-                  <label htmlFor="room">Комната</label>
-                </li>
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="dacha"
-                    name="object"
-                    value="summer_cottage"
-                  />
-                  <label htmlFor="dacha">Дача</label>
-                </li>
-                <li className="radio-btn">
-                  <input type="radio" id="house" name="object" value="house" />
-                  <label htmlFor="house">Дом</label>
-                </li>
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="part"
-                    name="object"
-                    value="part_house"
-                  />
-                  <label htmlFor="part">Часть дома</label>
-                </li>
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="townhouse"
-                    name="object"
-                    value="townhouse"
-                  />
-                  <label htmlFor="townhouse">Таунхаус</label>
-                </li>
-                <li className="radio-btn">
-                  <input
-                    type="radio"
-                    id="some"
-                    name="object"
-                    value="bed_space"
-                  />
-                  <label htmlFor="some">Койко-место</label>
-                </li> */}
               </ul>
               <h5>Расположение</h5>
               <div className="map mb-50">
@@ -610,34 +661,6 @@ const CreateProduct = () => {
                   </YMaps>
                 </div>
               </div>
-              <h5>Изображения объекта</h5>
-              <div className="image-upload mb-50">
-                <div className="image-outer">
-                  <div className="image-outer-info">
-                    <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
-                    <p>Поддерживает: .jpg, .png, .jpeg</p>
-                  </div>
-                  <input
-                    type="file"
-                    name="uploaded_images"
-                    // onChange={changeHandler}
-                    onChange={(e) => handleChange(e)}
-                    id="upload-images"
-                    accept="image/png, image/jpeg, image/jpg"
-                    multiple
-                  />
-                  <label htmlFor="upload-images">открыть</label>
-                </div>
-                <ul className="image-list" id="gallery">
-                  {img.length
-                    ? img.map((im, i) => (
-                        <li key={i}>
-                          <img src={im} alt="house" />
-                        </li>
-                      ))
-                    : ""}
-                </ul>
-              </div>
               <h5>Вся информация об объекте</h5>
               <div className="sizes mb-50">
                 <p>Площадь, м² *</p>
@@ -647,12 +670,14 @@ const CreateProduct = () => {
                     type="number"
                     id="general"
                     name="pm_general"
+                    value={form.pm_general}
                     onChange={changeHandler}
                     required
                   />
                   <input
                     placeholder="Жилая"
                     name="pm_residential"
+                    value={form.pm_residential}
                     onChange={changeHandler}
                     type="number"
                     required
@@ -660,6 +685,7 @@ const CreateProduct = () => {
                   <input
                     placeholder="Кухня"
                     name="pm_kitchen"
+                    value={form.pm_kitchen}
                     onChange={changeHandler}
                     type="number"
                     required
@@ -671,6 +697,7 @@ const CreateProduct = () => {
                     placeholder="Общая"
                     name="number_of_rooms"
                     type="number"
+                    value={form.number_of_rooms}
                     onChange={changeHandler}
                     required
                   />
@@ -680,6 +707,7 @@ const CreateProduct = () => {
                   <input
                     placeholder="Общая"
                     name="floor"
+                    value={form.floor}
                     type="number"
                     onChange={changeHandler}
                     required
@@ -690,6 +718,7 @@ const CreateProduct = () => {
                   <input
                     placeholder="Общая"
                     name="floor_from"
+                    value={form.floor_from}
                     onChange={changeHandler}
                     type="number"
                     required
@@ -710,23 +739,13 @@ const CreateProduct = () => {
                       id={item.value}
                       name="building_type"
                       value={item.value}
+                      required
                       onChange={changeHandler}
                       checked={form.building_type === item.value}
                     />
                     <label htmlFor={item.value}>{item.text}</label>
                   </li>
                 ))}
-                {/*      <li className="radio-btn">
-                  <input type="radio" id="type-monolith" name="type-building" />
-                  <label htmlFor="type-monolith">Монолит</label>
-                </li>
-FV                  <input type="radio" id="type-panel" name="type-building" />
-                  <label htmlFor="type-panel">Панель</label>
-                </li>
-                <li className="radio-btn">
-                  <input type="radio" id="type-block" name="type-building" />
-                  <label htmlFor="type-block">Блочный</label>
-                </li> */}
               </ul>
               <ul className="ipoteka-list mb-40">
                 <li className="radio-list">
@@ -739,6 +758,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         value={"true"}
                         onChange={changeHandler}
                         name="app_ipoteka"
+                        checked={form.app_ipoteka}
                       />
                       <label htmlFor="ipoteka-yes">да</label>
                     </div>
@@ -747,7 +767,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         type="radio"
                         id="ipoteka-no"
                         value={""}
-                        // checked={form}
+                        checked={!form.app_ipoteka}
                         name="app_ipoteka"
                         onChange={changeHandler}
                       />
@@ -765,6 +785,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         name="app_new_building"
                         onChange={changeHandler}
                         value={"true"}
+                        checked={form.app_new_building}
                       />
                       <label htmlFor="new-buildings-yes">да</label>
                     </div>
@@ -774,6 +795,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         id="new-buildings-no"
                         name="app_new_building"
                         onChange={changeHandler}
+                        checked={!form.app_new_building}
                         value={""}
                       />
                       <label htmlFor="new-buildings-no">нет </label>
@@ -789,6 +811,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         id="furnishings-yes"
                         name="app_mebel"
                         onChange={changeHandler}
+                        checked={form.app_mebel}
                         value={"true"}
                       />
                       <label htmlFor="furnishings-yes">да</label>
@@ -798,6 +821,7 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         type="radio"
                         id="furnishings-no"
                         onChange={changeHandler}
+                        checked={!form.app_mebel}
                         value={""}
                         name="app_mebel"
                       />
@@ -846,10 +870,10 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
                         fontWeight: "600",
                         cursor: "pointer",
                         background: `${
-                          aminities.includes(value) ? "#c56622" : "white"
+                          aminities?.includes(value) ? "#c56622" : "white"
                         }`,
                         color: `${
-                          aminities.includes(value) ? "white" : "black"
+                          aminities?.includes(value) ? "white" : "black"
                         }`,
                         padding: "0.8rem 1.5rem",
                         display: "flex",
@@ -967,4 +991,4 @@ FV                  <input type="radio" id="type-panel" name="type-building" />
   );
 };
 
-export default CreateProduct;
+export default EditHouse;

@@ -1,11 +1,28 @@
 import React, { useState } from "react";
-import card from "../../assets/img/cards/1.png";
+import { useNavigate } from "react-router-dom";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
-// img/symbol/sprite.svg#dots
-const UserContents = ({ data }) => {
+const UserContents = ({ data, content }) => {
   const [display, setDisplay] = useState(false);
-  // console.log(data.images?.map((item) => item));
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    switch (content) {
+      case "house":
+        navigate(`/edit-house/${data.id}`);
+        break;
+      case "store":
+        navigate(`/edit-store/${data.id}`);
+        break;
+      case "master":
+        navigate(`/edit-master/${data.pk}`);
+        break;
+      default:
+        break;
+    }
+  };
+  // console.log(data);
+
   return (
     <li className="advert-item">
       <div className="advert-item__top">
@@ -50,15 +67,20 @@ const UserContents = ({ data }) => {
             <ul>
               <li>
                 {" "}
-                <a href="#">Активировать </a>
+                <a>Активировать </a>
               </li>
               <li>
                 {" "}
                 <a href="#">Деактивировать </a>
               </li>
-              <li>
+              <li
+                onClick={handleClick}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
                 {" "}
-                <a href="#">Изменить </a>
+                <a>Изменить </a>
               </li>
               <li>
                 {" "}

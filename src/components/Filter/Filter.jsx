@@ -232,13 +232,13 @@ const Filter = ({ value, change, start, setFocus }) => {
       <div className="container">
         <div className="main"></div>
       </div>
-      <section className="categories-s">
+      {/* <section className="categories-s">
         <div className="container">
           <div className="categories">
             <ul id="categories-list"></ul>
           </div>
         </div>
-      </section>
+      </section> */}
     </section>
   );
 };

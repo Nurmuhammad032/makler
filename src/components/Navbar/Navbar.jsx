@@ -7,12 +7,10 @@ import ContextApp from "../../context/context";
 
 const Navbar = () => {
   const router = useLocation();
-  console.log(router.pathname.split("/"));
+  const [showNav, setShowNav] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const { userData, loginModalFunc } = useContext(ContextApp);
   const userId = localStorage.getItem("userId");
-  console.log(router.pathname.split("/").forEach((item) => item));
-  console.log(router.pathname);
   const access = localStorage.getItem("access");
   useEffect(() => {
     if (access) {
@@ -56,12 +54,18 @@ const Navbar = () => {
             </ul>
           </div>
           <div className="header-nav">
-            <button className="hamburger hamburger--collapse" type="button">
+            <button
+              onClick={() => setShowNav((prev) => !prev)}
+              className={`hamburger hamburger--collapse ${
+                showNav ? "is-active" : ""
+              }`}
+              type="button"
+            >
               <span className="hamburger-box">
                 <span className="hamburger-inner"></span>
               </span>
             </button>
-            <ul className="header-nav-list">
+            <ul className={`header-nav-list ${showNav ? "active" : ""}`}>
               <li>
                 <a href="#">
                   <svg className="svg-sprite-icon icon-fi_globe w-16">
@@ -76,6 +80,7 @@ const Navbar = () => {
                   <svg className="svg-sprite-icon icon-fi_heart w-16">
                     <use href={`${spirite}#fi_heart`}></use>
                   </svg>
+                  <span>Избранное</span>
                 </Link>
               </li>
               <li>

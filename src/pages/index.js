@@ -11,3 +11,6 @@ export { default as CreateIndustriya } from "./CreateIndustriya/CreateIndustriya
 export { default as BookInput } from "./BookInput/BookInput";
 export { default as CreatePage } from "./CreatePage/CreatePage";
 export { default as AllProducts } from "./AllProdcuts/AllProdcuts";
+export { default as EditHouse } from "./EditHouse/EditHouse";
+export { default as EditMaster } from "./EditMaster/EditMaster";
+export { default as EditStore } from "./EditStore/EditStore";

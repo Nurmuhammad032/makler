@@ -2,6 +2,7 @@
 @import "./fonts.scss";
 @import "./buttons.scss";
 @import "./marketList.scss";
+@import "../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss";
 // @import "fonts";
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap");
 // @import "utils/libs";
@@ -23,7 +24,7 @@ html {
   height: 100%;
   font-family: "Inter", sans-serif;
   font-style: 16px;
-  // overflow: auto;
+  overflow-x: hidden;
   // position: relative;
   @include laptop-max {
     font-size: 15px;
@@ -73,6 +74,19 @@ body {
   left: auto !important;
   top: auto !important;
   bottom: 0 !important;
+}
+
+.create-product-label {
+  transition: all ease 0.2s;
+}
+
+.create-product-label:hover {
+  background-color: #c56622 !important;
+  color: white !important;
+}
+
+.create-product-label:hover svg {
+  fill: white !important;
 }
 
 // ,

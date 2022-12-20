@@ -190,7 +190,6 @@ export default function CreateIndustriya() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("init");
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("price_type", Number(form.price_type));
@@ -218,7 +217,6 @@ export default function CreateIndustriya() {
         },
       })
       .then((res) => {
-        console.log(res);
         toast.success("Successfully created");
         router("/industria");
       })
