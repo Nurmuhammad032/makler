@@ -14,12 +14,12 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
   const [wishAllId, setWishAllId] = useState([]);
   const { loginModalFunc } = useContext(ContextApp);
   const handleClick = () => {
-    setIsLoading(true);
     const userId = localStorage.getItem("userId");
     if (!userId) {
       loginModalFunc(true);
       return;
     }
+    setIsLoading(true);
     const isThere = wishAllId.some((item) => item === data?.id);
     if (wishlist) {
       axios
