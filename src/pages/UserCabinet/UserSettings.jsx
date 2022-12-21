@@ -3,7 +3,6 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import useForm from "../../hooks/useForm";
 
 const UserSettings = ({ name, email, password, number, img }) => {
   const [file, setFile] = useState();
@@ -59,7 +58,7 @@ const UserSettings = ({ name, email, password, number, img }) => {
   return (
     <div className="container-sm">
       <div className="settings">
-        <div className="settings-profile">
+        {/* <div className="settings-profile">
           <div className="settings-profile-logo">
             {" "}
             <picture>
@@ -73,7 +72,7 @@ const UserSettings = ({ name, email, password, number, img }) => {
               Изменить фото профиля{" "}
             </button>
           </div>
-        </div>
+        </div> */}
         <form className="settings-form" onSubmit={handleSubmit}>
           <div className="form-input">
             <label>Имя Фамилия</label>
@@ -112,7 +111,7 @@ const UserSettings = ({ name, email, password, number, img }) => {
               value={dataUser?.password}
             />
           </div>
-          <div className="change-password">
+          {/* <div className="change-password">
             <h3>Изменить пароль</h3>
             <p className="change-password-subtitle">
               После создания постоянного пароля для своего профиля вам
@@ -129,7 +128,7 @@ const UserSettings = ({ name, email, password, number, img }) => {
             <p className="change-password-par">
               Создайте постоянный пароль для входа в аккаунт!
             </p>
-          </div>
+          </div> */}
           <button
             type="submit"
             onSubmit={handleSubmit}

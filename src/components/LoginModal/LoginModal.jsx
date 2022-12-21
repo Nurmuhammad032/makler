@@ -73,7 +73,7 @@ const LoginModal = () => {
               value={form.number}
             />
             <button className="btn btn-orange">
-              Подтвердит номер телефона
+              Подтвердить номер телефона
             </button>
           </div>
         </form>

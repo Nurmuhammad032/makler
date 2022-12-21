@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
@@ -59,7 +59,60 @@ const UserContents = ({ data, content }) => {
 
   return (
     <li className="advert-item">
-      <div className="advert-item__top">
+      <div
+        className="advert-settings"
+        style={{
+          position: "absolute",
+          right: "0.8rem",
+          zIndex: 30,
+        }}
+      >
+        <button
+          className="btn btn-settings"
+          onClick={() => setDisplay((prev) => !prev)}
+        >
+          <svg className="svg-sprite-icon icon-dots w-16">
+            <use href={`${spirite}#dots`}></use>
+          </svg>
+        </button>
+        <div
+          className={`advert-settings-body choose-body ${display && "active"}`}
+        >
+          <ul>
+            <li
+              onClick={handleClick}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              {" "}
+              <a>Изменить </a>
+            </li>
+            <li
+              onClick={clickHandle}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              {" "}
+              <a>Удалить </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <Link
+        to={
+          content === "house"
+            ? `/product/${data.id}`
+            : content === "store"
+            ? `/industria/${data.id}`
+            : `/master/${data.pk}`
+        }
+        style={{
+          display: "block",
+        }}
+        className="advert-item__top"
+      >
         <div
           className={`advert-item-status ${
             data.product_status === 0
@@ -84,42 +137,6 @@ const UserContents = ({ data, content }) => {
           </span>
         </div>
 
-        <div className="advert-settings">
-          <button
-            className="btn btn-settings"
-            onClick={() => setDisplay((prev) => !prev)}
-          >
-            <svg className="svg-sprite-icon icon-dots w-16">
-              <use href={`${spirite}#dots`}></use>
-            </svg>
-          </button>
-          <div
-            className={`advert-settings-body choose-body ${
-              display && "active"
-            }`}
-          >
-            <ul>
-              <li
-                onClick={handleClick}
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                {" "}
-                <a>Изменить </a>
-              </li>
-              <li
-                onClick={clickHandle}
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                {" "}
-                <a>Удалить </a>
-              </li>
-            </ul>
-          </div>
-        </div>
         <picture>
           {"images" in data ? (
             <>
@@ -138,7 +155,7 @@ const UserContents = ({ data, content }) => {
             </>
           )}
         </picture>
-      </div>
+      </Link>
       <div className="advert-item__bottom">
         <div className="advert-item-info">
           <div className="advert-item-info__top">
@@ -152,16 +169,16 @@ const UserContents = ({ data, content }) => {
           <ul className="statistic-list">
             <li>
               {" "}
-              <span>Просмотры: </span>
+              <span>Просмотры: {data.view_count}</span>
               <strong>{data.pm}</strong>
             </li>
             <li>
-              <span>Комментарии: </span>
+              {/* <span>Комментарии: </span>
               <strong>{data.comment}</strong>
             </li>
             <li>
               <span>Лайки:</span>
-              <strong>{data.like}</strong>
+              <strong>{data.like}</strong> */}
             </li>
           </ul>
         </div>

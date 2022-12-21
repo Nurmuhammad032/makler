@@ -1,6 +1,7 @@
 import "./UserCabinet.scss";
 import avatar from "../../assets/img/avatar-big.png";
 import { LoadingPost, UserContents } from "../../components";
+import avatar_image from "../../assets/img/avatar_change.png";
 import spirite from "../../assets/img/symbol/sprite.svg";
 import {
   announceData,
@@ -332,8 +333,8 @@ const UserCabinet = () => {
               <div className="cabinet-profile-logo">
                 {" "}
                 <picture>
-                  <source srcSet={avatar} type="image/webp" />
-                  <img src={avatar} alt="Логотип" />
+                  <source srcSet={avatar_image} type="image/webp" />
+                  <img src={avatar_image} alt="Логотип" />
                 </picture>
               </div>
               <div className="cabinet-profile-info">
