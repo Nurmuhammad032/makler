@@ -1,17 +1,25 @@
 import axios from "axios";
+import { useContext } from "react";
 import { useEffect, useId } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import ContextApp from "../../context/context";
 import { baseURL } from "../../requests/requests";
 import LoadingPost from "../LoadingPost/LoadingPost";
 
 const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [wishAllId, setWishAllId] = useState([]);
+  const { loginModalFunc } = useContext(ContextApp);
   const handleClick = () => {
     setIsLoading(true);
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      loginModalFunc(true);
+      return;
+    }
     const isThere = wishAllId.some((item) => item === data?.id);
     if (wishlist) {
       axios
@@ -87,7 +95,7 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
           <div className="cards-item-info">
             <div className="cards-item-info__top">
               <p>{data.title}</p>
-              <span>{data.price}</span>
+              <span>{data.view_count}</span>
             </div>
             <div className="cards-item-info__bottom"></div>
           </div>

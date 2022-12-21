@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
 const UserContents = ({ data, content }) => {
   const [display, setDisplay] = useState(false);
+  const [pm, setPm] = useState();
   const navigate = useNavigate();
   console.log(data);
   const handleClick = () => {
@@ -23,6 +24,10 @@ const UserContents = ({ data, content }) => {
         break;
     }
   };
+
+  useEffect(() => {
+    setPm(data?.view_count - 1);
+  }, [data?.view_count]);
 
   const deleteData = (url, id) => {
     axios
@@ -169,7 +174,7 @@ const UserContents = ({ data, content }) => {
           <ul className="statistic-list">
             <li>
               {" "}
-              <span>Просмотры: {data.view_count}</span>
+              <span>Просмотры: {pm}</span>
               <strong>{data.pm}</strong>
             </li>
             <li>
