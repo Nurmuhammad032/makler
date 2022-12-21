@@ -165,7 +165,13 @@ const UserContents = ({ data, content }) => {
         <div className="advert-item-info">
           <div className="advert-item-info__top">
             <p>{"name" in data ? data.name : data.title}</p>
-            <span>{"price" in data ? `${data.price}$` : data.phone}</span>
+            <span>
+              {"price" in data
+                ? `${data.price} ${
+                    data.price_type.price_t ? data.price_type.price_t : "y.e"
+                  }`
+                : data.phone}
+            </span>
           </div>
           <div className="advert-item-info__bottom">
             <p>{"address" in data ? data.address : data.web_address_title}</p>
