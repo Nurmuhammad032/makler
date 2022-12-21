@@ -20,11 +20,11 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
         )
         .then(() => {
           deleteMount((prev) => !prev);
-          toast.success("Successfully removed");
+          toast.success("Успешно!");
         })
         .catch((err) => {
           console.log(err);
-          toast.error("Something went wrong!");
+          toast.error("Ошибка!");
         })
         .finally(() => setIsLoading(false));
       return;
@@ -37,11 +37,11 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
           product: data.id,
         })
         .then(() => {
-          toast.success("Successfully product added to wishlist!");
+          toast.success("Успешно!");
         })
         .catch((err) => {
           console.log(err);
-          toast.error("Something went wrong!");
+          toast.error("Ошибка!");
         })
         .finally(() => setIsLoading(false));
     } else {

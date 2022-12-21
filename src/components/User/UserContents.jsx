@@ -1,11 +1,13 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
 const UserContents = ({ data, content }) => {
   const [display, setDisplay] = useState(false);
   const navigate = useNavigate();
-
+  console.log(data);
   const handleClick = () => {
     switch (content) {
       case "house":
@@ -21,7 +23,39 @@ const UserContents = ({ data, content }) => {
         break;
     }
   };
-  // console.log(data);
+
+  const deleteData = (url, id) => {
+    axios
+      .delete(`${url}/${id}/`)
+      .then(() => {
+        toast.success("Успешно");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      });
+  };
+
+  const clickHandle = () => {
+    switch (content) {
+      case "house":
+        deleteData(
+          "https://fathulla.tk/products/api/v1/houses/delete",
+          data.id
+        );
+        break;
+      case "store":
+        deleteData("https://fathulla.tk/store2/api/v1/store/delete", data.id);
+        break;
+      case "master":
+        deleteData("https://fathulla.tk/master/api/v1/maklers/delete", data.pk);
+        break;
+      default:
+        break;
+    }
+  };
+  console.log(data);
 
   return (
     <li className="advert-item">
@@ -65,14 +99,6 @@ const UserContents = ({ data, content }) => {
             }`}
           >
             <ul>
-              <li>
-                {" "}
-                <a>Активировать </a>
-              </li>
-              <li>
-                {" "}
-                <a href="#">Деактивировать </a>
-              </li>
               <li
                 onClick={handleClick}
                 style={{
@@ -82,9 +108,14 @@ const UserContents = ({ data, content }) => {
                 {" "}
                 <a>Изменить </a>
               </li>
-              <li>
+              <li
+                onClick={clickHandle}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
                 {" "}
-                <a href="#">Удалить </a>
+                <a>Удалить </a>
               </li>
             </ul>
           </div>
@@ -112,7 +143,7 @@ const UserContents = ({ data, content }) => {
         <div className="advert-item-info">
           <div className="advert-item-info__top">
             <p>{"name" in data ? data.name : data.title}</p>
-            <span>{data.price}$</span>
+            <span>{"price" in data ? `${data.price}$` : data.phone}</span>
           </div>
           <div className="advert-item-info__bottom">
             <p>{"address" in data ? data.address : data.web_address_title}</p>

@@ -1,4 +1,5 @@
 import "./LoginModal.scss";
+import modalSvg from "../../assets/img/svg/30.svg";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import useForm from "../../hooks/useForm";
 import axios from "axios";
@@ -55,7 +56,7 @@ const LoginModal = () => {
           запись!
         </p>
         <div className="alert-form">
-          <img src="img/svg/30.svg" alt="30 days" />
+          <img src={modalSvg} alt="30 days" />
           <p>
             Вы имеете право размещать бесплатные объявления в течение 30 дней
             после регистрации! Спасибо, что выбрали нас!
@@ -74,10 +75,6 @@ const LoginModal = () => {
             <button className="btn btn-orange">
               Подтвердит номер телефона
             </button>
-            <p>
-              <a href="#">Войти другом способом!</a> |{" "}
-              <a href="#">Нужна помощь?</a>{" "}
-            </p>
           </div>
         </form>
       </div>

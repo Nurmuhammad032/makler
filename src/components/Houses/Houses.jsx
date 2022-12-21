@@ -42,8 +42,8 @@ const Houses = ({ value, start, focus }) => {
     );
 
     setDisplayData(res.data.results);
-    setNextUrl(res.data.next);
-    setPrevUrl(res.data.previous);
+    // setNextUrl(res.data.next);
+    // setPrevUrl(res.data.previous);
     setLoading(false);
   };
 
@@ -58,6 +58,7 @@ const Houses = ({ value, start, focus }) => {
     setPrevUrl(res.data.previous);
     setLoading(false);
   };
+  // console.log(displayData);
   const init3 = async () => {
     if (!sort) return;
     setLoading(true);
@@ -97,7 +98,7 @@ const Houses = ({ value, start, focus }) => {
       }
     }
   }, [sort]);
-  console.log(sort);
+  // console.log(sort);
 
   const handleNext = () => {
     setUrl(nextUrl);

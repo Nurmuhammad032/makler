@@ -271,12 +271,12 @@ export default function EditStore() {
         },
       })
       .then(() => {
-        toast.success("Successfully modified");
+        toast.success("Успешно!");
         navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Something went wrong!");
+        toast.error("Ошибка!");
       })
       .finally(() => setLoading(false));
   };

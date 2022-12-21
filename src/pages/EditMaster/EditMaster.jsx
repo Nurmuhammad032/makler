@@ -248,12 +248,12 @@ export default function EditMaster() {
         },
       })
       .then(() => {
-        toast.success("Successfully ");
+        toast.success("Успешно!");
         navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Something went wrong!");
+        toast.error("Ошибка!");
       })
       .finally(() => setLoading(false));
   };

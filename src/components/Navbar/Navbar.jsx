@@ -47,8 +47,9 @@ const Navbar = () => {
                 .split("/")
                 .filter((item) => item !== "")
                 .map((item, i) => (
-                  <li key={i}>
-                    <Link to={item}>{item}</Link>
+                  <li key={i} className="bread-link">
+                    <Link to={isNaN(item) ? item : null}>{item}</Link>
+                    {/* <Link to={""}></Link> */}
                   </li>
                 ))}
             </ul>

@@ -21,7 +21,7 @@ const CreateProduct = () => {
   const [navActive, setNavActive] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
   const [loading, setLoading] = useState(false);
-  const { loginModalFunc, openLoginModal } = useContext(ContextApp);
+  const { loginModalFunc, navigateToProfile } = useContext(ContextApp);
   const initialState = {
     title: "",
     center: [40.783388, 72.350663],
@@ -33,7 +33,6 @@ const CreateProduct = () => {
   const [aminities, setAminities] = useState([]);
   const [file, setFile] = useState([]);
   const [img, setImg] = useState([]);
-  const [fileDataURL, setFileDataURL] = useState(null);
   const mapRef = useRef(null);
   const searchRef = useRef(null);
   const [points, setPoints] = useState([]);
@@ -80,11 +79,12 @@ const CreateProduct = () => {
         }
       )
       .then((res) => {
-        toast.success("Successfully created");
+        toast.success("Успешно");
+        navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Something went wrong!");
+        toast.error("Ошибка!");
       })
       .finally(() => setLoading(false));
   };

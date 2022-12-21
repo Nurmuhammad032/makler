@@ -24,6 +24,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LoadingPost } from "../../components";
+import { useContext } from "react";
+import ContextApp from "../../context/context";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -62,6 +64,7 @@ function getStyles(name, personName, theme) {
 
 export default function CreateIndustriya() {
   const theme = useTheme();
+  const { navigateToProfile } = useContext(ContextApp);
   const [loading, setLoading] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
   const [navActive, setNavActive] = useState(false);
@@ -217,12 +220,12 @@ export default function CreateIndustriya() {
         },
       })
       .then((res) => {
-        toast.success("Successfully created");
-        router("/industria");
+        toast.success("Успешно!");
+        navigateToProfile();
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Something went wrong!");
+        toast.error("Ошибка!");
       })
       .finally(() => setLoading(false));
   };
@@ -408,7 +411,7 @@ export default function CreateIndustriya() {
                 <p className="second__card__text">Введите род деятельности!</p>
               </div>
               <FormControl sx={{ m: 0, width: "100%", bgcolor: "white" }}>
-                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+                <InputLabel id="demo-multiple-chip-label">---</InputLabel>
                 <Select
                   labelId="demo-multiple-chip-label"
                   id="demo-multiple-chip"
@@ -420,7 +423,7 @@ export default function CreateIndustriya() {
                     changeHandler(e);
                   }}
                   input={
-                    <OutlinedInput id="select-multiple-chip" label="Chip" />
+                    <OutlinedInput id="select-multiple-chip" label="---" />
                   }
                   renderValue={(selected) => (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>

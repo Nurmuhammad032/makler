@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 const categories = [
   {
     url: "house",
-    text: "craete house",
+    text: "Создание маклера",
     imgUrl: "https://fathulla.tk/media/category_image/cat1.svg",
   },
   {
     url: "industria",
-    text: "craete industria",
+    text: "Создание обустройства",
     imgUrl: "https://fathulla.tk/media/category_image/cat2.svg",
   },
   {
     url: "master",
-    text: "craete master",
+    text: "Создание мастера",
     imgUrl: "https://fathulla.tk/media/category_image/cat3.svg",
   },
 ];

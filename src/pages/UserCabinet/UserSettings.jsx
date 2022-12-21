@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 import useForm from "../../hooks/useForm";
 
 const UserSettings = ({ name, email, password, number, img }) => {
@@ -45,10 +46,15 @@ const UserSettings = ({ name, email, password, number, img }) => {
 
     axios
       .put(`https://fathulla.tk/users/api/v1/update-user/${userId}/`, formData)
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .then(() => {
+        toast.success("Успешно!");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      });
   };
-
 
   return (
     <div className="container-sm">

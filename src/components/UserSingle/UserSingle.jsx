@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
   /*  */
 }
 const UserSingle = ({ data, id }) => {
+  const locat = useLocation();
   const [masterData, setMasterData] = useState([]);
   const [storeData, setStoreData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +96,11 @@ const UserSingle = ({ data, id }) => {
                     </h1>
                     <p>{data?.email}</p>
                   </div>
-                  <button className="worker-btn">Написать мастеру</button>
+                  <a href={`tel:${data?.phone}`} className="worker-btn">
+                    {locat.pathname.includes("master")
+                      ? "позвонить в номер"
+                      : "industriacha"}
+                  </a>
                 </div>
               </div>
               <div className="app__worker-right">
