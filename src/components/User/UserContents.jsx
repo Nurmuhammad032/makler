@@ -24,6 +24,7 @@ const UserContents = ({ data, content }) => {
         break;
     }
   };
+  console.log(data);
 
   useEffect(() => {
     setPm(data?.view_count - 1);
@@ -180,7 +181,7 @@ const UserContents = ({ data, content }) => {
           <ul className="statistic-list">
             <li>
               {" "}
-              <span>Просмотры: {pm}</span>
+              <span>Просмотры: {data?.view_count}</span>
               <strong>{data.pm}</strong>
             </li>
             <li>

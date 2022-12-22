@@ -71,12 +71,13 @@ const SingleProduct = () => {
             <div className="slider__right">
               <ul>
                 {houseData?.images.length &&
-                  houseData?.images.map((item, i) => (
-                    <li key={i}>
-                      {" "}
-                      <img src={item.images} alt="Картинка 1" />
-                    </li>
-                  ))}
+                  houseData?.images
+                    ?.filter((_, i) => i <= 3)
+                    ?.map((item, i) => (
+                      <li key={i}>
+                        <img src={item.images} alt="Картинка 1" />
+                      </li>
+                    ))}
               </ul>
             </div>
           </div>

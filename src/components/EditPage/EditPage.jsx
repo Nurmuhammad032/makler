@@ -23,6 +23,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import LoadingPost from "../LoadingPost/LoadingPost";
 import ContextApp from "../../context/context";
+import { baseURL } from "../../requests/requests";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -34,21 +35,6 @@ const MenuProps = {
     },
   },
 };
-
-const names = [
-  {
-    text: "architect",
-    value: 1,
-  },
-  {
-    text: "painter",
-    value: 2,
-  },
-  {
-    text: "electrician",
-    value: 3,
-  },
-];
 
 function getStyles(name, personName, theme) {
   return {
@@ -64,6 +50,7 @@ export default function EditPage() {
   const { navigateToProfile } = useContext(ContextApp);
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
+  const [names, setNames] = useState([]);
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState();
   const fileHandle = (e) => {
@@ -76,6 +63,33 @@ export default function EditPage() {
       setImgUrl(reader.result);
     };
   };
+
+  // const names = [
+  //   {
+  //     text: "architect",
+  //     value: 1,
+  //   },
+  //   {
+  //     text: "painter",
+  //     value: 2,
+  //   },
+  //   {
+  //     text: "electrician",
+  //     value: 3,
+  //   },
+  // ];
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/master/api/v1/maklers/professions`)
+      .then((res) => setNames(res.data.results))
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      });
+  }, []);
+
+  console.log(names);
 
   const handleChange = (event) => {
     const {
@@ -180,7 +194,7 @@ export default function EditPage() {
     //   form.profession.map((data) => data.value)
     // );
     for (const fi of form.profession) {
-      formData.append("profession", fi.value);
+      formData.append("profession", fi?.id);
     }
     formData.append("descriptions", form.descriptions);
     formData.append("experience", form.experience);
@@ -306,7 +320,7 @@ export default function EditPage() {
                 </label>
               </div>
               <label htmlFor="e">
-                <span className="text__area">Краткое описание о себе</span>
+                <span className="text__area">Опыт работы</span>
                 <input
                   type="number"
                   id="e"
@@ -346,21 +360,21 @@ export default function EditPage() {
                       {selected.map((value) => (
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
-                          key={value.value}
-                          label={value.text}
+                          key={value.id}
+                          label={value.title}
                         />
                       ))}
                     </Box>
                   )}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name) => (
+                  {names?.map((name) => (
                     <MenuItem
-                      key={name.value}
+                      key={name.id}
                       value={name}
-                      style={getStyles(name.value, personName, theme)}
+                      style={getStyles(name.id, personName, theme)}
                     >
-                      {name.text}
+                      {name.title}
                     </MenuItem>
                   ))}
                 </Select>

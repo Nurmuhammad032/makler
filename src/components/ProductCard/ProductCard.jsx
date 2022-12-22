@@ -96,7 +96,7 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
             <div className="cards-item-info__top">
               <p>{data.title}</p>
               <span>
-                {data.price} {data.price_type.price_t}
+                {data.price} {data?.price_type?.price_t}
               </span>
             </div>
             <div className="cards-item-info__bottom"></div>
