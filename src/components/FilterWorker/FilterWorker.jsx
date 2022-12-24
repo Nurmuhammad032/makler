@@ -1,44 +1,57 @@
 import { Map, YMaps } from "@pbe/react-yandex-maps";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import spirite from "../../assets/img/symbol/sprite.svg";
+import { baseURL } from "../../requests/requests";
 
 const FilterWorker = ({ change, value }) => {
   const [show1, setShow1] = useState(false);
   const [serviceTypeValue, setServiceText] = useState("");
   const [show2, setShow2] = useState(false);
   const [profess, setProfess] = useState();
+  const [option1, setOption1] = useState([]);
 
   const { profession, service } = value;
-  const option1 = [
-    {
-      label: "Ingener",
-      value: 1,
-    },
-    {
-      label: "Santexnik",
-      value: 2,
-    },
-    // {
-    //   label: "Master",
-    //   value: 3,
-    // },
-    // {
-    //   label: "Oyna ustasi",
-    //   value: 4,
-    // },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/master/api/v1/maklers/professions`)
+      .then((res) => setOption1(res.data.results))
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      });
+  }, []);
+  // const option1 = [
+  //   {
+  //     label: "Ingener",
+  //     value: 1,
+  //   },
+  //   {
+  //     label: "Santexnik",
+  //     value: 2,
+  //   },
+  //   // {
+  //   //   label: "Master",
+  //   //   value: 3,
+  //   // },
+  //   // {
+  //   //   label: "Oyna ustasi",
+  //   //   value: 4,
+  //   // },
+  // ];
   const serviceType = [
     {
-      label: "Remont",
+      label: "Ремонт",
       value: 1,
     },
     {
-      label: "Arenda",
+      label: "Eвро",
       value: 2,
     },
   ];
   useEffect(() => {
-    setProfess(option1[profession - 1]?.label);
+    setProfess(option1[profession - 1]?.title);
     setServiceText(serviceType[service - 1]?.label);
   }, [profession]);
   useEffect(() => {
@@ -129,20 +142,20 @@ const FilterWorker = ({ change, value }) => {
               </a>
               <div className={`nav-body-choose ${show2 ? "active" : ""}`}>
                 <ul>
-                  {option1.map((item) => (
-                    <li key={item.value}>
+                  {option1?.map((item) => (
+                    <li key={item.id}>
                       <label
-                        htmlFor={`room${item.value}`}
+                        htmlFor={`room${item.id}`}
                         className={`btn btn-orange-light ${
-                          Number(profession) === item.value ? "active" : ""
+                          Number(profession) === item.id ? "active" : ""
                         }`}
                       >
-                        {item.label}
+                        {item.title}
                         <input
                           type="text"
-                          id={`room${item.value}`}
+                          id={`room${item.id}`}
                           name="profession"
-                          value={item.value}
+                          value={item.id}
                           onClick={(e) => {
                             change(e);
                             setShow2(false);

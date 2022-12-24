@@ -79,6 +79,15 @@ const UserSingle = ({ data, id }) => {
                       ))}
                     </div>
                   )}
+                  {"store_amenitites" in data && (
+                    <div className="info-cards">
+                      {data?.store_amenitites.map((item, i) => (
+                        <span key={i} className="info-box">
+                          {item.title}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <p className="user-loc">
                     {typeof data.address !== "string"
                       ? data.address_title

@@ -58,7 +58,7 @@ const Houses = ({ value, start, focus }) => {
     setPrevUrl(res.data.previous);
     setLoading(false);
   };
-  // console.log(displayData);
+  console.log(displayData);
   const init3 = async () => {
     if (!sort) return;
     setLoading(true);

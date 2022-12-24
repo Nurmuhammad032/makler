@@ -90,8 +90,10 @@ const SingleProduct = () => {
           <div className="info-product">
             <div className="info-product-sidebar">
               <div className="plashka">
-                <h4>Стоимость за месяц:</h4>
-                <strong>{houseData?.price} сум</strong>
+                <h4>Стоимость:</h4>
+                <strong>
+                  {houseData?.price} {houseData?.price_type?.price_t}
+                </strong>
                 <a className="btn btn-orange" href="tel:035252434">
                   Позвонить маклеру
                 </a>

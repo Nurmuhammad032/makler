@@ -40,15 +40,15 @@ const MenuProps = {
 
 const names = [
   {
-    text: "architect",
+    text: "мебель",
     value: 1,
   },
   {
-    text: "painter",
+    text: "для кухни",
     value: 2,
   },
   {
-    text: "electrician",
+    text: "бытовая техника",
     value: 3,
   },
 ];
@@ -199,10 +199,10 @@ export default function CreateIndustriya() {
     formData.append("image", img.machineImg);
     formData.append("brand_image", img.brandImg);
     formData.append("description", form.description);
-    formData.append(
-      "store_amenitites",
-      form.store_amenitites.map((data) => data.value)
-    );
+    // formData.append(
+    //   "store_amenitites",
+    //   form.store_amenitites.map((data) => data.value)
+    // );
     formData.append("brand", form.brand);
     formData.append("price", form.price);
     formData.append("use_for", form.use_for);
@@ -210,6 +210,9 @@ export default function CreateIndustriya() {
     formData.append("address", searchRef.current?.value);
     formData.append("email", form.email);
     formData.append("how_store_service", form.how_store_service);
+    for (const fi of form.store_amenitites) {
+      formData.append("store_amenitites", fi.value);
+    }
 
     const userToken = localStorage.getItem("access");
 
@@ -289,13 +292,13 @@ export default function CreateIndustriya() {
             <div className="editpage__input">
               <div className="form__input">
                 <label htmlFor="">
-                  <span>Имя Фамилия</span>
+                  <span>Названия товара</span>
                   <input
                     name={"name"}
                     onChange={changeHandler}
                     id="name"
                     type={"text"}
-                    placeholder="Abbos Janizakov"
+                    placeholder="Стиральная машина"
                   />
                 </label>
                 <label id="email" htmlFor="">

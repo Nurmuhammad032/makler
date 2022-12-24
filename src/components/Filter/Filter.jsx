@@ -4,6 +4,7 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 const Filter = ({ value, change, start, setFocus }) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [print, setPrint] = useState("");
 
   return (
     <section className="main-s">
@@ -31,15 +32,15 @@ const Filter = ({ value, change, start, setFocus }) => {
                     <label
                       htmlFor="roomtype"
                       className={`btn btn-orange-light ${
-                        value.typeRoom === "rent" ? "active" : ""
+                        value.typeRoom === "аденда" ? "active" : ""
                       }`}
                     >
-                      rent
+                      аpенда
                       <input
                         type="text"
                         id="roomtype"
                         name="typeRoom"
-                        value={"rent"}
+                        value={"аденда"}
                         onClick={(e) => {
                           change(e);
                           setShow1(false);
@@ -53,15 +54,37 @@ const Filter = ({ value, change, start, setFocus }) => {
                     <label
                       htmlFor="roomtype2"
                       className={`btn btn-orange-light ${
-                        value.typeRoom === "for_sale" ? "active" : ""
+                        value.typeRoom === "купить" ? "active" : ""
                       }`}
                     >
-                      for_sale
+                      купить
                       <input
                         type="text"
                         id="roomtype2"
                         name="typeRoom"
-                        value={"for_sale"}
+                        value={"купить"}
+                        onClick={(e) => {
+                          change(e);
+                          setShow1(false);
+                        }}
+                        onChange={change}
+                        style={{ display: "none" }}
+                      />
+                    </label>
+                  </li>
+                  <li>
+                    <label
+                      htmlFor="roomtype3"
+                      className={`btn btn-orange-light ${
+                        value.typeRoom === "продать" ? "active" : ""
+                      }`}
+                    >
+                      продать
+                      <input
+                        type="text"
+                        id="roomtype3"
+                        name="typeRoom"
+                        value={"продать"}
                         onClick={(e) => {
                           change(e);
                           setShow1(false);
@@ -84,7 +107,7 @@ const Filter = ({ value, change, start, setFocus }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{value.building ? value.building : "---------"}</span>
+                <span>{print ? print : "---------"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -93,15 +116,15 @@ const Filter = ({ value, change, start, setFocus }) => {
                 <ul>
                   {[
                     {
-                      label: "Flat",
+                      label: "Квартиру",
                       value: "flat",
                     },
                     {
-                      label: "Room",
+                      label: "Комната",
                       value: "room",
                     },
                     {
-                      label: "Summer cottage",
+                      label: "Дача",
                       value: "summer_cottage",
                     },
                   ].map((item, i) => (
@@ -121,6 +144,7 @@ const Filter = ({ value, change, start, setFocus }) => {
                           onClick={(e) => {
                             change(e);
                             setShow2(false);
+                            setPrint(item.label);
                           }}
                           onChange={change}
                           style={{ display: "none" }}
@@ -132,21 +156,21 @@ const Filter = ({ value, change, start, setFocus }) => {
                 <ul>
                   {[
                     {
-                      label: "House",
+                      label: "Дома",
                       value: "house",
                     },
                     {
-                      label: "Part house",
+                      label: "Участка",
                       value: "part_house",
                     },
-                    {
-                      label: "Town house",
-                      value: "townhouse",
-                    },
-                    {
-                      label: "Bed space",
-                      value: "bed_space",
-                    },
+                    // {
+                    //   label: "Town house",
+                    //   value: "townhouse",
+                    // },
+                    // {
+                    //   label: "Bed space",
+                    //   value: "bed_space",
+                    // },
                   ].map((item) => (
                     <li key={item.value}>
                       <label
@@ -164,6 +188,7 @@ const Filter = ({ value, change, start, setFocus }) => {
                           onClick={(e) => {
                             change(e);
                             setShow2(false);
+                            setPrint(item.label);
                           }}
                           onChange={change}
                           style={{ display: "none" }}
