@@ -8,7 +8,6 @@ const UserContents = ({ data, content }) => {
   const [display, setDisplay] = useState(false);
   const [pm, setPm] = useState();
   const navigate = useNavigate();
-  console.log(data);
   const handleClick = () => {
     switch (content) {
       case "house":
@@ -24,7 +23,6 @@ const UserContents = ({ data, content }) => {
         break;
     }
   };
-  console.log(data);
 
   useEffect(() => {
     setPm(data?.view_count - 1);
@@ -61,7 +59,6 @@ const UserContents = ({ data, content }) => {
         break;
     }
   };
-  console.log(data);
 
   return (
     <li className="advert-item">

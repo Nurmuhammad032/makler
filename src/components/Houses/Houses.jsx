@@ -10,9 +10,7 @@ import Loading from "../Loading/Loading";
 
 const Houses = ({ value, start, focus }) => {
   const { typeRoom, room, search, building, sort } = value;
-  const { allHouses, houseData } = useContext(ContextApp);
   const [displayData, setDisplayData] = useState([]);
-  const [searchResult, setSearchResult] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(8);
@@ -46,11 +44,14 @@ const Houses = ({ value, start, focus }) => {
     // setPrevUrl(res.data.previous);
     setLoading(false);
   };
+  console.log(value);
 
   const init2 = async () => {
     setLoading(true);
     const res = await axios.get(
-      `https://fathulla.tk/products/web/api/v1/all-web-houses/?limit=${limit}&product_status=&object=${building}&building_type=&number_of_rooms=${room}&type=${typeRoom}&rental_type=`
+      `https://fathulla.tk/products/web/api/v1/all-web-houses/?limit=${limit}&product_status=&object=${encodeURI(
+        building
+      )}&building_type=&number_of_rooms=${room}&type=${typeRoom}&rental_type=`
     );
 
     setDisplayData(res.data.results);
@@ -58,7 +59,6 @@ const Houses = ({ value, start, focus }) => {
     setPrevUrl(res.data.previous);
     setLoading(false);
   };
-  console.log(displayData);
   const init3 = async () => {
     if (!sort) return;
     setLoading(true);
@@ -175,14 +175,14 @@ const Houses = ({ value, start, focus }) => {
                     ?.slice(0, limit)
                     ?.map((item) => <ProductCard key={item.id} data={item} />)
                 ) : (
-                  <h1>hech narsa yo'q hali</h1>
+                  <h1>Ничего нет</h1>
                 )
               ) : searchData.length ? (
                 searchData
                   ?.slice(0, searchLimit)
                   ?.map((item) => <ProductCard key={item.id} data={item} />)
               ) : (
-                <h1>Items not found!</h1>
+                <h1>Предметы не найдены!</h1>
               )}
             </ul>
           ) : (

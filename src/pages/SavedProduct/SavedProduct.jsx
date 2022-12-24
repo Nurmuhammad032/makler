@@ -37,7 +37,7 @@ const SavedProduct = () => {
                   />
                 ))
               ) : (
-                <h1>No wishlist items yet!</h1>
+                <h1>В списке желаний пока нет товаров!</h1>
               )}
             </ul>
           </div>

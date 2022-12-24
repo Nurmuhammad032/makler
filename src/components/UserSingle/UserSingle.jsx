@@ -1,21 +1,16 @@
 import "./UserSingle.scss";
-import UserImg from "../../assets/img/avatar-big.png";
-import { LoadingPost, ProductSingle, UserCard } from "../../components";
+import { ProductSingle, UserCard } from "../../components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
 import { toast } from "react-toastify";
 import Loading from "../Loading/Loading";
-import { useLocation, useNavigate } from "react-router-dom";
-{
-  /*  */
-}
+import { useLocation } from "react-router-dom";
 const UserSingle = ({ data, id }) => {
   const locat = useLocation();
   const [masterData, setMasterData] = useState([]);
   const [storeData, setStoreData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const router = useLocation();
   const getData = (url, setData) => {
     setIsLoading(true);
@@ -27,7 +22,7 @@ const UserSingle = ({ data, id }) => {
       })
       .finally(() => setIsLoading(false));
   };
-
+  console.log(storeData);
   useEffect(() => {
     getData("store2/api/v1/store/popular", setStoreData);
   }, [id]);
@@ -66,7 +61,7 @@ const UserSingle = ({ data, id }) => {
                       {"experience" in data
                         ? `Мастер, ${data.experience} года опыта`
                         : "use_for" in data
-                        ? data.use_for
+                        ? data.use_for.title
                         : ""}
                     </p>
                   </div>
@@ -99,16 +94,25 @@ const UserSingle = ({ data, id }) => {
                     <h1>
                       {"telNumber" in data
                         ? data?.telNumber
-                        : "phone" in data
-                        ? data?.phone
+                        : "phoneNumber" in data
+                        ? data?.phoneNumber
                         : ""}
                     </h1>
                     <p>{data?.email}</p>
                   </div>
-                  <a href={`tel:${data?.phone}`} className="worker-btn">
+                  <a
+                    href={`tel:${
+                      "telNumber" in data
+                        ? data.telNumber
+                        : "phoneNumber" in data
+                        ? data.phoneNumber
+                        : ""
+                    }`}
+                    className="worker-btn"
+                  >
                     {locat.pathname.includes("master")
                       ? "позвонить в номер"
-                      : "industriacha"}
+                      : "Позвонить"}
                   </a>
                 </div>
               </div>

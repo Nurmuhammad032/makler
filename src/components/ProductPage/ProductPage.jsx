@@ -52,7 +52,7 @@ export default function ProductCard({ data }) {
             >
               {data.name}
             </p>
-            <em className="product-type">{data.use_for}</em>
+            <em className="product-type">{data.use_for.title}</em>
           </div>
           <p className="product-price">{data.price}$</p>
         </div>

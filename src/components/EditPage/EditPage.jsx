@@ -88,7 +88,6 @@ export default function EditPage() {
         toast.error("Ошибка!");
       });
   }, []);
-  console.log(names);
 
   const handleChange = (event) => {
     const {

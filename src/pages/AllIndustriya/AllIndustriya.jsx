@@ -28,6 +28,7 @@ const AllIndustriya = () => {
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
+  console.log(data);
 
   useMemo(() => {
     setLoading(true);
@@ -85,7 +86,7 @@ const AllIndustriya = () => {
                     </div>
                   ))
                 ) : (
-                  <h1>No items.</h1>
+                  <h1>Нет товаров.</h1>
                 )
               ) : searchData.length ? (
                 searchData?.slice(0, searchLimit)?.map((data, i) => (
@@ -99,7 +100,7 @@ const AllIndustriya = () => {
                   </div>
                 ))
               ) : (
-                <h1>Items not found!</h1>
+                <h1>Предметы не найдены!</h1>
               )}
             </div>
           ) : (

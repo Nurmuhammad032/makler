@@ -117,15 +117,15 @@ const Filter = ({ value, change, start, setFocus }) => {
                   {[
                     {
                       label: "Квартиру",
-                      value: "flat",
+                      value: "квартира",
                     },
                     {
                       label: "Комната",
-                      value: "room",
+                      value: "комната",
                     },
                     {
                       label: "Дача",
-                      value: "summer_cottage",
+                      value: "дача",
                     },
                   ].map((item, i) => (
                     <li key={i}>
@@ -157,11 +157,11 @@ const Filter = ({ value, change, start, setFocus }) => {
                   {[
                     {
                       label: "Дома",
-                      value: "house",
+                      value: "дома",
                     },
                     {
                       label: "Участка",
-                      value: "part_house",
+                      value: "участка",
                     },
                     // {
                     //   label: "Town house",

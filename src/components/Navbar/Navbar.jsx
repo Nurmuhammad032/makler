@@ -48,7 +48,14 @@ const Navbar = () => {
                 .filter((item) => item !== "")
                 .map((item, i) => (
                   <li key={i} className="bread-link">
-                    <Link to={isNaN(item) ? item : null}>{item}</Link>
+                    <Link
+                      to={isNaN(item) ? item : null}
+                      style={{
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {item}
+                    </Link>
                     {/* <Link to={""}></Link> */}
                   </li>
                 ))}

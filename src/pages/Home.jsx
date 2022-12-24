@@ -10,13 +10,8 @@ import {
   Filter,
   FooterMenu,
   Houses,
-  LoginModal,
-  ProductSingle,
-  SearchResults,
 } from "../components";
-import ContextApp from "../context/context";
 import useForm from "../hooks/useForm";
-import { baseURL } from "../requests/requests";
 
 const Home = () => {
   const { form, changeHandler } = useForm({

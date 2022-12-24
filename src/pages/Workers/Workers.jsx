@@ -89,7 +89,7 @@ const Workers = () => {
                     </div>
                   ))
                 ) : (
-                  <h1>hech narsa yo'q hali</h1>
+                  <h1>Ничего нет</h1>
                 )
               ) : searchData.length ? (
                 searchData?.slice(0, searchLimit)?.map((data, i) => (
@@ -103,7 +103,7 @@ const Workers = () => {
                   </div>
                 ))
               ) : (
-                <h1>Items not found!</h1>
+                <h1>Предметы не найдены!</h1>
               )
             ) : (
               <Loading />
