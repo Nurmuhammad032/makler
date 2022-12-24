@@ -1,7 +1,7 @@
-import { startTransition, useState } from "react";
+import { useState } from "react";
 import spirite from "../../assets/img/symbol/sprite.svg";
 
-const Filter = ({ value, change, start, setFocus }) => {
+const Filter = ({ value, change, start }) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [print, setPrint] = useState("");
@@ -246,9 +246,9 @@ const Filter = ({ value, change, start, setFocus }) => {
             <li>
               <button
                 className="btn show-btn-orange btn-search"
-                onClick={() => start(2)}
+                onClick={() => window.location.reload()}
               >
-                Показать
+                Очистить
               </button>
             </li>
           </ul>

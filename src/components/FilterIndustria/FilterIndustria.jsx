@@ -190,8 +190,11 @@ const FilterIndustria = ({ change, value }) => {
               </a>
             </li>
             <li>
-              <button className="btn show-btn-orange btn-search">
-                Показать
+              <button
+                className="btn show-btn-orange btn-search"
+                onClick={() => window.location.reload()}
+              >
+                Очистить
               </button>
             </li>
           </ul>
