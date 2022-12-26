@@ -84,7 +84,7 @@ const UserCabinet = () => {
                     <button className="btn btn-orange-50">
                       Активировать в топ
                     </button>
-                    <a href="#">Подробнее </a>
+                    <a>Подробнее </a>
                   </div>
                 </div>
                 {!loading ? (

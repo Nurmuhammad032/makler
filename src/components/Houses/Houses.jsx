@@ -40,11 +40,8 @@ const Houses = ({ value, start, focus }) => {
     );
 
     setDisplayData(res.data.results);
-    // setNextUrl(res.data.next);
-    // setPrevUrl(res.data.previous);
     setLoading(false);
   };
-  console.log(value);
 
   const init2 = async () => {
     setLoading(true);
@@ -115,6 +112,8 @@ const Houses = ({ value, start, focus }) => {
       setSearchLimit((prev) => (prev += 8));
     }
   };
+
+  console.log(displayData);
 
   return (
     <section className="cards-s">

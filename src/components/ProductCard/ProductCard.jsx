@@ -99,7 +99,17 @@ const ProductCard = ({ data, wishlist, wishId, deleteMount }) => {
                 {data.price} {data?.price_type?.price_t}
               </span>
             </div>
-            <div className="cards-item-info__bottom"></div>
+          </div>
+          <div
+            className="cards-item-info__bottom"
+            style={{
+              paddingLeft: "1rem",
+            }}
+          >
+            <div className="advert-item-info__bottom">
+              <p>{"address" in data ? data.address : data.web_address_title}</p>
+              {/* <span>22:52</span> */}
+            </div>
           </div>
         </div>
       </Link>
