@@ -29,7 +29,7 @@ const UserSingle = ({ data, id }) => {
   useEffect(() => {
     getData("master/api/v1/maklers/popular", setMasterData);
   }, [id]);
-
+  console.log(data);
   return (
     <>
       {data ? (
@@ -92,8 +92,8 @@ const UserSingle = ({ data, id }) => {
                 <div className="app__worker-info--wrapper">
                   <div className="app__worker-info">
                     <h1>
-                      {"telNumber" in data
-                        ? data?.telNumber
+                      {"phone" in data
+                        ? data?.phone
                         : "phoneNumber" in data
                         ? data?.phoneNumber
                         : ""}
@@ -102,8 +102,8 @@ const UserSingle = ({ data, id }) => {
                   </div>
                   <a
                     href={`tel:${
-                      "telNumber" in data
-                        ? data.telNumber
+                      "phone" in data
+                        ? data.phone
                         : "phoneNumber" in data
                         ? data.phoneNumber
                         : ""
@@ -125,41 +125,46 @@ const UserSingle = ({ data, id }) => {
                 </p>
               </div>
             </div>
-            <section
-              className="slider-s"
-              style={{
-                margin: "1.5rem 0",
-              }}
-            >
-              <div className="container">
-                <div className="slider-body">
-                  <div
-                    className="slider__left"
-                    style={{
-                      position: "relative",
-                    }}
-                  >
-                    <div className="swiper">
-                      {data?.images.length && (
-                        <SliderContent imgUrl={data?.images} />
-                      )}
+            {locat.pathname.includes("master") ? (
+              <section
+                className="slider-s"
+                style={{
+                  margin: "1.5rem 0",
+                }}
+              >
+                <div className="container">
+                  <div className="slider-body">
+                    <div
+                      className="slider__left"
+                      style={{
+                        position: "relative",
+                      }}
+                    >
+                      <div className="swiper">
+                        {data?.images.length && (
+                          <SliderContent imgUrl={data?.images} />
+                        )}
+                      </div>
+                    </div>
+                    <div className="slider__right">
+                      <ul>
+                        {data?.images.length &&
+                          data?.images
+                            ?.filter((_, i) => i <= 3)
+                            ?.map((item, i) => (
+                              <li key={i}>
+                                <img src={item.images} alt="Картинка 1" />
+                              </li>
+                            ))}
+                      </ul>
                     </div>
                   </div>
-                  <div className="slider__right">
-                    <ul>
-                      {data?.images.length &&
-                        data?.images
-                          ?.filter((_, i) => i <= 3)
-                          ?.map((item, i) => (
-                            <li key={i}>
-                              <img src={item.images} alt="Картинка 1" />
-                            </li>
-                          ))}
-                    </ul>
-                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            ) : (
+              ""
+            )}
+
             <div
               className=""
               style={{
