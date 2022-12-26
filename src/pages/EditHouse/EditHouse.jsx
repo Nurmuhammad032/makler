@@ -234,8 +234,8 @@ const EditHouse = () => {
     formData.append("property_type", form.property_type);
     formData.append("object", form.object);
     formData.append("web_address_title", searchRef.current?.value);
-    formData.append("web_address_latitude", initialState?.center[0]);
-    formData.append("web_address_longtitude", initialState?.center[1]);
+    formData.append("web_address_latitude", state?.center[0]);
+    formData.append("web_address_longtitude", state?.center[1]);
     formData.append("pm_general", form.pm_general);
     formData.append("pm_residential", form.pm_residential);
     formData.append("pm_kitchen", form.pm_kitchen);

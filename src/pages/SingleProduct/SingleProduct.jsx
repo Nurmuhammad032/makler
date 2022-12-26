@@ -201,6 +201,7 @@ const SingleProduct = () => {
                   }}
                 >
                   показать на карте
+                  {console.log(houseData)}
                 </button>
               </div>
               <h5 className="product-small-title">Рекомендуем похожие </h5>
