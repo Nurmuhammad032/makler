@@ -1,5 +1,5 @@
 import "./UserSingle.scss";
-import { ProductSingle, UserCard } from "../../components";
+import { ProductSingle, SliderContent, UserCard } from "../../components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL } from "../../requests/requests";
@@ -125,6 +125,41 @@ const UserSingle = ({ data, id }) => {
                 </p>
               </div>
             </div>
+            <section
+              className="slider-s"
+              style={{
+                margin: "1.5rem 0",
+              }}
+            >
+              <div className="container">
+                <div className="slider-body">
+                  <div
+                    className="slider__left"
+                    style={{
+                      position: "relative",
+                    }}
+                  >
+                    <div className="swiper">
+                      {data?.images.length && (
+                        <SliderContent imgUrl={data?.images} />
+                      )}
+                    </div>
+                  </div>
+                  <div className="slider__right">
+                    <ul>
+                      {data?.images.length &&
+                        data?.images
+                          ?.filter((_, i) => i <= 3)
+                          ?.map((item, i) => (
+                            <li key={i}>
+                              <img src={item.images} alt="Картинка 1" />
+                            </li>
+                          ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
             <div
               className=""
               style={{

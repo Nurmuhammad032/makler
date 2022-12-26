@@ -47,6 +47,8 @@ function getStyles(name, personName, theme) {
 
 export default function EditPage() {
   const theme = useTheme();
+  const [fileImage, setFileImage] = useState([]);
+  const [img, setImg] = useState([]);
   const { navigateToProfile } = useContext(ContextApp);
   const [personName, setPersonName] = React.useState([]);
   const [file, setFile] = useState();
@@ -158,6 +160,64 @@ export default function EditPage() {
     });
   };
 
+  const handleChange2 = (e) => {
+    const { files } = e.target;
+    setFileImage([...files]);
+    const validimg = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      validimg.push(file);
+    }
+    if (validimg.length) {
+      setImg(validimg);
+      return;
+    }
+    alert("Selected images are not of valid type!");
+  };
+
+  useEffect(() => {
+    const fileReaders = [];
+    let isCancel = false;
+    if (img?.length) {
+      const promises = img.map((file) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReaders.push(fileReader);
+          fileReader.onload = (e) => {
+            const { result } = e.target;
+            if (result) {
+              resolve(result);
+            }
+          };
+          fileReader.onabort = () => {
+            reject(new Error("File reading aborted"));
+          };
+          fileReader.onerror = () => {
+            reject(new Error("Failed to read file"));
+          };
+          fileReader.readAsDataURL(file);
+        });
+      });
+      Promise.all(promises)
+        .then((images) => {
+          if (!isCancel) {
+            setImg(images);
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [img]);
+
   const { form, changeHandler } = useForm({
     name: "",
     email: "",
@@ -172,6 +232,7 @@ export default function EditPage() {
     descriptions: "",
     experience: 0,
     serviceType: 1,
+    // uploaded_images: [],
   });
 
   const handeSubmit = (e) => {
@@ -193,6 +254,9 @@ export default function EditPage() {
     // );
     for (const fi of form.profession) {
       formData.append("profession", fi?.id);
+    }
+    for (const fi of fileImage) {
+      formData.append("uploaded_images", fi);
     }
     formData.append("descriptions", form.descriptions);
     formData.append("experience", form.experience);
@@ -383,6 +447,7 @@ export default function EditPage() {
               className="map"
               style={{
                 position: "relative",
+                marginBottom: "1.5rem",
               }}
             >
               <div className="map-info">
@@ -441,6 +506,34 @@ export default function EditPage() {
                   </Map>
                 </YMaps>
               </div>
+            </div>
+            <h5>Изображения объекта</h5>
+            <div className="image-upload mb-50">
+              <div className="image-outer">
+                <div className="image-outer-info">
+                  <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
+                  <p>Поддерживает: .jpg, .png, .jpeg</p>
+                </div>
+                <input
+                  type="file"
+                  name="uploaded_images"
+                  // onChange={changeHandler}
+                  onChange={(e) => handleChange2(e)}
+                  id="upload-images"
+                  accept="image/png, image/jpeg, image/jpg"
+                  multiple
+                />
+                <label htmlFor="upload-images">открыть</label>
+              </div>
+              <ul className="image-list" id="gallery">
+                {img.length
+                  ? img.map((im, i) => (
+                      <li key={i}>
+                        <img src={im} alt="house" />
+                      </li>
+                    ))
+                  : ""}
+              </ul>
             </div>
             <div
               style={{
