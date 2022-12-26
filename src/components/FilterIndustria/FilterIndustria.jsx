@@ -96,7 +96,7 @@ const FilterIndustria = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{profess2 ? profess2 : "---------"}</span>
+                <span>{profess2 ? profess2 : "для дома"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -140,7 +140,7 @@ const FilterIndustria = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{profess ? profess : "---------"}</span>
+                <span>{profess ? profess : "для кухни"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -176,7 +176,7 @@ const FilterIndustria = ({ change, value }) => {
             </li>
             <li className="nav-search_address">
               <label className="nav-label">Адрес</label>
-              <a href="#">
+              <a>
                 <svg className="svg-sprite-icon icon-fi_navigation w-16">
                   <use href={`${spirite}#fi_navigation`}></use>
                 </svg>

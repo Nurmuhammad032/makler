@@ -91,7 +91,7 @@ const FilterWorker = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{serviceTypeValue ? serviceTypeValue : "---------"}</span>
+                <span>{serviceTypeValue ? serviceTypeValue : "Ремонт"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -135,7 +135,7 @@ const FilterWorker = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{profess ? profess : "---------"}</span>
+                <span>{profess ? profess : "Инженер"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -171,7 +171,7 @@ const FilterWorker = ({ change, value }) => {
             </li>
             <li className="nav-search_address">
               <label className="nav-label">Адрес</label>
-              <a href="#">
+              <a>
                 <svg className="svg-sprite-icon icon-fi_navigation w-16">
                   <use href={`${spirite}#fi_navigation`}></use>
                 </svg>

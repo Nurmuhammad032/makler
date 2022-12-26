@@ -21,7 +21,7 @@ const Filter = ({ value, change, start }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{value.typeRoom ? value.typeRoom : "---------"}</span>
+                <span>{value.typeRoom ? value.typeRoom : "аpенда"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -107,7 +107,7 @@ const Filter = ({ value, change, start }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{print ? print : "---------"}</span>
+                <span>{print ? print : "Квартиру"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
@@ -201,7 +201,7 @@ const Filter = ({ value, change, start }) => {
             </li>
             <li className="nav-search_address">
               <label className="nav-label">Адрес</label>
-              <a href="#">
+              <a>
                 <svg className="svg-sprite-icon icon-fi_navigation w-16">
                   <use href={`${spirite}#fi_navigation`}></use>
                 </svg>
