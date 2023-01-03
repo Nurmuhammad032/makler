@@ -31,11 +31,11 @@ const UserCabinet = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-
+  // https://fathulla.tk/users/api/v1/user-products/2/
   useEffect(() => {
     let userToken = localStorage.getItem("access");
     axios
-      .get(`${baseURL}/users/api/v1/profile/${id}`, {
+      .get(`${baseURL}/users/api/v1/user-products/${id}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

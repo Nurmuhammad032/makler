@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import {
+  BannerCarousel,
   Categories,
   DownloadApp,
   EditPage,
@@ -45,13 +46,14 @@ const Home = () => {
 
   return (
     <>
-      <Filter
+      {/* <Filter
         value={form}
         change={changeHandler}
         start={setStart}
         setFocus={setFocus}
-      />
+      /> */}
       {/* {form.search.length ? <SearchResults data={searchData} loading={loading} /> : ""} */}
+      <BannerCarousel />
       <Categories />
       <Houses value={form} start={start} focus={focus} />
       <FooterMenu />

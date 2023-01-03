@@ -204,6 +204,23 @@ const SingleProduct = () => {
                   {console.log(houseData)}
                 </button>
               </div>
+
+              {houseData?.youtube_link ? (
+                <iframe
+                  style={{
+                    width: "100%",
+                  }}
+                  height="315"
+                  src={"https://www.youtube.com/watch?v=sJqb6-HRlzA"}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              ) : (
+                ""
+              )}
+
               <h5 className="product-small-title">Рекомендуем похожие </h5>
             </div>
           </div>

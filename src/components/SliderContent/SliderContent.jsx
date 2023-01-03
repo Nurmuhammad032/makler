@@ -2,6 +2,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import sprite from "../../assets/img/symbol/sprite.svg";
+import img from "../../assets/img/slider/1.png";
 // slick-arrow
 
 function CustomLeftArrow({ className, style, onClick }) {
@@ -62,7 +63,7 @@ const SliderContent = ({ imgUrl }) => {
           }}
         >
           <img
-            src={img.images}
+            src={img.images || img}
             alt={img}
             style={{
               height: "100%",

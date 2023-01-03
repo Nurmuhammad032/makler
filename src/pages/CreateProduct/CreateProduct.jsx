@@ -60,6 +60,7 @@ const CreateProduct = () => {
     phone_number: "+99895",
     how_sale: [1],
     isBookmarked: false,
+    youtube_link: "",
   });
 
   const postData = (data) => {
@@ -125,6 +126,7 @@ const CreateProduct = () => {
     // formData.append("amenities", form.amenities);
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
+    formData.append("youtube_link", form.youtube_link);
     formData.append("how_sale", form.how_sale);
     formData.append("draft", false);
     for (const fi of file) {
@@ -164,6 +166,7 @@ const CreateProduct = () => {
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
     formData.append("how_sale", form.how_sale);
+    formData.append("youtube_link", form.youtube_link);
     formData.append("draft", true);
     for (const fi of file) {
       formData.append("uploaded_images", fi);
@@ -314,6 +317,17 @@ const CreateProduct = () => {
                   onChange={changeHandler}
                   required
                 ></textarea>
+              </div>
+              <h5>Сылка на ютуб</h5>
+              <div className="form-input">
+                <input
+                  placeholder="пусто"
+                  id="link-product"
+                  type="text"
+                  name="youtube_link"
+                  onChange={changeHandler}
+                  required
+                />
               </div>
               <h5>Цена</h5>
               <div className="form-price">
