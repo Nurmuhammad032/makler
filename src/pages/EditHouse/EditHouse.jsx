@@ -44,8 +44,6 @@ const EditHouse = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  // console.log(editData);
-
   const [state, setState] = useState({ ...initialState });
   const [mapConstructor, setMapConstructor] = useState(null);
   const [file, setFile] = useState([]);
@@ -176,15 +174,6 @@ const EditHouse = () => {
       }
     });
   };
-  // useEffect(() => {
-  //   if (editData?.aminities?.length) {
-  //     setAminities((prev) => {
-  //       return [...prev, editData.amenities];
-  //     });
-  //   }
-  //   console.log(editData.amenities);
-  // }, [editData]);
-  console.log(aminities);
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -256,7 +245,6 @@ const EditHouse = () => {
     for (const aminit of aminities) {
       formData.append("amenities", aminit);
     }
-    console.log(aminities);
 
     postData(formData);
   };

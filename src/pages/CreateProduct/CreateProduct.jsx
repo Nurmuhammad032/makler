@@ -66,7 +66,6 @@ const CreateProduct = () => {
   const postData = (data) => {
     setLoading(true);
     const userToken = localStorage.getItem("access");
-    console.log(userToken);
 
     axios
       .post(
@@ -98,7 +97,6 @@ const CreateProduct = () => {
       }
     });
   };
-  console.log(state.center);
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();

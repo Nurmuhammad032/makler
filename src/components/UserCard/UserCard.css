@@ -1,21 +1,22 @@
 * {
   margin: 0;
   padding: 0;
-
 }
+
 .master-card {
-  padding-top: 20px;
-  padding-bottom: 40px;
+  /* padding-top: 20px; */
+  /* padding-bottom: 40px;
   padding-left: 20px;
-  padding-right: 20px;
+  padding-right: 20px; */
   width: 343px;
-  height: 318px;
+  /* height: 318px; */
   border-radius: 5px;
   background-color: #fff;
 }
 .user-card {
-  width: 300px;
-  height: 280px;
+  width: 100%;
+  padding: 0 1rem 1.5rem;
+  /* height: 280px; */
 }
 .user-name {
   font-size: 15px;

@@ -95,7 +95,6 @@ const Houses = ({ value, start, focus }) => {
       }
     }
   }, [sort]);
-  // console.log(sort);
 
   const handleNext = () => {
     setUrl(nextUrl);
@@ -112,8 +111,6 @@ const Houses = ({ value, start, focus }) => {
       setSearchLimit((prev) => (prev += 8));
     }
   };
-
-  console.log(displayData);
 
   return (
     <section className="cards-s">

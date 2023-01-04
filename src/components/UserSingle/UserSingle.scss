@@ -1,19 +1,19 @@
 @import "../../styles/modules.scss";
 
-.master-card {
-  padding-top: 20px;
-  padding-bottom: 40px;
-  padding-left: 20px;
-  padding-right: 20px;
-  width: 343px;
-  height: 318px;
-  border-radius: 5px;
-  background-color: #fff;
-}
-.user-card {
-  width: 300px;
-  height: 280px;
-}
+// .master-card {
+//   padding-top: 20px;
+//   padding-bottom: 40px;
+//   padding-left: 20px;
+//   padding-right: 20px;
+//   width: 343px;
+//   height: 318px;
+//   border-radius: 5px;
+//   background-color: #fff;
+// }
+// .user-card {
+//   width: 300px;
+//   height: 280px;
+// }
 .user-name {
   font-size: 15px;
   color: #111;
@@ -66,11 +66,11 @@
     justify-content: space-between;
     border-radius: 3px;
     width: 70%;
-    
+
     @include laptop {
       width: 60%;
     }
-    
+
     @include tablet {
       width: 100%;
     }

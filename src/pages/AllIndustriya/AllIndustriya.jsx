@@ -28,7 +28,6 @@ const AllIndustriya = () => {
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, []);
-  console.log(data);
 
   useMemo(() => {
     setLoading(true);

@@ -27,22 +27,29 @@ const UserCabinet = () => {
   const [maklers, setMaklers] = useState([]);
   const [filtered, setFiltered] = useState();
   const [loading, setLoading] = useState(true);
+  const [userOwnData, setUserOwnData] = useState([]);
   const [draft, setDraft] = useState(null);
   const navigate = useNavigate();
 
   const { id } = useParams();
   // https://fathulla.tk/users/api/v1/user-products/2/
-  useEffect(() => {
+  const getData = (setData, url) => {
     let userToken = localStorage.getItem("access");
     axios
-      .get(`${baseURL}/users/api/v1/user-products/${id}`, {
+      .get(`${baseURL}/users/api/v1/${url}/${id}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then((data) => getUserData(data.data))
+      .then((data) => setData(data.data))
       .catch(() => navigate("/"))
       .finally(() => setLoading(false));
+  };
+  useEffect(() => {
+    getData(getUserData, "user-products");
+  }, []);
+  useEffect(() => {
+    getData(setUserOwnData, "profile");
   }, []);
 
   useEffect(() => {
@@ -168,11 +175,11 @@ const UserCabinet = () => {
             id="settings"
           >
             <UserSettings
-              img={userData?.avatar}
-              name={userData?.first_name}
-              number={userData?.phone_number}
-              email={userData?.email}
-              password={userData?.password}
+              img={userOwnData?.avatar}
+              name={userOwnData?.first_name}
+              number={userOwnData?.phone_number}
+              email={userOwnData?.email}
+              password={userOwnData?.password}
             />
           </section>
           {/* <section className="chat-s d-none" id="chat">
@@ -338,9 +345,9 @@ const UserCabinet = () => {
                 </picture>
               </div>
               <div className="cabinet-profile-info">
-                <h4>Name: {userData?.first_name}</h4>
-                <p>id: {userData?.id}</p>
-                <p>Email: {userData?.email}</p>
+                <h4>Name: {userOwnData?.first_name}</h4>
+                <p>id: {userOwnData?.id}</p>
+                <p>Email: {userOwnData?.email}</p>
               </div>
             </div>
             <ul className="cabinet-nav-list">

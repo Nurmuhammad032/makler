@@ -16,6 +16,7 @@ import ContextApp from "../../context/context";
 import { baseURL } from "../../requests/requests";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import Loading from "../../components/Loading/Loading";
+import Player from "video-react/lib/components/Player";
 
 const img = [img1, img1, img1, img1];
 
@@ -25,6 +26,14 @@ const SingleProduct = () => {
   const [recomendLoading, setRecomendLoading] = useState(false);
   const [recomdend, setRecomdend] = useState([]);
   const { houseData, getHouseData } = useContext(ContextApp);
+
+  const slice = (str) => {
+    return str.substr(32);
+  };
+
+  // useEffect(() => {
+  //   slice("https://www.youtube.com/wach?v=zJwbZX4i-N4");
+  // }, []);
 
   useEffect(() => {
     setLaoding(true);
@@ -201,22 +210,25 @@ const SingleProduct = () => {
                   }}
                 >
                   показать на карте
-                  {console.log(houseData)}
                 </button>
               </div>
 
               {houseData?.youtube_link ? (
-                <iframe
+                // <Player>
+                //   <source src={houseData?.youtube_link} />
+                // </Player>
+                // <video src={houseData?.youtube_link}></video>
+                <embed
                   style={{
+                    height: "15rem",
                     width: "100%",
+                    objectFit: "cover",
+                    margin: "0rem 0 2rem",
                   }}
-                  height="315"
-                  src={"https://www.youtube.com/watch?v=sJqb6-HRlzA"}
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
+                  src={`https://www.youtube.com/embed/${slice(
+                    houseData?.youtube_link
+                  )}`}
+                />
               ) : (
                 ""
               )}

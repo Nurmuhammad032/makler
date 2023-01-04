@@ -215,7 +215,6 @@ export default function EditMaster() {
       serviceType: editData?.serviceType,
     });
   }, [editData]);
-  // console.log(form);
 
   const handeSubmit = (e) => {
     e.preventDefault();

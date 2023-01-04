@@ -94,6 +94,7 @@ body {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  align-items: center;
 
   @include laptop {
     justify-content: center;

@@ -84,6 +84,15 @@ const Card = styled.div`
   @media (max-width: 768px) {
     height: 358px;
   }
+  @media (max-width: 400px) {
+    height: 250px;
+  }
+  .slick-track {
+    height: 100%;
+  }
+  div {
+    height: 100%;
+  }
   .slick-slider {
     height: 100%;
     /* max-height: 300px; */

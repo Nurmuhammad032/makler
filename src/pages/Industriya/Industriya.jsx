@@ -15,7 +15,6 @@ const Industriya = () => {
       .catch((err) => console.log(err))
       .finally(() => setLaoding(false));
   }, [id]);
-  // console.log(data);
 
   return (
     <section className="content">

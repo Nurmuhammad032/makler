@@ -13,17 +13,18 @@ const UserCard = ({ data }) => {
         }}
       >
         <div className="master-card">
+          <img
+            src={"avatar" in data ? data.avatar : data.image}
+            alt="User image"
+            // width={"40px"}
+            // height="40px"
+            style={{
+              objectFit: "cover",
+              width: "100%",
+              borderRadius: "5px 5px 0 0",
+            }}
+          />
           <div className="user-card">
-            <img
-              src={"avatar" in data ? data.avatar : data.image}
-              alt="User image"
-              width={"40px"}
-              height="40px"
-              style={{
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
             <div className="user-info">
               <h4 className="user-name">{data.name}</h4>
               <p className="user-level">Мастер, {data.experience} года опыта</p>

@@ -22,14 +22,12 @@ const UserSingle = ({ data, id }) => {
       })
       .finally(() => setIsLoading(false));
   };
-  console.log(storeData);
   useEffect(() => {
     getData("store2/api/v1/store/popular", setStoreData);
   }, [id]);
   useEffect(() => {
     getData("master/api/v1/maklers/popular", setMasterData);
   }, [id]);
-  console.log(data);
   return (
     <>
       {data ? (
