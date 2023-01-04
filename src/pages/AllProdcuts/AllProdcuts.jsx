@@ -2,7 +2,6 @@ import { Filter, Houses } from "../../components";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import useForm from "../../hooks/useForm";
 import { useState } from "react";
-import { formatMuiErrorMessage } from "@mui/utils";
 
 const AllProducts = () => {
   const { form, changeHandler } = useForm({

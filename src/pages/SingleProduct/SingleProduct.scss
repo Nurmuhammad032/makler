@@ -1,5 +1,26 @@
 @import "../../styles/modules.scss";
 
+.youtube-video {
+  height: 15rem;
+  width: 100%;
+  object-fit: cover;
+  margin: 0rem 0 2rem;
+  padding-left: 1rem;
+
+  &.phone-video {
+    @media screen and (min-width: 1100px) {
+      display: none;
+    }
+  }
+  &.desktop-video {
+    // display: none;
+
+    @media screen and (max-width: 1099px) {
+      display: none;
+    }
+  }
+}
+
 .slider {
   &-s {
     margin-bottom: rem(40px);
@@ -134,10 +155,11 @@
 
 .info-product {
   display: flex;
+  // justify-content: space-between;
   margin-top: rem(41px);
-  @include laptop {
-    flex-wrap: wrap;
-  }
+  // @include laptop {
+  // flex-wrap: wrap;
+  // }
   &-s {
     margin-top: rem(40px);
     .product-info-title {

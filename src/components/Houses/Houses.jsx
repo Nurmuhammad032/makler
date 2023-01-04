@@ -1,5 +1,4 @@
-import { useContext, useMemo, useState } from "react";
-import ContextApp from "../../context/context";
+import { useMemo, useState } from "react";
 
 import sprite from "../../assets/img/symbol/sprite.svg";
 import ProductCard from "../ProductCard/ProductCard";
@@ -71,12 +70,12 @@ const Houses = ({ value, start, focus }) => {
     init();
   }, []);
 
-  // useMemo(() => {
-  //   init2();
-  // }, [url, typeRoom, room, building, start]);
-  // useMemo(() => {
-  //   init3();
-  // }, [sort]);
+  useMemo(() => {
+    init2();
+  }, [url, typeRoom, room, building, start]);
+  useMemo(() => {
+    init3();
+  }, [sort]);
 
   useEffect(() => {
     if (displayData.length) {

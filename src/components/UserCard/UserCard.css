@@ -13,11 +13,12 @@
   border-radius: 5px;
   background-color: #fff;
 }
-.user-card {
+.main-card .user-card {
   width: 100%;
   padding: 0 1rem 1.5rem;
-  /* height: 280px; */
+  height: auto !important;
 }
+
 .user-name {
   font-size: 15px;
   color: #111;
