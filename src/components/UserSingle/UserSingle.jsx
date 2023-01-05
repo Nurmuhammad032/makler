@@ -59,7 +59,7 @@ const UserSingle = ({ data, id }) => {
                       {"experience" in data
                         ? `Мастер, ${data.experience} года опыта`
                         : "use_for" in data
-                        ? data.use_for.title
+                        ? data.use_for?.title
                         : ""}
                     </p>
                   </div>

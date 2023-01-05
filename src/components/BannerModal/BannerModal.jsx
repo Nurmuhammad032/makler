@@ -5,7 +5,7 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 const BannerModal = ({ setOpen }) => {
   return (
     <>
-      <BgofBanner />
+      <BgofBanner onClick={() => setOpen(false)} />
       <Wrapper>
         <SvgWrapper>
           <svg

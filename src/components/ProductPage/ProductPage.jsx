@@ -3,7 +3,6 @@ import "./ProductPage.css";
 import logo from "../../assets/img/icon.svg";
 import freeze from "../../assets/img/freeze.png";
 import { Link } from "react-router-dom";
-import { height } from "@mui/system";
 
 export default function ProductCard({ data }) {
   return (
@@ -26,7 +25,7 @@ export default function ProductCard({ data }) {
               borderRadius: "50%",
             }}
           />
-          <span className="product-title">{data.brand}</span>
+          <span className="product-title">{data?.brand_title?.title}</span>
         </div>
         <div className="product-main">
           <img
@@ -52,7 +51,7 @@ export default function ProductCard({ data }) {
             >
               {data.name}
             </p>
-            <em className="product-type">{data.use_for.title}</em>
+            <em className="product-type">{data.use_for?.title}</em>
           </div>
           <p className="product-price">{data.price}$</p>
         </div>

@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { LoadingPost } from "../../components";
 import { useContext } from "react";
 import ContextApp from "../../context/context";
+import { baseURL } from "../../requests/requests";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -67,8 +68,11 @@ export default function CreateIndustriya() {
   const { navigateToProfile } = useContext(ContextApp);
   const [loading, setLoading] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
+  const [brandText, setBrandText] = useState("");
   const [navActive, setNavActive] = useState(false);
+  const [navActive2, setNavActive2] = useState(false);
   const [personName, setPersonName] = React.useState([]);
+  const [brandData, setBrandData] = useState([]);
   const [file, setFile] = useState();
   const [imgUrl, setImgUrl] = useState({
     brand: null,
@@ -133,6 +137,16 @@ export default function CreateIndustriya() {
   };
 
   useEffect(() => {
+    axios
+      .get(`${baseURL}/store2/api/v1/store/brands`)
+      .then((res) => {
+        setBrandData(res.data.results);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  // console.log(brandData);
+
+  useEffect(() => {
     if (mapConstructor) {
       new mapConstructor.SuggestView(searchRef.current).events.add(
         "select",
@@ -187,6 +201,7 @@ export default function CreateIndustriya() {
     use_for: "",
     phoneNumber: 0,
     email: "",
+    brand_title: "",
     how_store_service: 1,
   });
 
@@ -209,6 +224,7 @@ export default function CreateIndustriya() {
     formData.append("phoneNumber", form.phoneNumber);
     formData.append("address", searchRef.current?.value);
     formData.append("email", form.email);
+    formData.append("brand_title", form.brand_title);
     formData.append("how_store_service", form.how_store_service);
     for (const fi of form.store_amenitites) {
       formData.append("store_amenitites", fi.value);
@@ -310,7 +326,12 @@ export default function CreateIndustriya() {
                     placeholder="info@gmail.com"
                   />
                 </label>
-                <label htmlFor="">
+                <label
+                  htmlFor=""
+                  style={{
+                    marginTop: "1rem",
+                  }}
+                >
                   <span>Номер телефона | Ваше логин</span>
                   <input
                     name={"phoneNumber"}
@@ -319,32 +340,99 @@ export default function CreateIndustriya() {
                     placeholder="+998 90 123-45-67"
                   />
                 </label>
-                <label htmlFor="">
-                  <span>brand name</span>
-                  <input
-                    name={"brand"}
-                    type="text"
-                    placeholder="пусто"
-                    onChange={changeHandler}
-                  />
-                </label>
-                <label htmlFor="">
-                  <span className="text__area">Краткое описание о себе</span>
-                  <textarea
-                    className="textarea"
-                    name="description"
-                    onChange={changeHandler}
-                    id=""
-                    placeholder="пусто"
-                  ></textarea>
-                </label>
               </div>
+              <label htmlFor="">
+                <span className="text__area">Краткое описание о себе</span>
+                <textarea
+                  style={{
+                    width: "100%",
+                  }}
+                  className="textarea"
+                  name="description"
+                  onChange={changeHandler}
+                  id=""
+                  placeholder="пусто"
+                ></textarea>
+              </label>
               <div
                 style={{
                   marginTop: "2rem",
                 }}
               >
-                <h5>Цена</h5>
+                <h5>Бранд</h5>
+                <div
+                  className="form-price"
+                  style={{
+                    display: "block",
+                  }}
+                >
+                  <div className="form-price-choose">
+                    <button
+                      className="choose-currency"
+                      type="button"
+                      id="select-currency"
+                      onClick={() => setNavActive2((prev) => !prev)}
+                    >
+                      <span>{brandText ? brandText : "------"}</span>
+                      <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
+                        <use href={`${sprite}#fi_chevron-down`}></use>
+                      </svg>
+                    </button>
+                    <div
+                      className={`nav-body-choose ${navActive2 && "active"}`}
+                      style={{
+                        width: "100%",
+                        left: 0,
+                        maxHeight: "10rem",
+                        overflow: "auto",
+                      }}
+                    >
+                      <ul
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {brandData?.map((item) => (
+                          <div
+                            key={item.id}
+                            style={{
+                              width: "100%",
+                            }}
+                          >
+                            <label
+                              style={{
+                                width: "100%",
+                              }}
+                              htmlFor={`brand${item.id}`}
+                              className={`labelcha ${
+                                item.id === Number(form.brand_title)
+                                  ? "active"
+                                  : ""
+                              }`}
+                            >
+                              {item.title}
+                            </label>
+                            <input
+                              type="text"
+                              id={`brand${item.id}`}
+                              name="brand_title"
+                              onClick={(e) => {
+                                changeHandler(e);
+                                setNavActive2(false);
+                                setBrandText(item.title);
+                              }}
+                              value={item.id}
+                              readOnly
+                              style={{
+                                display: "none",
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
                 <div className="form-price">
                   <input
                     type="number"
