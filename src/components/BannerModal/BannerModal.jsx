@@ -31,6 +31,11 @@ const Wrapper = styled.div`
   transform: translate(-50%, -50%);
   max-width: 40rem;
   z-index: 100;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    padding: 0 1rem;
+  }
 `;
 
 const ImageWrapper = styled.div`
