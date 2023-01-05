@@ -68,6 +68,22 @@ body {
   border-radius: 50%;
 }
 
+.brand_select::-webkit-scrollbar {
+  width: 0.4rem;
+  background-color: #aaa;
+}
+
+.brand_select {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: 0.4rem; /* Firefox */
+  background-color: #aaa;
+}
+
+.brand_select::-webkit-scrollbar-thumb {
+  background-color: #0f1826;
+  border-radius: 5px;
+}
+
 .slick-prev {
   transform: rotate(180deg) translateY(0.7rem) !important;
   right: 2.8rem !important;

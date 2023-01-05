@@ -2,34 +2,24 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import spirite from "../../assets/img/symbol/sprite.svg";
+import { baseURL } from "../../requests/requests";
 
 const FilterIndustria = ({ change, value }) => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
   const [profess, setProfess] = useState("");
   const [profess2, setProfess2] = useState("");
+  const [profess3, setProfess3] = useState("");
   const [option1, setOption1] = useState([]);
   const [option2, setOption2] = useState([]);
-  // const option1 = [
-  //   {
-  //     label: "Стиральная машины",
-  //     value: 1,
-  //   },
-  //   {
-  //     label: "Холодильники",
-  //     value: 2,
-  //   },
-  //   {
-  //     label: "Микроволновки",
-  //     value: 3,
-  //   },
-  // ];
+  const [option3, setOption3] = useState([]);
 
   useEffect(() => {
     axios
       .get("https://fathulla.tk/store2/api/v1/store/how_store")
       .then((res) => {
-        setOption2(res.data.results);
+        setOption2(res.data.results?.sort((a, b) => a.id - b.id));
       })
       .catch((err) => {
         console.log(err.message);
@@ -40,13 +30,30 @@ const FilterIndustria = ({ change, value }) => {
     axios
       .get("https://fathulla.tk/store2/api/v1/store/use_for")
       .then((res) => {
-        setOption1(res.data.results);
+        setOption1(res.data.results?.sort((a, b) => a.id - b.id));
       })
       .catch((err) => {
         console.log(err.message);
         toast.error(err.message);
       });
   }, []);
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/store2/api/v1/store/brands`)
+      .then((res) => {
+        setOption3(res.data.results?.sort((a, b) => a.id - b.id));
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error(err.message);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   setOption3((prev) => {
+  //     prev?.sort((a, b) => a.id - b.id);
+  //   });
+  // }, [option3]);
   // useEffect(() => {
   //   axios
   //     .get(`https://fathulla.tk/store2/api/v1/store/how_store`)
@@ -73,7 +80,7 @@ const FilterIndustria = ({ change, value }) => {
   //     value: 3,
   //   },
   // ];
-  const { useFor, how_store_service } = value;
+  const { useFor, how_store_service, brand_title } = value;
 
   useEffect(() => {
     setProfess(option1[useFor - 1]?.title);
@@ -81,6 +88,11 @@ const FilterIndustria = ({ change, value }) => {
   useEffect(() => {
     setProfess2(option2[how_store_service - 1]?.title);
   }, [how_store_service]);
+  useEffect(() => {
+    setProfess3(option3[brand_title - 1]?.title);
+  }, [brand_title]);
+  console.log(brand_title);
+  console.log(option3);
   return (
     <section className="main-s">
       <div className="nav-search">
@@ -164,6 +176,58 @@ const FilterIndustria = ({ change, value }) => {
                           onClick={(e) => {
                             change(e);
                             setShow2(false);
+                          }}
+                          onChange={change}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+            <li className="nav-search_type select-choose">
+              <label className="nav-label">Тип</label>
+              <a
+                className="choose-btn choose-btn-link"
+                id="choose-type"
+                onClick={() => setShow3((prev) => !prev)}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                <span>{profess3 ? profess3 : "Beko"}</span>
+                <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
+                  <use href={`${spirite}#fi_chevron-down`}></use>
+                </svg>
+              </a>
+              <div
+                className={`nav-body-choose ${
+                  show3 ? "active" : ""
+                } brand_select`}
+                style={{
+                  maxHeight: "15rem",
+                  overflowY: "auto",
+                }}
+              >
+                <ul>
+                  {option3?.map((item) => (
+                    <li key={item.id}>
+                      <label
+                        htmlFor={`brand_title${item.id}`}
+                        className={`btn btn-orange-light ${
+                          Number(brand_title) === item.id ? "active" : ""
+                        }`}
+                      >
+                        {item.title}
+                        <input
+                          type="text"
+                          id={`brand_title${item.id}`}
+                          name="brand_title"
+                          value={item.id}
+                          onClick={(e) => {
+                            change(e);
+                            setShow3(false);
                           }}
                           onChange={change}
                           style={{ display: "none" }}

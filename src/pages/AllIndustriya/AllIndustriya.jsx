@@ -18,9 +18,10 @@ const AllIndustriya = () => {
     useFor: "",
     search: "",
     how_store_service: "",
+    brand_title: "",
   });
 
-  const { search, useFor, how_store_service } = form;
+  const { search, useFor, how_store_service, brand_title } = form;
   useEffect(() => {
     axios
       .get(`${baseURL}/store2/api/v1/store/`)
@@ -36,12 +37,13 @@ const AllIndustriya = () => {
         params: {
           use_for: useFor,
           how_store_service,
+          brand_title,
         },
       })
       .then((data) => setData(data.data.results))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, [useFor, how_store_service]);
+  }, [useFor, how_store_service, brand_title]);
 
   useEffect(() => {
     setLoading(true);
