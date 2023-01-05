@@ -32,7 +32,7 @@ export default function ProductCard({ data }) {
             src={data?.image ? data.image : freeze}
             alt="freeze"
             style={{
-              maxWidth: "340px",
+              // maxWidth: "340px",
               maxHeight: "237px",
               width: "100%",
               height: "100%",
