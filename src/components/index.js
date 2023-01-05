@@ -18,3 +18,4 @@ export { default as LoadingPost } from "./LoadingPost/LoadingPost";
 export { default as FilterIndustria } from "./FilterIndustria/FilterIndustria";
 export { default as ScrollTop } from "./ScrollTop/ScrollTop";
 export { default as BannerCarousel } from "./BannerCarousel/BannerCarousel";
+export { default as BannerModal } from "./BannerModal/BannerModal";

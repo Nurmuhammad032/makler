@@ -15,10 +15,8 @@ import { useContext } from "react";
 import ContextApp from "../../context/context";
 import { baseURL } from "../../requests/requests";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import Loading from "../../components/Loading/Loading";
-import Player from "video-react/lib/components/Player";
 
-const img = [img1, img1, img1, img1];
+// const img = [img1, img1, img1, img1];
 
 const SingleProduct = () => {
   const { id } = useParams();

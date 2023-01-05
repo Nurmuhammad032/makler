@@ -5,7 +5,14 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { EditPage, Footer, LoginModal, Navbar, ScrollTop } from "./components";
+import {
+  BannerModal,
+  EditPage,
+  Footer,
+  LoginModal,
+  Navbar,
+  ScrollTop,
+} from "./components";
 import ContextApp, { ContextProvider } from "./context/context";
 import ProtectedRoute from "./helpers/ProtectedRoute";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,6 +46,7 @@ const CabinetPage = () => {
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
+  const [bannerModal, setBannerModal] = useState(false);
   const { openLoginModal } = useContext(ContextApp);
   useEffect(() => {
     let access = localStorage.getItem("access");
@@ -49,6 +57,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setBannerModal(true);
+    }, 4000);
+  }, []);
+
   return (
     <>
       <div className="wrapper">
@@ -56,6 +70,7 @@ function App() {
         <ScrollTop />
         <Navbar />
         {openLoginModal && <LoginModal />}
+        {bannerModal && <BannerModal setOpen={setBannerModal} />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
