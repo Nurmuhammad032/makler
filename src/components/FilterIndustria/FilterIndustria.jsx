@@ -187,7 +187,7 @@ const FilterIndustria = ({ change, value }) => {
               </div>
             </li>
             <li className="nav-search_type select-choose">
-              <label className="nav-label">Тип</label>
+              <label className="nav-label">Бренд</label>
               <a
                 className="choose-btn choose-btn-link"
                 id="choose-type"
@@ -196,7 +196,7 @@ const FilterIndustria = ({ change, value }) => {
                   cursor: "pointer",
                 }}
               >
-                <span>{profess3 ? profess3 : "Beko"}</span>
+                <span>{profess3 ? profess3 : "Samsung"}</span>
                 <svg className="svg-sprite-icon icon-fi_chevron-down w-12">
                   <use href={`${spirite}#fi_chevron-down`}></use>
                 </svg>
