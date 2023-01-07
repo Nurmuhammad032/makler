@@ -313,7 +313,7 @@ export default function EditMebel() {
     formData.append("price_type", Number(form.price_type));
     // formData.append("image", img.machineImg);
     // formData.append("brand_image", img.brandImg);
-    formData.append("long_descriptions", form.descriptions);
+    formData.append("long_descriptions", form.long_descriptions);
     formData.append("short_descriptions", form.short_descriptions);
     // formData.append(
     //   "store_amenitites",
