@@ -63,37 +63,37 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function CreateIndustriya() {
+export default function CreateMebel() {
   const theme = useTheme();
   const { navigateToProfile } = useContext(ContextApp);
   const [loading, setLoading] = useState(false);
   const [priceText, setPriceText] = useState("y.e");
-  const [brandText, setBrandText] = useState("");
+  const [categoryText, setCategoryText] = useState("");
   const [navActive, setNavActive] = useState(false);
   const [navActive2, setNavActive2] = useState(false);
   const [personName, setPersonName] = React.useState([]);
-  const [brandData, setBrandData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
   const [file, setFile] = useState();
   const [imgUrl, setImgUrl] = useState({
     brand: null,
     view: null,
   });
 
-  const fileHandle = (file, name) => {
-    const img = file;
-    setFile(img);
-    let reader = new FileReader();
-    reader.readAsDataURL(img);
+  // const fileHandle = (file, name) => {
+  //   const img = file;
+  //   // setFile(img);
+  //   let reader = new FileReader();
+  //   reader.readAsDataURL(img);
 
-    reader.onloadend = function () {
-      setImgUrl((prev) => {
-        return {
-          ...prev,
-          [name]: reader.result,
-        };
-      });
-    };
-  };
+  //   reader.onloadend = function () {
+  //     setImgUrl((prev) => {
+  //       return {
+  //         ...prev,
+  //         [name]: reader.result,
+  //       };
+  //     });
+  //   };
+  // };
 
   const handleChange = (event) => {
     const {
@@ -138,13 +138,12 @@ export default function CreateIndustriya() {
 
   useEffect(() => {
     axios
-      .get(`${baseURL}/store2/api/v1/store/brands`)
+      .get(`${baseURL}/mebel/api/v1/mebel-categories/`)
       .then((res) => {
-        setBrandData(res.data.results);
+        setCategoryData(res.data.results);
       })
       .catch((err) => console.log(err));
   }, []);
-  // console.log(brandData);
 
   useEffect(() => {
     if (mapConstructor) {
@@ -176,69 +175,117 @@ export default function CreateIndustriya() {
     });
   };
 
-  const [img, setImg] = useState({
-    brandImg: null,
-    machineImg: null,
-  });
-  const router = useNavigate();
+  const [img, setImg] = useState([]);
+  // const router = useNavigate();
 
-  const imgHandle = (e) => {
-    setImg((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.files[0],
-      };
-    });
+  const imgHandleChange = (e) => {
+    const { files } = e.target;
+    setFile([...files]);
+    const validimg = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      validimg.push(file);
+    }
+    if (validimg.length) {
+      setImg(validimg);
+      return;
+    }
+    alert("Selected images are not of valid type!");
   };
 
+  useEffect(() => {
+    const fileReaders = [];
+    let isCancel = false;
+    if (img?.length) {
+      const promises = img.map((file) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReaders.push(fileReader);
+          fileReader.onload = (e) => {
+            const { result } = e.target;
+            if (result) {
+              resolve(result);
+            }
+          };
+          fileReader.onabort = () => {
+            reject(new Error("File reading aborted"));
+          };
+          fileReader.onerror = () => {
+            reject(new Error("Failed to read file"));
+          };
+          fileReader.readAsDataURL(file);
+        });
+      });
+      Promise.all(promises)
+        .then((images) => {
+          if (!isCancel) {
+            setImg(images);
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [img]);
+
   const { form, changeHandler } = useForm({
-    name: "",
-    description: "",
+    title: "",
+    descriptions: "",
+    short_descriptions: "",
     price_type: 1,
-    store_amenitites: [],
-    brand: "",
+    // store_amenitites: [],
+    category: "",
     price: 0,
-    use_for: "",
-    phoneNumber: 0,
-    email: "",
-    brand_title: "",
-    how_store_service: 1,
+    // use_for: "",
+    // phoneNumber: 0,
+    // email: "",
+    // brand_title: "",
+    // how_store_service: 1,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
-    formData.append("name", form.name);
+    formData.append("title", form.title);
     formData.append("price_type", Number(form.price_type));
-    formData.append("image", img.machineImg);
-    formData.append("brand_image", img.brandImg);
-    formData.append("description", form.description);
-    // formData.append(
-    //   "store_amenitites",
-    //   form.store_amenitites.map((data) => data.value)
-    // );
-    formData.append("brand", form.brand);
+    // formData.append("image", img.machineImg);
+    // formData.append("brand_image", img.brandImg);
+    formData.append("long_descriptions", form.descriptions);
+    formData.append("short_descriptions", form.short_descriptions);
     formData.append("price", form.price);
-    formData.append("use_for", form.use_for);
-    formData.append("phoneNumber", form.phoneNumber);
-    formData.append("address", searchRef.current?.value);
-    formData.append("email", form.email);
-    formData.append("brand_title", form.brand_title);
-    formData.append("how_store_service", form.how_store_service);
-    for (const fi of form.store_amenitites) {
-      formData.append("store_amenitites", fi.value);
+    formData.append("category", form.category);
+    formData.append("phone_number", form.phoneNumber);
+    formData.append("web_address_title", searchRef.current?.value);
+    formData.append("web_address_latitude", state?.center[0]);
+    formData.append("web_address_longtitude", state?.center[1]);
+    // formData.append("email", form.email);
+    // formData.append("brand_title", form.brand_title);
+    // formData.append("how_store_service", form.how_store_service);
+    // for (const fi of form.store_amenitites) {
+    // formData.append("store_amenitites", fi.value);
+    // }
+    for (const fi of file) {
+      formData.append("uploaded_images", fi);
     }
 
     const userToken = localStorage.getItem("access");
 
     axios
-      .post("https://fathulla.tk/store2/api/v1/store/create/", formData, {
+      .post("https://fathulla.tk/mebel/api/v1/mebels/create/", formData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       })
-      .then((res) => {
+      .then(() => {
         toast.success("Успешно!");
         navigateToProfile();
       })
@@ -256,7 +303,7 @@ export default function CreateIndustriya() {
         <div className="create-product edit-page">
           <form className="create-product__left" onSubmit={handleSubmit}>
             <h1 className="edit__card__title">
-              Регистрируйтес как мастер, получите работы
+              Регистрируйтес как мебель, получите работы
             </h1>
             <p className="edit__card__text">
               Объявление будет доступно на{" "}
@@ -265,7 +312,7 @@ export default function CreateIndustriya() {
               </a>{" "}
               и в наших мобильных приложениях
             </p>
-            <div className="card__header">
+            {/* <div className="card__header">
               <img
                 className="avatar__img"
                 src={imgUrl.brand ? imgUrl.brand : avatar_image}
@@ -304,20 +351,25 @@ export default function CreateIndustriya() {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
             <div className="editpage__input">
-              <div className="form__input">
+              <div
+                className="form__input"
+                // style={{
+                //   alignItems: "center",
+                // }}
+              >
                 <label htmlFor="">
-                  <span>Названия товара</span>
+                  <span>Мебельные названия</span>
                   <input
-                    name={"name"}
+                    name={"title"}
                     onChange={changeHandler}
                     id="name"
                     type={"text"}
-                    placeholder="Стиральная машина"
+                    placeholder=""
                   />
                 </label>
-                <label id="email" htmlFor="">
+                {/* <label id="email" htmlFor="">
                   <span>Электронная почта</span>
                   <input
                     name={"email"}
@@ -325,13 +377,8 @@ export default function CreateIndustriya() {
                     type={"email"}
                     placeholder="info@gmail.com"
                   />
-                </label>
-                <label
-                  htmlFor=""
-                  style={{
-                    marginTop: "1rem",
-                  }}
-                >
+                </label> */}
+                <label htmlFor="">
                   <span>Номер телефона | Ваше логин</span>
                   <input
                     name={"phoneNumber"}
@@ -342,13 +389,26 @@ export default function CreateIndustriya() {
                 </label>
               </div>
               <label htmlFor="">
+                <span className="text__area">Краткое описание</span>
+                <textarea
+                  style={{
+                    width: "100%",
+                  }}
+                  className="textarea"
+                  name="descriptions"
+                  onChange={changeHandler}
+                  id=""
+                  placeholder="пусто"
+                ></textarea>
+              </label>
+              <label htmlFor="">
                 <span className="text__area">Краткое описание о себе</span>
                 <textarea
                   style={{
                     width: "100%",
                   }}
                   className="textarea"
-                  name="description"
+                  name="short_descriptions"
                   onChange={changeHandler}
                   id=""
                   placeholder="пусто"
@@ -373,7 +433,7 @@ export default function CreateIndustriya() {
                       id="select-currency"
                       onClick={() => setNavActive2((prev) => !prev)}
                     >
-                      <span>{brandText ? brandText : "------"}</span>
+                      <span>{categoryText ? categoryText : "------"}</span>
                       <svg className="svg-sprite-icon icon-fi_chevron-down fill-n w-12">
                         <use href={`${sprite}#fi_chevron-down`}></use>
                       </svg>
@@ -392,7 +452,7 @@ export default function CreateIndustriya() {
                           width: "100%",
                         }}
                       >
-                        {brandData?.map((item) => (
+                        {categoryData?.map((item) => (
                           <div
                             key={item.id}
                             style={{
@@ -403,9 +463,9 @@ export default function CreateIndustriya() {
                               style={{
                                 width: "100%",
                               }}
-                              htmlFor={`brand${item.id}`}
+                              htmlFor={`category${item.id}`}
                               className={`labelcha ${
-                                item.id === Number(form.brand_title)
+                                item.id === Number(form.category)
                                   ? "active"
                                   : ""
                               }`}
@@ -414,12 +474,12 @@ export default function CreateIndustriya() {
                             </label>
                             <input
                               type="text"
-                              id={`brand${item.id}`}
-                              name="brand_title"
+                              id={`category${item.id}`}
+                              name="category"
                               onClick={(e) => {
                                 changeHandler(e);
                                 setNavActive2(false);
-                                setBrandText(item.title);
+                                setCategoryText(item.title);
                               }}
                               value={item.id}
                               readOnly
@@ -494,7 +554,7 @@ export default function CreateIndustriya() {
                 </div>
               </div>
             </div>
-            <div className="second-card">
+            {/* <div className="second-card">
               <div className="second__card">
                 <h2 className="second__card__title">
                   Выберите раздел и специализацию *
@@ -518,10 +578,10 @@ export default function CreateIndustriya() {
                   }
                   renderValue={(selected) => (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                      {selected.map((value, i) => (
+                      {selected.map((value) => (
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
-                          key={i}
+                          key={value.value}
                           label={value.text}
                         />
                       ))}
@@ -529,9 +589,9 @@ export default function CreateIndustriya() {
                   )}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name, i) => (
+                  {names.map((name) => (
                     <MenuItem
-                      key={i}
+                      key={name.value}
                       value={name}
                       style={getStyles(name.value, personName, theme)}
                     >
@@ -540,7 +600,7 @@ export default function CreateIndustriya() {
                   ))}
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
             <h5>Расположение</h5>
             <div
               className="map"
@@ -586,20 +646,7 @@ export default function CreateIndustriya() {
                     onBoundsChange={handleBoundsChange}
                     instanceRef={mapRef}
                   >
-                    {/* <div
-                      style={{
-                        width: "1rem",
-                        height: "1rem",
-                        background: "#000",
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -100%)",
-                        zIndex: 3000,
-                      }}
-                    ></div> */}
                     <GeolocationControl {...geolocationOptions} />
-                    {/* <ZoomControl     /> */}
                     <Placemark geometry={state.center} />
                   </Map>
                 </YMaps>
@@ -623,8 +670,9 @@ export default function CreateIndustriya() {
                     name="machineImg"
                     // onChange={changeHandler}
                     onChange={(e) => {
-                      fileHandle(e.target.files[0], "view");
-                      imgHandle(e);
+                      // fileHandle(e.target.files[0], "view");
+                      // imgHandle(e);
+                      imgHandleChange(e);
                     }}
                     // onChange={(e) => handleChange(e)}
                     id="upload-images"
@@ -634,21 +682,17 @@ export default function CreateIndustriya() {
                   <label htmlFor="upload-images">открыть</label>
                 </div>
                 <ul className="image-list" id="gallery">
-                  {imgUrl.view && (
-                    <li>
-                      <img
-                        src={imgUrl.view}
-                        alt="house"
-                        style={{
-                          objectFit: "cover",
-                        }}
-                      />
-                    </li>
-                  )}
+                  {img.length
+                    ? img.map((im, i) => (
+                        <li key={i}>
+                          <img src={im} alt="house" />
+                        </li>
+                      ))
+                    : ""}
                 </ul>
               </div>
             </div>
-            <div
+            {/* <div
               style={{
                 marginTop: "2rem",
               }}
@@ -689,7 +733,7 @@ export default function CreateIndustriya() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
             <div className="checkbox">
               <input
                 className="checkbox__input"

@@ -139,14 +139,14 @@ const UserSingle = ({ data, id }) => {
                       }}
                     >
                       <div className="swiper">
-                        {data?.images.length && (
+                        {data?.images?.length && (
                           <SliderContent imgUrl={data?.images} />
                         )}
                       </div>
                     </div>
                     <div className="slider__right">
                       <ul>
-                        {data?.images.length &&
+                        {data?.images?.length &&
                           data?.images
                             ?.filter((_, i) => i <= 3)
                             ?.map((item, i) => (

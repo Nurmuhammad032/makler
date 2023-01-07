@@ -19,6 +19,9 @@ const UserContents = ({ data, content }) => {
       case "master":
         navigate(`/edit-master/${data.pk}`);
         break;
+      case "mebel":
+        navigate(`/edit-mebel/${data.id}`);
+        break;
       default:
         break;
     }
@@ -54,6 +57,9 @@ const UserContents = ({ data, content }) => {
         break;
       case "master":
         deleteData("https://fathulla.tk/master/api/v1/maklers/delete", data.pk);
+        break;
+      case "mebel":
+        deleteData("https://fathulla.tk/mebel/api/v1/mebels/delete", data.id);
         break;
       default:
         break;
@@ -109,36 +115,42 @@ const UserContents = ({ data, content }) => {
             ? `/product/${data.id}`
             : content === "store"
             ? `/industria/${data.id}`
-            : `/master/${data.pk}`
+            : content === "master"
+            ? `/master/${data.pk}`
+            : `/mebel/${data.id}`
         }
         style={{
           display: "block",
         }}
         className="advert-item__top"
       >
-        <div
-          className={`advert-item-status ${
-            data.product_status === 0
-              ? "wait-status"
-              : data.product_status === 1
-              ? "done-status"
-              : data.product_status === 2 && "error-status"
-          }`}
-        >
-          {" "}
-          <span className="advert-item-status-icon">
-            <svg className="svg-sprite-icon icon-dots-horizontal fill-n">
-              <use href={`${spirite}#dots-horizontal`}></use>
-            </svg>
-          </span>
-          <span>
-            {data.product_status === 0
-              ? "Ожидание подтверждения"
-              : data.product_status === 1
-              ? "Подтвержден"
-              : data.product_status === 2 && "Отказaна!"}
-          </span>
-        </div>
+        {"product_status" in data ? (
+          <div
+            className={`advert-item-status ${
+              data.product_status === 0
+                ? "wait-status"
+                : data.product_status === 1
+                ? "done-status"
+                : data.product_status === 2 && "error-status"
+            }`}
+          >
+            {" "}
+            <span className="advert-item-status-icon">
+              <svg className="svg-sprite-icon icon-dots-horizontal fill-n">
+                <use href={`${spirite}#dots-horizontal`}></use>
+              </svg>
+            </span>
+            <span>
+              {data.product_status === 0
+                ? "Ожидание подтверждения"
+                : data.product_status === 1
+                ? "Подтвержден"
+                : data.product_status === 2 && "Отказaна!"}
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
 
         <picture>
           {"images" in data ? (

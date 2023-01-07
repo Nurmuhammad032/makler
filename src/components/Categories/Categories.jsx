@@ -6,7 +6,7 @@ import ContextApp from "../../context/context";
 import { baseURL } from "../../requests/requests";
 import "./Categories.scss";
 
-const links = ["product", "master", "industria"];
+const links = ["product", "master", "industria", "mebel"];
 
 const Categories = () => {
   const { categories } = useContext(ContextApp);

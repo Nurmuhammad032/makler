@@ -49,37 +49,6 @@ const FilterIndustria = ({ change, value }) => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   setOption3((prev) => {
-  //     prev?.sort((a, b) => a.id - b.id);
-  //   });
-  // }, [option3]);
-  // useEffect(() => {
-  //   axios
-  //     .get(`https://fathulla.tk/store2/api/v1/store/how_store`)
-  //     .then((res) => {
-  //       setOption1(res.data.results);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //       toast.error(err.message);
-  //     });
-  // }, []);
-
-  // const option2 = [
-  //   {
-  //     label: "For who",
-  //     value: 1,
-  //   },
-  //   {
-  //     label: "For who 2",
-  //     value: 2,
-  //   },
-  //   {
-  //     label: "For house",
-  //     value: 3,
-  //   },
-  // ];
   const { useFor, how_store_service, brand_title } = value;
 
   useEffect(() => {

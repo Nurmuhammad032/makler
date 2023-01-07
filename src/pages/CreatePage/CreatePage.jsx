@@ -17,6 +17,11 @@ const categories = [
     text: "Создание мастера",
     imgUrl: "https://fathulla.tk/media/category_image/cat3.svg",
   },
+  {
+    url: "mebel",
+    text: "Мебель",
+    imgUrl: "https://fathulla.tk/media/category_image/furniture.jpeg",
+  },
 ];
 
 const CreatePage = () => {

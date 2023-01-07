@@ -24,6 +24,7 @@ const UserCabinet = () => {
   const { getUserData, userData } = useContext(ContextApp);
   const [stores, setStores] = useState(null);
   const [houses, setHouses] = useState(null);
+  const [mebels, setMebels] = useState([]);
   const [maklers, setMaklers] = useState([]);
   const [filtered, setFiltered] = useState();
   const [loading, setLoading] = useState(true);
@@ -51,11 +52,13 @@ const UserCabinet = () => {
   useEffect(() => {
     getData(setUserOwnData, "profile");
   }, []);
+  console.log(userData);
 
   useEffect(() => {
     setStores(userData?.stores);
     setHouses(userData?.houses);
     setMaklers(userData?.maklers);
+    setMebels(userData?.mebels);
   }, [userData]);
 
   useEffect(() => {
@@ -111,6 +114,9 @@ const UserCabinet = () => {
                     ))}
                     {maklers?.map((item, i) => (
                       <UserContents key={i} data={item} content="master" />
+                    ))}
+                    {mebels?.map((item, i) => (
+                      <UserContents key={i} data={item} content="mebel" />
                     ))}
                   </ul>
                 ) : (

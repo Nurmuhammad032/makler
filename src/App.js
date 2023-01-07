@@ -20,15 +20,19 @@ import {
   AllIndustriya,
   AllProducts,
   CreateIndustriya,
+  CreateMebel,
   CreatePage,
   CreateProduct,
   EditHouse,
   EditMaster,
+  EditMebel,
   EditStore,
   Home,
   Industriya,
   MasterPage,
+  Mebel,
   SavedProduct,
+  SingleMebel,
   SingleProduct,
   UserCabinet,
   Workers,
@@ -70,7 +74,7 @@ function App() {
         <ScrollTop />
         <Navbar />
         {openLoginModal && <LoginModal />}
-        {bannerModal && <BannerModal setOpen={setBannerModal} />}
+        {/* {bannerModal && <BannerModal setOpen={setBannerModal} />} */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -86,15 +90,20 @@ function App() {
           <Route path="/edit-house/:id" element={<EditHouse />} />
           <Route path="/edit-master/:id" element={<EditMaster />} />
           <Route path="/edit-store/:id" element={<EditStore />} />
+          <Route path="/edit-mebel/:id" element={<EditMebel />} />
+          <Route path="/edit-mebel" element={<CabinetPage />} />
           <Route path="/edit-house" element={<CabinetPage />} />
           <Route path="/edit-master" element={<CabinetPage />} />
           <Route path="/edit-store" element={<CabinetPage />} />
           <Route path="/create/master" element={<EditPage />} />
           <Route path="/create/house" element={<CreateProduct />} />
+          <Route path="/create/mebel" element={<CreateMebel />} />
           <Route path="/save-products" element={<SavedProduct />} />
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/product" element={<AllProducts />} />
           <Route path="/master" element={<Workers />} />
+          <Route path="/mebel" element={<Mebel />} />
+          <Route path="/mebel/:id" element={<SingleMebel />} />
           <Route path="/master/:id" element={<MasterPage />} />
           <Route path="/industria/:id" element={<Industriya />} />
           <Route path="/industria" element={<AllIndustriya />} />

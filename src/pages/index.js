@@ -14,3 +14,7 @@ export { default as AllProducts } from "./AllProdcuts/AllProdcuts";
 export { default as EditHouse } from "./EditHouse/EditHouse";
 export { default as EditMaster } from "./EditMaster/EditMaster";
 export { default as EditStore } from "./EditStore/EditStore";
+export { default as CreateMebel } from "./CreateMebel/CreateMebel";
+export { default as Mebel } from "./Mebel/Mebel";
+export { default as SingleMebel } from "./SingleMebel/SingleMebel";
+export { default as EditMebel } from "./EditMebel/EditMebel";

@@ -70,14 +70,14 @@ const SingleProduct = () => {
               }}
             >
               <div className="swiper">
-                {houseData?.images.length && (
+                {houseData?.images?.length && (
                   <SliderContent imgUrl={houseData?.images} />
                 )}
               </div>
             </div>
             <div className="slider__right">
               <ul>
-                {houseData?.images.length &&
+                {houseData?.images?.length &&
                   houseData?.images
                     ?.filter((_, i) => i <= 3)
                     ?.map((item, i) => (
