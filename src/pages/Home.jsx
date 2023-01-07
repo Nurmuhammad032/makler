@@ -1,6 +1,7 @@
 import { fabClasses } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
+import { useMemo } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import {
@@ -32,10 +33,18 @@ const Home = () => {
   // }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      setBannerModal(true);
-    }, 4000);
+    const modal = sessionStorage.getItem("modal");
+    if (!modal) {
+      setTimeout(() => {
+        setBannerModal(true);
+      }, 2000);
+    }
+
+    return;
   }, []);
+  // window.addEventListener("DOMContentLoaded", () => {
+  //   setBannerModal(true);
+  // });
 
   // useEffect(() => {
   //   setLoading(true);
@@ -52,6 +61,11 @@ const Home = () => {
 
   // console.log(form.search.length);
 
+  const closeModal = () => {
+    setBannerModal(false);
+    sessionStorage.setItem("modal", true);
+  };
+
   return (
     <>
       {/* <Filter
@@ -61,7 +75,7 @@ const Home = () => {
         setFocus={setFocus}
       /> */}
       {/* {form.search.length ? <SearchResults data={searchData} loading={loading} /> : ""} */}
-      {bannerModal && <BannerModal setOpen={setBannerModal} />}
+      {bannerModal && <BannerModal setOpen={closeModal} />}
       <BannerCarousel />
       <Categories />
       <Houses value={form} start={start} focus={focus} />

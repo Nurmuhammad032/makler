@@ -4,14 +4,11 @@ import spirite from "../../assets/img/symbol/sprite.svg";
 
 const BannerModal = ({ setOpen }) => {
   return (
-    <>
-      <BgofBanner onClick={() => setOpen(false)} />
+    <div id="banner-modal">
+      <BgofBanner onClick={setOpen} />
       <Wrapper>
         <SvgWrapper>
-          <svg
-            className="svg-sprite-icon icon-fi_x w-16"
-            onClick={() => setOpen(false)}
-          >
+          <svg className="svg-sprite-icon icon-fi_x w-16" onClick={setOpen}>
             <use href={`${spirite}#fi_x`}></use>
           </svg>
         </SvgWrapper>
@@ -19,7 +16,7 @@ const BannerModal = ({ setOpen }) => {
           <img src="/images/new.jpeg" alt="" />
         </ImageWrapper>
       </Wrapper>
-    </>
+    </div>
   );
 };
 

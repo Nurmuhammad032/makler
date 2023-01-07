@@ -4,6 +4,8 @@ import "slick-carousel/slick/slick-theme.css";
 import sprite from "../../assets/img/symbol/sprite.svg";
 // import img from "../../assets/img/slider/1.png";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function CustomLeftArrow({ className, style, onClick }) {
   return (
@@ -35,6 +37,13 @@ function CustomRightArrow({ className, style, onClick }) {
 const products = ["/images/new.jpeg", "/images/new2.jpeg"];
 
 const BannerCarousel = () => {
+  const [bannerData, setBannerData] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://fathulla.tk/api/v1/carousels/")
+      .then((res) => setBannerData(res.data.results))
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div className="container">
       <Card>
@@ -59,12 +68,12 @@ const BannerCarousel = () => {
           // nextArrow={<NextArrow />}
           // adaptiveHeight={true}
         >
-          {products?.map((item, i) => (
+          {bannerData?.map((item, i) => (
             <div key={i}>
               {item && (
                 <div>
                   <span>
-                    <img src={item} alt={"products"} />
+                    <img src={item.image} alt={"products"} />
                   </span>
                 </div>
               )}

@@ -23,6 +23,7 @@ const UserCabinet = () => {
   const router = useNavigate();
   const { getUserData, userData } = useContext(ContextApp);
   const [stores, setStores] = useState(null);
+  const [mounted, setMounted] = useState(false);
   const [houses, setHouses] = useState(null);
   const [mebels, setMebels] = useState([]);
   const [maklers, setMaklers] = useState([]);
@@ -48,18 +49,18 @@ const UserCabinet = () => {
   };
   useEffect(() => {
     getData(getUserData, "user-products");
-  }, []);
+  }, [mounted]);
   useEffect(() => {
     getData(setUserOwnData, "profile");
   }, []);
-  console.log(userData);
+  // console.log(userData);
 
   useEffect(() => {
     setStores(userData?.stores);
     setHouses(userData?.houses);
     setMaklers(userData?.maklers);
     setMebels(userData?.mebels);
-  }, [userData]);
+  }, [userData, mounted]);
 
   useEffect(() => {
     const filteredHouses = houses?.filter((item) => {
@@ -110,7 +111,13 @@ const UserCabinet = () => {
                           />
                         ))}
                     {filtered?.map((item, i) => (
-                      <UserContents key={i} data={item} content="house" />
+                      <UserContents
+                        key={i}
+                        data={item}
+                        content="house"
+                        draft={false}
+                        mounted={setMounted}
+                      />
                     ))}
                     {maklers?.map((item, i) => (
                       <UserContents key={i} data={item} content="master" />
@@ -169,7 +176,9 @@ const UserCabinet = () => {
                         <UserContents
                           key={item.id}
                           content="house"
+                          mounted={setMounted}
                           data={item}
+                          draft={true}
                         />
                       ))}
                 </ul>
