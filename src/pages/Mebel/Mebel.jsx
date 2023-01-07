@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { FilterWorker, UserCard } from "../../components";
+import { FilterMebel, FilterWorker, UserCard } from "../../components";
 import ContextApp from "../../context/context";
 import useForm from "../../hooks/useForm";
 import { baseURL } from "../../requests/requests";
@@ -11,22 +11,38 @@ const Mebel = () => {
 
   const [displayData, setDisplayData] = useState("");
   const [loading, setLoading] = useState(true);
+
   const [searchLimit, setSearchLimit] = useState(8);
   const [searchData, setSearchData] = useState([]);
   const [limit, setLimit] = useState(6);
   const { form, changeHandler } = useForm({
-    profession: "",
+    // profession: "",
     search: "",
-    service: "",
+    category: "",
   });
-  const { search, profession, service } = form;
+  const { search, category, service } = form;
   useEffect(() => {
     axios
-      .get(`https://fathulla.tk/mebel/api/v1/mebels/`)
+      .get("https://fathulla.tk/mebel/api/v1/mebels/", {
+        params: {
+          category,
+        },
+      })
       .then((data) => setDisplayData(data.data.results))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [category]);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${baseURL}/mebel/api/v1/mebels/?search=${search}`)
+      .then((res) => setSearchData(res.data.results))
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [search]);
 
   // useMemo(() => {
   //   setLoading(true);
@@ -73,8 +89,43 @@ const Mebel = () => {
     <section className="content">
       <div className="container">
         <div>
-          {/* <FilterWorker change={changeHandler} value={form} /> */}
-          <div className="app__cards--wrapper">
+          <FilterMebel change={changeHandler} value={form} />
+          {!loading ? (
+            <div className="app__cards--wrapper">
+              {!search.length ? (
+                displayData?.length ? (
+                  displayData?.slice(0, limit)?.map((data) => (
+                    <div
+                      style={{
+                        marginRight: "0.5rem",
+                      }}
+                      key={data.id}
+                    >
+                      <UserCard data={data} mebel />
+                    </div>
+                  ))
+                ) : (
+                  <h1>Нет товаров.</h1>
+                )
+              ) : searchData.length ? (
+                searchData?.slice(0, searchLimit)?.map((data) => (
+                  <div
+                    style={{
+                      marginRight: "0.5rem",
+                    }}
+                    key={data.id}
+                  >
+                    <UserCard data={data} mebel />
+                  </div>
+                ))
+              ) : (
+                <h1>Предметы не найдены!</h1>
+              )}
+            </div>
+          ) : (
+            <Loading />
+          )}
+          {/* <div className="app__cards--wrapper">
             {!loading ? (
               displayData.length ? (
                 displayData?.slice(0, limit)?.map((data, i) => (
@@ -93,7 +144,7 @@ const Mebel = () => {
             ) : (
               <Loading />
             )}
-          </div>
+          </div> */}
         </div>
         <button
           onClick={handleLoad}
