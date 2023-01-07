@@ -50,7 +50,7 @@ const CabinetPage = () => {
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-  const [bannerModal, setBannerModal] = useState(false);
+
   const { openLoginModal } = useContext(ContextApp);
   useEffect(() => {
     let access = localStorage.getItem("access");
@@ -61,11 +61,11 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setBannerModal(true);
-    }, 4000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setBannerModal(true);
+  //   }, 4000);
+  // }, []);
 
   return (
     <>
@@ -74,7 +74,6 @@ function App() {
         <ScrollTop />
         <Navbar />
         {openLoginModal && <LoginModal />}
-        {/* {bannerModal && <BannerModal setOpen={setBannerModal} />} */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route

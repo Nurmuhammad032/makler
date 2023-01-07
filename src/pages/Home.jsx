@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import {
   BannerCarousel,
+  BannerModal,
   Categories,
   DownloadApp,
   EditPage,
@@ -21,6 +22,7 @@ const Home = () => {
     building: "",
     search: "",
   });
+  const [bannerModal, setBannerModal] = useState(false);
 
   const [start, setStart] = useState(1);
   const [focus, setFocus] = useState(false);
@@ -28,6 +30,12 @@ const Home = () => {
   // useEffect(() => {
   //  searchData?.splice(0, 8);
   // }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setBannerModal(true);
+    }, 4000);
+  }, []);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -53,6 +61,7 @@ const Home = () => {
         setFocus={setFocus}
       /> */}
       {/* {form.search.length ? <SearchResults data={searchData} loading={loading} /> : ""} */}
+      {bannerModal && <BannerModal setOpen={setBannerModal} />}
       <BannerCarousel />
       <Categories />
       <Houses value={form} start={start} focus={focus} />
