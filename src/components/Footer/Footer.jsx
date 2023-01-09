@@ -1,9 +1,11 @@
 import "./Footer.scss";
 import makler from "../../assets/img/svg/logo-white.svg";
+import logo from "../../assets/img/logo_site2.png";
 import payme from "../../assets/img/svg/payme.svg";
-import click from "../../assets/img/svg/payme.svg";
+import click from "../../assets/img/svg/click.svg";
 import upay from "../../assets/img/svg/upay.svg";
 import spirite from "../../assets/img/symbol/sprite.svg";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -11,10 +13,16 @@ const Footer = () => {
       <div className="footer__top">
         <div className="container">
           <div className="footer__top-body">
-            <a href="/">
+            <Link to="/">
               {" "}
-              <img src={makler} alt="Makler" />
-            </a>
+              <img
+                src={logo}
+                alt="Makler"
+                style={{
+                  maxWidth: "13rem",
+                }}
+              />
+            </Link>
             <ul>
               <li>
                 {" "}

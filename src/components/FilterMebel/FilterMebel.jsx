@@ -65,9 +65,9 @@ const FilterMebel = ({ change, value }) => {
   const { useFor, how_store_service, brand_title, category } = value;
 
   useEffect(() => {
-    setProfess(option1[category - 1]?.title);
+    setProfess(category2[category - 1]?.title);
   }, [category]);
-  // useEffect(() => {
+  // useEffect(() =>  {
   //   setProfess2(option2[how_store_service - 1]?.title);
   // }, [how_store_service]);
   // useEffect(() => {

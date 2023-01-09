@@ -41,6 +41,11 @@
     margin-bottom: rem(22px);
   }
   &-list {
+    min-width: 460px;
+    @media screen and (max-width: 530px) {
+      min-width: none !important;
+      width: 100%;
+    }
     & > * {
       &:not(:last-child) {
         margin-bottom: rem(30px);
@@ -176,9 +181,11 @@
           }
         }
       }
-      a {
+      span {
         font-family: SFProDisplay_600;
         font-size: rem(14px);
+        // width: max-content;
+        white-space: nowrap;
         color: $black;
         transition: all ease 0.2s;
         &:hover {

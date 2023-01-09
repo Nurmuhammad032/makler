@@ -70,6 +70,27 @@ const UserContents = ({ data, content, mounted, draft }) => {
     axios
       .patch(url, {
         draft: !draft,
+        product_status: 0,
+      })
+      .then(() => {
+        toast.success("Успешно!");
+        mounted((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      })
+      .finally(() => {
+        setLoading(false);
+        setDisplay(false);
+      });
+  };
+  const addedToDraftFunc = (url) => {
+    setLoading(true);
+    axios
+      .patch(url, {
+        product_status: data?.product_status !== 3 ? 3 : 0,
+        draft: false,
       })
       .then(() => {
         toast.success("Успешно!");
@@ -88,7 +109,7 @@ const UserContents = ({ data, content, mounted, draft }) => {
   const draftHandle = () => {
     switch (content) {
       case "house":
-        draftFunc(`${baseURL}/products/api/v1/houses/updates/${data.id}`);
+        draftFunc(`${baseURL}/products/api/v1/houses/patch-updates/${data.id}`);
         break;
       case "master":
         // https://fathulla.tk
@@ -99,6 +120,34 @@ const UserContents = ({ data, content, mounted, draft }) => {
         break;
       case "mebel":
         draftFunc(`${baseURL}/mebel/api/v1/mebels/patch-update/${data.id}`);
+        break;
+
+      default:
+        break;
+    }
+  };
+  const addedToDraft = () => {
+    switch (content) {
+      case "house":
+        addedToDraftFunc(
+          `${baseURL}/products/api/v1/houses/patch-updates/${data.id}`
+        );
+        break;
+      case "master":
+        // https://fathulla.tk
+        addedToDraftFunc(
+          `${baseURL}/master/api/v1/maklers/patch-update/${data.pk}`
+        );
+        break;
+      case "store":
+        addedToDraftFunc(
+          `${baseURL}/store2/api/v1/store/patch-update/${data.id}`
+        );
+        break;
+      case "mebel":
+        addedToDraftFunc(
+          `${baseURL}/mebel/api/v1/mebels/patch-update/${data.id}`
+        );
         break;
 
       default:
@@ -139,7 +188,7 @@ const UserContents = ({ data, content, mounted, draft }) => {
                 }}
               >
                 {" "}
-                <a>Изменить </a>
+                <span>Изменить </span>
               </li>
               <li
                 onClick={draftHandle}
@@ -148,7 +197,20 @@ const UserContents = ({ data, content, mounted, draft }) => {
                 }}
               >
                 {" "}
-                <a>{draft ? "Разархивировать" : "Архивировать"} </a>
+                <span>{draft ? "Разархивировать" : "Архивировать"} </span>
+              </li>
+              <li
+                onClick={addedToDraft}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                {" "}
+                <span>
+                  {data?.product_status !== 3
+                    ? "Добавить в черновик"
+                    : "Удалить из черновика"}{" "}
+                </span>
               </li>
               <li
                 onClick={clickHandle}
@@ -157,7 +219,7 @@ const UserContents = ({ data, content, mounted, draft }) => {
                 }}
               >
                 {" "}
-                <a>Удалить </a>
+                <span>Удалить </span>
               </li>
             </ul>
           </div>
@@ -177,7 +239,7 @@ const UserContents = ({ data, content, mounted, draft }) => {
           }}
           className="advert-item__top"
         >
-          {"product_status" in data ? (
+          {"product_status" in data && data?.product_status !== 3 ? (
             <div
               className={`advert-item-status ${
                 data.product_status === 0

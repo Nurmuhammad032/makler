@@ -30,7 +30,7 @@ const UserCabinet = () => {
   const [userOwnData, setUserOwnData] = useState([]);
   const [draft, setDraft] = useState(null);
   const navigate = useNavigate();
-
+  // console.log(maklers);
   const { id } = useParams();
   // https://fathulla.tk/users/api/v1/user-products/2/
   const getData = (setData, url) => {
@@ -136,16 +136,26 @@ const UserCabinet = () => {
                 </div>
                 {!loading ? (
                   <ul className="advert-list">
+                    {draftArr.every(
+                      (item) => item.filteredArr?.length === 0
+                    ) && <span>Тут ничего нету</span>}
                     {draftArr.map((draftArg, i) => (
                       <div key={i}>
                         <span className="all-products-header">
-                          {draftArg.content === "house"
+                          {draftArg.content === "house" &&
+                          draftArg.filteredArr?.length
                             ? "Маклера"
-                            : draftArg.content === "store"
+                            : draftArg.content === "store" &&
+                              draftArg.filteredArr?.length
                             ? "обустройства"
-                            : draftArg.content === "master"
+                            : draftArg.content === "master" &&
+                              draftArg.filteredArr?.length
                             ? "мастера"
-                            : "Мебель"}
+                            : draftArg.content === "mebel" &&
+                              draftArg.filteredArr?.length
+                            ? "Мебель"
+                            : ""}
+                          {console.log()}
                         </span>
                         {draftArg.filteredArr?.map((item, i) => (
                           <UserContents
@@ -208,16 +218,47 @@ const UserCabinet = () => {
             <div className="container-sm">
               <div className="advert">
                 <ul className="advert-list">
-                  {stores
-                    ?.filter((item) => item.product_status === 3)
-                    ?.map((item) => (
-                      <UserContents
-                        key={item.id}
-                        content="store"
-                        data={item}
-                        mounted={setMounted}
-                      />
-                    ))}
+                  {draftArr.map((draftArg, i) => (
+                    <div key={i}>
+                      {/* {<span className="all-products-header">
+                        /* {draftArg.content === "house"
+                          ? "Маклера"
+                          : draftArg.content === "store"
+                          ? "обустройства"
+                          : draftArg.content === "master"
+                          ? "мастера"
+                          : "Мебель"}
+                        {draftArg.content === "house" &&
+                        houses?.filter((item) => item.draft === true).length
+                          ? "Маклера"
+                          : draftArg.content === "store" &&
+                            stores?.filter((item) => item.draft === true).length
+                          ? "обустройства"
+                          : draftArg.content === "master" &&
+                            maklers?.filter((item) => item.draft === true)
+                              .length
+                          ? "мастера"
+                          : draftArg.content === "master" &&
+                            mebels?.filter((item) => item.draft === true).length
+                          ? "Мебель"
+                          : ""}
+                      </span> } */}
+                      {draftArg.arr
+                        ?.filter(
+                          (item) =>
+                            item.draft === true && item.product_status !== 3
+                        )
+                        ?.map((item, i) => (
+                          <UserContents
+                            key={i}
+                            content={draftArg.content}
+                            mounted={setMounted}
+                            data={item}
+                            draft={true}
+                          />
+                        ))}
+                    </div>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -243,26 +284,50 @@ const UserCabinet = () => {
                   </div>
                 </div>
                 <ul className="advert-list">
+                  {/* {stores
+                    ?.filter((item) => item.product_status === 3)
+                    ?.map((item) => (
+                      <UserContents
+                        key={item.id}
+                        content="store"
+                        data={item}
+                        mounted={setMounted}
+                      />
+                    ))} */}
                   {draftArr.map((draftArg, i) => (
                     <div key={i}>
-                      <span className="all-products-header">
-                        {draftArg.content === "house"
+                      {/* {<span className="all-products-header">
+                        /* {draftArg.content === "house"
                           ? "Маклера"
                           : draftArg.content === "store"
                           ? "обустройства"
                           : draftArg.content === "master"
                           ? "мастера"
                           : "Мебель"}
-                      </span>
+                        {draftArg.content === "house" &&
+                        houses?.filter((item) => item.draft === true).length
+                          ? "Маклера"
+                          : draftArg.content === "store" &&
+                            stores?.filter((item) => item.draft === true).length
+                          ? "обустройства"
+                          : draftArg.content === "master" &&
+                            maklers?.filter((item) => item.draft === true)
+                              .length
+                          ? "мастера"
+                          : draftArg.content === "master" &&
+                            mebels?.filter((item) => item.draft === true).length
+                          ? "Мебель"
+                          : ""}
+                      </span> } */}
                       {draftArg.arr
-                        ?.filter((item) => item.draft === true)
+                        ?.filter((item) => item?.product_status === 3)
                         ?.map((item, i) => (
                           <UserContents
                             key={i}
                             content={draftArg.content}
                             mounted={setMounted}
                             data={item}
-                            draft={true}
+                            draft={false}
                           />
                         ))}
                     </div>
