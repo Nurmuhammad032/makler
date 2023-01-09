@@ -9,7 +9,6 @@ import LoadingPost from "../LoadingPost/LoadingPost";
 const UserContents = ({ data, content, mounted, draft }) => {
   const [display, setDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [pm, setPm] = useState();
   const navigate = useNavigate();
   const handleClick = () => {
     switch (content) {
@@ -30,21 +29,18 @@ const UserContents = ({ data, content, mounted, draft }) => {
     }
   };
 
-  useEffect(() => {
-    setPm(data?.view_count - 1);
-  }, [data?.view_count]);
-
   const deleteData = (url, id) => {
     axios
       .delete(`${url}/${id}/`)
       .then(() => {
         toast.success("Успешно");
-        window.location.reload();
+        mounted((prev) => !prev);
       })
       .catch((err) => {
         console.log(err);
         toast.error("Ошибка!");
-      });
+      })
+      .finally(() => setDisplay(false));
   };
 
   const clickHandle = () => {
@@ -69,10 +65,10 @@ const UserContents = ({ data, content, mounted, draft }) => {
     }
   };
 
-  const draftHandle = () => {
+  const draftFunc = (url) => {
     setLoading(true);
     axios
-      .patch(`${baseURL}/products/api/v1/houses/updates/${data.id}`, {
+      .patch(url, {
         draft: !draft,
       })
       .then(() => {
@@ -87,6 +83,27 @@ const UserContents = ({ data, content, mounted, draft }) => {
         setLoading(false);
         setDisplay(false);
       });
+  };
+
+  const draftHandle = () => {
+    switch (content) {
+      case "house":
+        draftFunc(`${baseURL}/products/api/v1/houses/updates/${data.id}`);
+        break;
+      case "master":
+        // https://fathulla.tk
+        draftFunc(`${baseURL}/master/api/v1/maklers/patch-update/${data.pk}`);
+        break;
+      case "store":
+        draftFunc(`${baseURL}/store2/api/v1/store/patch-update/${data.id}`);
+        break;
+      case "mebel":
+        draftFunc(`${baseURL}/mebel/api/v1/mebels/patch-update/${data.id}`);
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -124,17 +141,15 @@ const UserContents = ({ data, content, mounted, draft }) => {
                 {" "}
                 <a>Изменить </a>
               </li>
-              {content === "house" && (
-                <li
-                  onClick={draftHandle}
-                  style={{
-                    cursor: "pointer",
-                  }}
-                >
-                  {" "}
-                  <a>{draft ? "Разархивировать" : "Архивировать"} </a>
-                </li>
-              )}
+              <li
+                onClick={draftHandle}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                {" "}
+                <a>{draft ? "Разархивировать" : "Архивировать"} </a>
+              </li>
               <li
                 onClick={clickHandle}
                 style={{

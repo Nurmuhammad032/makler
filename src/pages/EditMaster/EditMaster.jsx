@@ -34,21 +34,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  {
-    text: "architect",
-    value: 1,
-  },
-  {
-    text: "painter",
-    value: 2,
-  },
-  {
-    text: "electrician",
-    value: 3,
-  },
-];
-
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -65,6 +50,7 @@ export default function EditMaster() {
   const [file, setFile] = useState();
   const [loading, setLoading] = useState(false);
   const [editData, setEditData] = useState([]);
+  const [names, setNames] = useState([]);
   const [imgUrl, setImgUrl] = useState();
   const { navigateToProfile } = useContext(ContextApp);
   const fileHandle = (e) => {
@@ -116,6 +102,16 @@ export default function EditMaster() {
     defaultOptions: { maxWidth: 128 },
     defaultData: { content: "Determine" },
   };
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/master/api/v1/maklers/professions`)
+      .then((res) => setNames(res.data.results))
+      .catch((err) => {
+        console.log(err);
+        toast.error("Ошибка!");
+      });
+  }, []);
 
   useEffect(() => {
     if (mapConstructor) {
@@ -201,20 +197,25 @@ export default function EditMaster() {
   };
 
   useEffect(() => {
-    setForm({
-      name: editData?.name,
-      email: editData?.email,
-      phone: editData?.phone,
-      address_title: editData?.address_title,
-      address_latitude: editData?.address_latitude,
-      address_longitude: editData?.address_longitude,
-      password: editData?.password,
-      profession: editData?.profession,
-      descriptions: editData?.descriptions,
-      experience: editData?.experience,
-      serviceType: editData?.serviceType,
+    setForm((prev) => {
+      return {
+        ...prev,
+        name: editData?.name,
+        email: editData?.email,
+        phone: editData?.phone,
+        address_title: editData?.address_title,
+        address_latitude: editData?.address_latitude,
+        address_longitude: editData?.address_longitude,
+        password: editData?.password,
+        profession: [],
+        descriptions: editData?.descriptions,
+        experience: editData?.experience,
+        // serviceType: editData?.how_service,
+      };
     });
   }, [editData]);
+
+  console.log(form);
 
   const handeSubmit = (e) => {
     e.preventDefault();
@@ -227,14 +228,14 @@ export default function EditMaster() {
     formData.append("address_latitude", form.address_latitude);
     formData.append("address_longitude", form.address_longitude);
     formData.append("password", form.password);
-    formData.append("avatar", file);
+    // formData.append("avatar", file);
     formData.append("how_service", form.serviceType);
     // formData.append(
     //   "profession",
     //   form.profession.map((data) => data.value)
     // );
     for (const fi of form.profession) {
-      formData.append("profession", fi.value);
+      formData.append("profession", fi?.id);
     }
     formData.append("descriptions", form.descriptions);
     formData.append("experience", form.experience);
@@ -273,7 +274,7 @@ export default function EditMaster() {
               </a>{" "}
               и в наших мобильных приложениях
             </p>
-            <div className="card__header">
+            {/* <div className="card__header">
               <img
                 className="avatar__img"
                 src={imgUrl ? imgUrl : avatar_image}
@@ -308,7 +309,7 @@ export default function EditMaster() {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
             <div className="editMaster__input">
               <div className="form__input">
                 <label htmlFor="">
@@ -406,21 +407,21 @@ export default function EditMaster() {
                       {selected.map((value) => (
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
-                          key={value.value}
-                          label={value.text}
+                          key={value.id}
+                          label={value.title}
                         />
                       ))}
                     </Box>
                   )}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name) => (
+                  {names?.map((name) => (
                     <MenuItem
-                      key={name.value}
+                      key={name.id}
                       value={name}
-                      style={getStyles(name.value, personName, theme)}
+                      style={getStyles(name.id, personName, theme)}
                     >
-                      {name.text}
+                      {name.title}
                     </MenuItem>
                   ))}
                 </Select>

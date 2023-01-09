@@ -113,6 +113,7 @@ const EditHouse = () => {
       };
     });
   };
+  console.log(editData);
 
   useEffect(() => {
     setFormData({
@@ -201,7 +202,7 @@ const EditHouse = () => {
     formData.append("phone_number", form.phone_number);
     formData.append("isBookmarked", form.isBookmarked);
     formData.append("how_sale", form.how_sale);
-    formData.append("draft", false);
+    formData.append("draft", editData?.draft);
     for (const fi of file) {
       formData.append("uploaded_images", fi);
     }
@@ -459,8 +460,8 @@ const EditHouse = () => {
                     type="radio"
                     name="type"
                     id="rent"
-                    checked={form.type === "rent"}
-                    value="rent"
+                    checked={form.type === "аденда"}
+                    value="аденда"
                     onChange={changeHandler}
                   />
                   <label htmlFor="rent">Сдать в аренду</label>
@@ -470,8 +471,8 @@ const EditHouse = () => {
                     type="radio"
                     name="type"
                     id="sale"
-                    checked={form.type === "for_sale"}
-                    value="for_sale"
+                    checked={form.type === "продать"}
+                    value="продать"
                     onChange={changeHandler}
                   />
                   <label htmlFor="sale">Продажа недвижимости</label>
@@ -486,8 +487,8 @@ const EditHouse = () => {
                     name="rental_type"
                     required
                     onChange={changeHandler}
-                    checked={form.rental_type === "long_time"}
-                    value="long_time"
+                    checked={form.rental_type === "длительно"}
+                    value="длительно"
                   />
                   <label htmlFor="long">Длительно</label>
                 </li>
@@ -497,8 +498,9 @@ const EditHouse = () => {
                     onChange={changeHandler}
                     id="month"
                     name="rental_type"
+                    checked={form.rental_type === "несколько месяцев"}
                     required
-                    value="several_months"
+                    value="несколько месяцев"
                   />
                   <label htmlFor="month">На несколько месяцев</label>
                 </li>
@@ -508,8 +510,9 @@ const EditHouse = () => {
                     onChange={changeHandler}
                     id="day"
                     name="rental_type"
+                    checked={form.rental_type === "посуточно"}
                     required
-                    value="daily"
+                    value="посуточно"
                   />
                   <label htmlFor="day">Посуточно</label>
                 </li>
@@ -520,8 +523,8 @@ const EditHouse = () => {
                   <input
                     type="radio"
                     id="living"
-                    value={"residential"}
-                    checked={form.property_type === "residential"}
+                    value={"жилая"}
+                    checked={form.property_type === "жилая"}
                     required
                     onChange={changeHandler}
                     name="property_type"
@@ -532,8 +535,8 @@ const EditHouse = () => {
                   <input
                     type="radio"
                     id="commercial"
-                    value={"commercial"}
-                    checked={form.property_type === "commercial"}
+                    value={"коммерческая"}
+                    checked={form.property_type === "коммерческая"}
                     required
                     onChange={changeHandler}
                     name="property_type"
@@ -546,31 +549,31 @@ const EditHouse = () => {
                 {[
                   {
                     text: "Квартира",
-                    value: "flat",
+                    value: "квартира",
                   },
                   {
                     text: "Комната",
-                    value: "room",
+                    value: "комната",
                   },
                   {
                     text: "Дача",
-                    value: "summer_cottage",
+                    value: "дача",
                   },
                   {
                     text: "Дом",
-                    value: "house",
+                    value: "дома",
                   },
                   {
                     text: "Часть дома",
-                    value: "part_house",
+                    value: "участка",
                   },
                   {
                     text: "Таунхаус",
-                    value: "townhouse",
+                    value: "таунхаус",
                   },
                   {
                     text: "Койко-место",
-                    value: "bed_space",
+                    value: "спальное",
                   },
                 ].map(({ text, value }) => (
                   <li className="radio-btn" key={value}>
@@ -718,10 +721,10 @@ const EditHouse = () => {
               <h5>Тип строения</h5>
               <ul className="radio-list mb-50">
                 {[
-                  { value: "brick", text: "Кирпич" },
-                  { value: "monolith", text: "Монолит" },
-                  { value: "panel", text: "Панель" },
-                  { value: "blocky", text: "Блочный" },
+                  { value: "кирпич", text: "Кирпич" },
+                  { value: "монолит", text: "Монолит" },
+                  { value: "панель", text: "Панель" },
+                  { value: "блочный", text: "Блочный" },
                 ].map((item) => (
                   <li className="radio-btn" key={item.value}>
                     <input

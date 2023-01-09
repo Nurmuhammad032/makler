@@ -1,5 +1,4 @@
 import React from "react";
-import avatar_image from "./../../assets/img/avatar_change.png";
 import { useState, useRef, useEffect } from "react";
 import sprite from "../../assets/img/symbol/sprite.svg";
 import "../../components/EditPage/EditPage.css";
@@ -76,6 +75,20 @@ export default function EditStore() {
     brand: null,
     view: null,
   });
+
+  const [storeAminities, setStoreAminities] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://fathulla.tk/store2/api/v1/store/how_store")
+      .then((res) => {
+        setStoreAminities(res.data.results);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error(err.message);
+      });
+  }, []);
 
   const fileHandle = (file, name) => {
     const img = file;
@@ -225,19 +238,18 @@ export default function EditStore() {
       };
     });
   };
-
   useEffect(() => {
     setForm({
       name: editData?.name,
       description: editData?.description,
       price_type: editData?.price_type,
-      store_amenitites: editData?.store_amenitites,
+      // store_amenitites: editData?.store_amenitites,
       brand: editData?.brand,
       price: editData?.price,
       use_for: editData?.use_for,
       phoneNumber: editData?.phoneNumber,
       email: editData?.email,
-      how_store_service: editData?.how_store_service,
+      // how_store_service: editData?.how_store_service,
     });
   }, [editData]);
 
@@ -250,10 +262,9 @@ export default function EditStore() {
     formData.append("image", img.machineImg);
     formData.append("brand_image", img.brandImg);
     formData.append("description", form.description);
-    formData.append(
-      "store_amenitites",
-      form.store_amenitites.map((data) => data.value)
-    );
+    for (const fi of form?.store_amenitites) {
+      formData.append("store_amenitites", fi?.id);
+    }
     formData.append("brand", form.brand);
     formData.append("price", form.price);
     formData.append("use_for", [1]);
@@ -261,6 +272,7 @@ export default function EditStore() {
     formData.append("address", searchRef.current?.value);
     formData.append("email", form.email);
     formData.append("how_store_service", form.how_store_service);
+    formData.append("draft", editData?.draft);
 
     const userToken = localStorage.getItem("access");
 
@@ -297,7 +309,7 @@ export default function EditStore() {
               </a>{" "}
               и в наших мобильных приложениях
             </p>
-            <div className="card__header">
+            {/* <div className="card__header">
               <img
                 className="avatar__img"
                 src={imgUrl.brand ? imgUrl.brand : avatar_image}
@@ -336,7 +348,7 @@ export default function EditStore() {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
             <div className="editpage__input">
               <div className="form__input">
                 <label htmlFor="">
@@ -370,7 +382,7 @@ export default function EditStore() {
                     placeholder="+998 90 123-45-67"
                   />
                 </label>
-                <label htmlFor="">
+                {/* <label htmlFor="">
                   <span>brand name</span>
                   <input
                     name={"brand"}
@@ -379,7 +391,7 @@ export default function EditStore() {
                     onChange={changeHandler}
                     value={form.brand}
                   />
-                </label>
+                </label> */}
                 <label htmlFor="">
                   <span className="text__area">Краткое описание о себе</span>
                   <textarea
@@ -487,21 +499,21 @@ export default function EditStore() {
                       {selected.map((value) => (
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
-                          key={value.value}
-                          label={value.text}
+                          key={value.id}
+                          label={value.title}
                         />
                       ))}
                     </Box>
                   )}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name) => (
+                  {storeAminities?.map((name) => (
                     <MenuItem
-                      key={name.value}
+                      key={name.id}
                       value={name}
-                      style={getStyles(name.value, personName, theme)}
+                      style={getStyles(name.title, personName, theme)}
                     >
-                      {name.text}
+                      {name.title}
                     </MenuItem>
                   ))}
                 </Select>
@@ -577,8 +589,8 @@ export default function EditStore() {
                 marginTop: "2rem",
               }}
             >
-              <h5>Изображения объекта</h5>
-              <div className="image-upload mb-50">
+              {/* <h5>Изображения объекта</h5> */}
+              {/* <div className="image-upload mb-50">
                 <div className="image-outer">
                   <div className="image-outer-info">
                     <h5>Перетащите сюда свои изображения или нажмите сюда</h5>
@@ -612,7 +624,7 @@ export default function EditStore() {
                     </li>
                   )}
                 </ul>
-              </div>
+              </div> */}
             </div>
             <div
               style={{
@@ -636,10 +648,6 @@ export default function EditStore() {
                   {
                     text: "Ремонт",
                     value: 2,
-                  },
-                  {
-                    text: "Ремонт",
-                    value: 3,
                   },
                 ].map(({ text, value }) => (
                   <li className="radio-btn" key={value}>

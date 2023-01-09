@@ -78,6 +78,19 @@ export default function CreateIndustriya() {
     brand: null,
     view: null,
   });
+  const [storeAminities, setStoreAminities] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://fathulla.tk/store2/api/v1/store/how_store")
+      .then((res) => {
+        setStoreAminities(res.data.results);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        toast.error(err.message);
+      });
+  }, []);
 
   const fileHandle = (file, name) => {
     const img = file;
@@ -227,7 +240,7 @@ export default function CreateIndustriya() {
     formData.append("brand_title", form.brand_title);
     formData.append("how_store_service", form.how_store_service);
     for (const fi of form.store_amenitites) {
-      formData.append("store_amenitites", fi.value);
+      formData.append("store_amenitites", fi.id);
     }
 
     const userToken = localStorage.getItem("access");
@@ -522,20 +535,20 @@ export default function CreateIndustriya() {
                         <Chip
                           sx={{ bgcolor: "rgba(197, 102, 34, 0.1)" }}
                           key={i}
-                          label={value.text}
+                          label={value.title}
                         />
                       ))}
                     </Box>
                   )}
                   MenuProps={MenuProps}
                 >
-                  {names.map((name, i) => (
+                  {storeAminities?.map((name, i) => (
                     <MenuItem
                       key={i}
                       value={name}
                       style={getStyles(name.value, personName, theme)}
                     >
-                      {name.text}
+                      {name.title}
                     </MenuItem>
                   ))}
                 </Select>

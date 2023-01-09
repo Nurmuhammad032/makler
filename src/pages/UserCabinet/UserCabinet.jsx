@@ -3,12 +3,7 @@ import avatar from "../../assets/img/avatar-big.png";
 import { LoadingPost, UserContents } from "../../components";
 import avatar_image from "../../assets/img/avatar_change.png";
 import spirite from "../../assets/img/symbol/sprite.svg";
-import {
-  announceData,
-  archive,
-  draft,
-  userCabinetNavigator,
-} from "./userAnnounce";
+import { userCabinetNavigator } from "./userAnnounce";
 import { useContext, useEffect, useState } from "react";
 import UserSettings from "./UserSettings";
 import { useParams, useNavigate } from "react-router-dom";
@@ -28,6 +23,9 @@ const UserCabinet = () => {
   const [mebels, setMebels] = useState([]);
   const [maklers, setMaklers] = useState([]);
   const [filtered, setFiltered] = useState();
+  const [filteredMaklers, setFilteredMaklers] = useState([]);
+  const [filteredStores, setFilteredStores] = useState([]);
+  const [filteredMebels, setFilteredMebels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userOwnData, setUserOwnData] = useState([]);
   const [draft, setDraft] = useState(null);
@@ -62,12 +60,50 @@ const UserCabinet = () => {
     setMebels(userData?.mebels);
   }, [userData, mounted]);
 
-  useEffect(() => {
-    const filteredHouses = houses?.filter((item) => {
+  // console.log(maklers);
+  const draftArr = [
+    {
+      content: "house",
+      arr: houses,
+      filteredArr: filtered,
+    },
+    {
+      content: "master",
+      arr: maklers,
+      filteredArr: filteredMaklers,
+    },
+    {
+      content: "store",
+      arr: stores,
+      filteredArr: filteredStores,
+    },
+    {
+      content: "mebel",
+      arr: mebels,
+      filteredArr: filteredMebels,
+    },
+  ];
+
+  const filterFunc = (setFilter, arr) => {
+    const filtered = arr?.filter((item) => {
       return item.product_status !== 3 && item.draft !== true;
     });
-    setFiltered(filteredHouses);
+    setFilter(filtered);
+  };
+
+  useEffect(() => {
+    filterFunc(setFiltered, houses);
   }, [houses]);
+  useEffect(() => {
+    filterFunc(setFilteredMaklers, maklers);
+  }, [maklers]);
+  useEffect(() => {
+    filterFunc(setFilteredStores, stores);
+  }, [stores]);
+  useEffect(() => {
+    filterFunc(setFilteredMebels, mebels);
+  }, [mebels]);
+
   const handleLogOut = () => {
     localStorage.clear();
     router("/");
@@ -100,16 +136,37 @@ const UserCabinet = () => {
                 </div>
                 {!loading ? (
                   <ul className="advert-list">
-                    {stores &&
-                      stores
-                        ?.filter((item) => item.product_status !== 3)
-                        ?.map((item) => (
+                    {draftArr.map((draftArg, i) => (
+                      <div key={i}>
+                        <span className="all-products-header">
+                          {draftArg.content === "house"
+                            ? "Маклера"
+                            : draftArg.content === "store"
+                            ? "обустройства"
+                            : draftArg.content === "master"
+                            ? "мастера"
+                            : "Мебель"}
+                        </span>
+                        {draftArg.filteredArr?.map((item, i) => (
                           <UserContents
-                            key={item.id}
-                            content="store"
+                            key={i}
+                            content={draftArg.content}
+                            mounted={setMounted}
                             data={item}
+                            draft={false}
                           />
                         ))}
+                      </div>
+                    ))}
+                    {/* {filteredStores?.map((item) => (
+                      <UserContents
+                        key={item.id}
+                        content="store"
+                        data={item}
+                        mounted={setMounted}
+                        draft={false}
+                      />
+                    ))}
                     {filtered?.map((item, i) => (
                       <UserContents
                         key={i}
@@ -119,12 +176,24 @@ const UserCabinet = () => {
                         mounted={setMounted}
                       />
                     ))}
-                    {maklers?.map((item, i) => (
-                      <UserContents key={i} data={item} content="master" />
+                    {filteredMaklers?.map((item, i) => (
+                      <UserContents
+                        key={i}
+                        data={item}
+                        content="master"
+                        draft={false}
+                        mounted={setMounted}
+                      />
                     ))}
-                    {mebels?.map((item, i) => (
-                      <UserContents key={i} data={item} content="mebel" />
-                    ))}
+                    {filteredMebels?.map((item, i) => (
+                      <UserContents
+                        key={i}
+                        data={item}
+                        content="mebel"
+                        draft={false}
+                        mounted={setMounted}
+                      />
+                    ))} */}
                   </ul>
                 ) : (
                   <Loading />
@@ -142,7 +211,12 @@ const UserCabinet = () => {
                   {stores
                     ?.filter((item) => item.product_status === 3)
                     ?.map((item) => (
-                      <UserContents key={item.id} content="store" data={item} />
+                      <UserContents
+                        key={item.id}
+                        content="store"
+                        data={item}
+                        mounted={setMounted}
+                      />
                     ))}
                 </ul>
               </div>
@@ -169,7 +243,32 @@ const UserCabinet = () => {
                   </div>
                 </div>
                 <ul className="advert-list">
-                  {houses &&
+                  {draftArr.map((draftArg, i) => (
+                    <div key={i}>
+                      <span className="all-products-header">
+                        {draftArg.content === "house"
+                          ? "Маклера"
+                          : draftArg.content === "store"
+                          ? "обустройства"
+                          : draftArg.content === "master"
+                          ? "мастера"
+                          : "Мебель"}
+                      </span>
+                      {draftArg.arr
+                        ?.filter((item) => item.draft === true)
+                        ?.map((item, i) => (
+                          <UserContents
+                            key={i}
+                            content={draftArg.content}
+                            mounted={setMounted}
+                            data={item}
+                            draft={true}
+                          />
+                        ))}
+                    </div>
+                  ))}
+                  {/* {userContents} */}
+                  {/* {houses &&
                     houses
                       ?.filter((item) => item.draft === true)
                       ?.map((item) => (
@@ -181,6 +280,28 @@ const UserCabinet = () => {
                           draft={true}
                         />
                       ))}
+                  {maklers
+                    ?.filter((item) => item.draft === true)
+                    ?.map((item, i) => (
+                      <UserContents
+                        key={i}
+                        data={item}
+                        content="master"
+                        draft={true}
+                        mounted={setMounted}
+                      />
+                    ))}
+                  {stores
+                    ?.filter((item) => item.draft === true)
+                    ?.map((item, i) => (
+                      <UserContents
+                        key={i}
+                        data={item}
+                        content="store"
+                        draft={true}
+                        mounted={setMounted}
+                      />
+                    ))} */}
                 </ul>
               </div>
             </div>
